@@ -1,0 +1,213 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <title>ADIF Process Control Form</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        div.panel {
+            background-color: lightblue;
+            padding: 10px;
+            margin: 10px;
+        }
+        div.dropdown {
+            padding: 10px;
+        }
+        div.panel-heading {
+            font-weight: bold;
+        }
+        div.row {
+            padding: 2px;
+        }
+        span.tip {
+            font-size: 8pt;
+            color: darkgreen;
+        }
+        div.submit {
+            padding-top: 5px;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<body>
+    <div class="container">
+        <div class="container">
+            <h1>ADIF Processor Control Form</h1>
+        </div>
+        <form id="form" action="#" th:action="@{/upload}" th:object="${upload}" enctype="multipart/form-data" method="post">
+
+            <!-- *********************** FILE ***************** -->
+            <div class="panel panel-default">
+                <div class="panel-heading">ADIF File
+                </div>
+                <div class="panel-body" id="filePanel">
+                    <div class="">
+                        <div class="row" >
+                            <div class="col-4">
+                                <label class="" for="fileInput">File to Upload</label>
+                            </div>
+                            <div class="col-4">
+                                <input type="file" id="fileInput" name="fileInput">
+                            </div>
+                        </div>
+                        <div class="row" >
+                            <div class="col-4">
+                                <label for="encoding">Encoding</label>
+                            </div>
+                            <div class="col-4">
+                                <input  type="text" id="encoding" name="encoding" value="windows-1251"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- *********************** LOCATION ***************** -->
+            <div class="panel panel-default">
+                <div class="panel-heading">Your Location
+                    <div class="checkbox" style="display:inline">
+                        <label><input type="checkbox" style="float:inherit;" id="locationOverrideCb" name="setCoords"/> override</label>
+                    </div>
+                </div>
+                <div class="panel-body" id="locationOverridePanel">
+                    <div class="dropdown location" id="locationOverrideDropdownDiv">
+                        <button class="btn btn-secondary dropdown-toggle location" type="button" id="myLocationOverride" data-bs-toggle="dropdown" aria-expanded="false">
+                            My Location Override:
+                        </button>
+                        <ul class="dropdown-menu location" aria-labelledby="myLocationOverride" id="locationOverrideDropdown">
+                            <li><a class="dropdown-item location" href="#" id="locationOverrideByCoordinates">by coordinates</a></li>
+                            <li><a class="dropdown-item location" href="#" id="locationOverrideByGrid">by grid</a></li>
+                        </ul>
+                    </div>
+                    <div class="container">
+                        <div id="input-group locationOverrideCoordsDiv location">
+                            <div class="row" >
+                                <div class="col-5">
+                                    <label class="location" for="latitudeInput">Latitude <span class="tip">(decimal)</span></label>
+                                </div>
+                                <div class="col-3">
+                                    <input class="location locationOverrideByCoords" type="text" id="latitudeInput" name="latitude" value=""/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-5">
+                                    <label class="location" for="longitudeInput">Longitude <span class="tip">(decimal)</span></label>
+                                </div>
+                                <div class="col-3">
+                                    <input class="location locationOverrideByCoords" type="text" id="longitudeInput" name="longitude" value=""/>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="locationOverrideGridDiv location">
+                            <div class="row" >
+                                <div class="col-5">
+                                    <label class="location" for="latitudeInput">Grid <span class="tip">(4/6/8/10 char)</span></label>
+                                </div>
+                                <div class="col-3">
+                                    <input class="location locationOverrideByGrid" type="text" id="grid" name="grid" value=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- *********************** ACTIVITY ***************** -->
+            <div class="panel panel-default">
+                <div class="panel-heading">Activity
+                </div>
+                <div class="panel-body" id="activityPanel">
+                    <div class="container">
+                        <div id="input-group activity">
+                            <div class="row" >
+                                <div class="col-3">
+                                    <label class="" for="sotaRef">SOTA</label>
+                                </div>
+                                <div class="col-5">
+                                    <input class="" type="text" id="sotaRef" name="sotaRef" value=""/>
+                                </div>
+                            </div>
+                            <div class="row" >
+                                <div class="col-3">
+                                    <label class="" for="wotaRef">WOTA</label>
+                                </div>
+                                <div class="col-5">
+                                    <input class="" type="text" id="wotaRef" name="wotaRef" value=""/>
+                                </div>
+                            </div>
+                            <div class="row" >
+                                <div class="col-3">
+                                    <label class="" for="hemaRef">HEMA</label>
+                                </div>
+                                <div class="col-5">
+                                    <input class="" type="text" id="hemaRef" name="hemaRef" value=""/>
+                                </div>
+                            </div>
+                            <div class="row" >
+                                <div class="col-3">
+                                    <label class="" for="potaRef">POTA</label>
+                                </div>
+                                <div class="col-5">
+                                    <input class="" type="text" id="potaRef" name="potaRef" value=""/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-2">
+                        <input id="submit" type="submit" value="Process"> the ADIF file
+                    </div>
+                    <div class="col-1">
+                        <div id="spinner" class="spinner-border" role="status">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+        $(function() {
+            $('.location').prop('disabled', true);
+            $('#spinner').hide();
+
+            $('#locationOverrideCb').on('change', function() {
+                $('.location').prop('disabled', !this.checked);
+                if (this.checked) {
+                    $('.locationOverrideByCoords').prop('disabled', true);
+                    $('.locationOverrideByGrid').prop('disabled', true);
+                }
+            });
+
+            $('#locationOverrideByCoordinates').on('click', function() {
+                $('.locationOverrideByCoords').prop('disabled', false);
+                $('.locationOverrideByGrid').prop('disabled', true);
+            })
+            $('#locationOverrideByGrid').on('click', function() {
+                $('.locationOverrideByCoords').prop('disabled', true);
+                $('.locationOverrideByGrid').prop('disabled', false);
+            })
+
+            $('#form').submit(function() {
+                $("#submit").prop('disabled', true);
+                $("#submit").val("Processing");
+                $('#spinner').show();
+                $("body").css("cursor", "progress");
+                return;
+            })
+        });
+    </script>
+
+</body>

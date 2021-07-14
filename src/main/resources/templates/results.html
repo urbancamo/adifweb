@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head> 
+    <title>ADIF Transformer Results</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        div.panel {
+            background-color: lightblue;
+            padding: 10px;
+            margin: 10px;
+        }
+        div.dropdown {
+            padding: 10px;
+        }
+        div.panel-heading {
+            font-weight: bold;
+        }
+        div.row {
+            padding: 2px;
+        }
+        span.tip {
+            font-size: 8pt;
+            color: darkgreen;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="container">
+        	<h1>ADIF Transformer Results</h1>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Result File Downloads</div>
+            <div class="panel-body" id="resultPanel">
+                <div class="container">
+
+                <div class="form-group" >
+                    <label for="adiFile">ADI File</label>
+                    <input class="form-control" type="text" id="adiFile" name="adiFile" th:value="${adiFile}" value=""/>
+                    <a href="#" th:href="@{/api/download(filename=${adiFile})}" class="btn btn-info" role="button">Download</a>
+                </div>
+                <div class="form-group" >
+                    <label for="kmlFile">KML File</label>
+                    <input class="form-control" type="text" id="kmlFile" name="kmlFile" th:value="${kmlFile}" value=""/>
+                    <a href="#" th:href="@{/api/download(filename=${kmlFile})}" class="btn btn-info" role="button">Download</a>
+                </div>
+                <div class="form-group" >
+                    <label for="adiFile">Markdown File</label>
+                    <input class="form-control" type="text" id="markdownFile" name="markdownFile" th:value="${markdownFile}" value=""/>
+                    <a href="#" th:href="@{/api/download(filename=${markdownFile})}" class="btn btn-info" role="button">Download</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</body>
+</html>
