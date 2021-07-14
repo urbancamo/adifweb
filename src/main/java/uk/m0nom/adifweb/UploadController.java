@@ -23,10 +23,10 @@ import uk.m0nom.adif3.UnsupportedHeaderException;
 import uk.m0nom.adif3.args.TransformControl;
 import uk.m0nom.adif3.contacts.Qsos;
 import uk.m0nom.adif3.print.Adif3PrintFormatter;
+import uk.m0nom.adif3.transform.TransformResults;
 import uk.m0nom.adifweb.domain.ControlInfo;
 import uk.m0nom.adifweb.domain.HtmlParameter;
 import uk.m0nom.adifweb.domain.HtmlParameterType;
-import uk.m0nom.adifweb.domain.TransformResults;
 import uk.m0nom.adifweb.validation.Validators;
 import uk.m0nom.kml.KmlWriter;
 import uk.m0nom.qrz.QrzXmlService;
@@ -112,7 +112,16 @@ public class UploadController {
 			results.put("adiFile", transformResults.getAdiFile());
 			results.put("kmlFile", transformResults.getKmlFile());
 			results.put("markdownFile", transformResults.getMarkdownFile());
-
+			results.put("error", StringUtils.defaultIfEmpty(transformResults.getError(), "No Errors"));
+			StringBuilder sb = new StringBuilder("");
+			for (String callsign : transformResults.getContactsWithoutLocation()) {
+				sb.append(String.format("%s, ", callsign));
+			}
+			String callsignsWithoutLocation = "none";
+			if (sb.length() > 0) {
+				callsignsWithoutLocation = sb.substring(0, sb.length()-2);
+			}
+			results.put("callsignsWithoutLocation", callsignsWithoutLocation);
 			return new ModelAndView("results", results);
 		}
 	}
@@ -204,7 +213,11 @@ public class UploadController {
 			logger.info(String.format("Writing output file %s with encoding %s", out, control.getEncoding()));
 			readerWriter.write(out, control.getEncoding(), log);
 			if (control.getGenerateKml()) {
-				kmlWriter.write(kml, originalFilename, summits, qsos);
+
+				kmlWriter.write(kml, originalFilename, summits, qsos, results);
+				if (StringUtils.isNotEmpty(results.getError())) {
+					kml = "";
+				}
 			}
 			if (control.getMarkdown()) {
 				BufferedWriter markdownWriter = null;

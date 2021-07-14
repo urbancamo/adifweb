@@ -23,6 +23,9 @@
             font-size: 8pt;
             color: darkgreen;
         }
+        label {
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -35,7 +38,14 @@
             <div class="panel-heading">Result File Downloads</div>
             <div class="panel-body" id="resultPanel">
                 <div class="container">
-
+                    <div class="form-group" >
+                        <label for="error">Errors</label>
+                        <input class="form-control" type="text" id="error" name="error" th:value="${error}" value=""/>
+                    </div>
+                    <div class="form-group" >
+                        <label for="error">Callsigns without Location</label>
+                        <input class="form-control" type="text" id="callsigns" name="callsigns" th:value="${callsignsWithoutLocation}" value=""/>
+                    </div>
                     <div class="form-group" >
                         <label for="adiFile">ADI File</label>
                         <input class="form-control" type="text" id="adiFile" name="adiFile" th:value="${adiFile}" value=""/>
