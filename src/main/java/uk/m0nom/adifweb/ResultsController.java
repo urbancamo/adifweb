@@ -1,4 +1,4 @@
-package uk.m0nom.adifweb.controller;
+package uk.m0nom.adifweb;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
