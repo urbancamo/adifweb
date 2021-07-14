@@ -36,20 +36,21 @@
             <div class="panel-body" id="resultPanel">
                 <div class="container">
 
-                <div class="form-group" >
-                    <label for="adiFile">ADI File</label>
-                    <input class="form-control" type="text" id="adiFile" name="adiFile" th:value="${adiFile}" value=""/>
-                    <a href="#" th:href="@{/api/download(filename=${adiFile})}" class="btn btn-info" role="button">Download</a>
-                </div>
-                <div class="form-group" >
-                    <label for="kmlFile">KML File</label>
-                    <input class="form-control" type="text" id="kmlFile" name="kmlFile" th:value="${kmlFile}" value=""/>
-                    <a href="#" th:href="@{/api/download(filename=${kmlFile})}" class="btn btn-info" role="button">Download</a>
-                </div>
-                <div class="form-group" >
-                    <label for="adiFile">Markdown File</label>
-                    <input class="form-control" type="text" id="markdownFile" name="markdownFile" th:value="${markdownFile}" value=""/>
-                    <a href="#" th:href="@{/api/download(filename=${markdownFile})}" class="btn btn-info" role="button">Download</a>
+                    <div class="form-group" >
+                        <label for="adiFile">ADI File</label>
+                        <input class="form-control" type="text" id="adiFile" name="adiFile" th:value="${adiFile}" value=""/>
+                        <a href="#" th:href="@{/download(filename=${adiFile})}" class="btn btn-info" role="button">Download</a>
+                    </div>
+                    <div class="form-group" >
+                        <label for="kmlFile">KML File</label>
+                        <input class="form-control" type="text" id="kmlFile" name="kmlFile" th:value="${kmlFile}" value=""/>
+                        <a href="#" th:href="@{/download(filename=${kmlFile})}" class="btn btn-info" role="button">Download</a>
+                    </div>
+                    <div class="form-group" >
+                        <label for="adiFile">Markdown File</label>
+                        <input class="form-control" type="text" id="markdownFile" name="markdownFile" th:value="${markdownFile}" value=""/>
+                        <a href="#" th:href="@{/download(filename=${markdownFile})}" class="btn btn-info" role="button">Download</a>
+                    </div>
                 </div>
             </div>
         </div>

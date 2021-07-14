@@ -75,6 +75,9 @@ public class UploadController {
 
 		var factory = new DiskFileItemFactory();
 		String tmpPath = System.getProperty("java.io.tmpdir");
+		if (!StringUtils.endsWith(tmpPath, File.separator)) {
+			tmpPath = tmpPath + File.separator;
+		}
 		factory.setRepository(new File(tmpPath));
 		factory.setSizeThreshold(DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD);
 		factory.setFileCleaningTracker(null);
