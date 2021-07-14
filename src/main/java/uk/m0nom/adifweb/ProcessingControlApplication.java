@@ -1,4 +1,4 @@
-package uk.m0nom.adifweb.app;
+package uk.m0nom.adifweb;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package uk.m0nom.adifweb.startup;
+package uk.m0nom.adifweb;
 
 import lombok.Getter;
 import lombok.Setter;

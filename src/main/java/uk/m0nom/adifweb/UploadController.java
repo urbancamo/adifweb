@@ -1,4 +1,4 @@
-package uk.m0nom.adifweb.controller;
+package uk.m0nom.adifweb;
 
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -27,7 +27,6 @@ import uk.m0nom.adifweb.domain.ControlInfo;
 import uk.m0nom.adifweb.domain.HtmlParameter;
 import uk.m0nom.adifweb.domain.HtmlParameterType;
 import uk.m0nom.adifweb.domain.TransformResults;
-import uk.m0nom.adifweb.startup.ApplicationConfiguration;
 import uk.m0nom.adifweb.validation.Validators;
 import uk.m0nom.kml.KmlWriter;
 import uk.m0nom.qrz.QrzXmlService;

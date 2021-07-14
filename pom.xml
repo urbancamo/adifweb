@@ -73,7 +73,7 @@
 						<configuration>
 							<archive>
 								<manifest>
-									<mainClass>uk.m0nom.adifweb.app.ProcessingControlApplication</mainClass>
+									<mainClass>uk.m0nom.adifweb.ProcessingControlApplication</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>
