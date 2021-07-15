@@ -112,7 +112,7 @@ public class UploadController {
 			results.put("adiFile", transformResults.getAdiFile());
 			results.put("kmlFile", transformResults.getKmlFile());
 			results.put("markdownFile", transformResults.getMarkdownFile());
-			results.put("error", StringUtils.defaultIfEmpty(transformResults.getError(), "No Errors"));
+			results.put("error", StringUtils.defaultIfEmpty(transformResults.getError(), "none"));
 			StringBuilder sb = new StringBuilder("");
 			for (String callsign : transformResults.getContactsWithoutLocation()) {
 				sb.append(String.format("%s, ", callsign));

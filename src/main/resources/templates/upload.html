@@ -28,6 +28,9 @@
         div.submit {
             padding-top: 5px;
         }
+        button.btn {
+            background: whitesmoke;
+        }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <body>
@@ -43,21 +46,17 @@
                 </div>
                 <div class="panel-body" id="filePanel">
                     <div class="">
-                        <div class="row" >
-                            <div class="col-4">
-                                <label class="" for="fileInput">File to Upload</label>
-                            </div>
-                            <div class="col-4">
-                                <input type="file" id="fileInput" name="fileInput">
-                            </div>
+                        <div class="input-group mb-3">
+                            <input type="file" class="form-control" id="fileInput"  name="fileInput">
                         </div>
-                        <div class="row" >
-                            <div class="col-4">
-                                <label for="encoding">Encoding</label>
-                            </div>
-                            <div class="col-4">
-                                <input  type="text" id="encoding" name="encoding" value="windows-1251"/>
-                            </div>
+                        <div class="input-group mb-3">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Encoding</button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item a-encoding" href="#">windows-1251</a></li>
+                                <li><a class="dropdown-item a-encoding" href="#">iso-8859-1</a></li>
+                                <li><a class="dropdown-item a-encoding" href="#">utf-8</a></li>
+                            </ul>
+                            <input type="text" class="form-control" aria-label="File Encoding" id="encoding" name="encoding" value="windows-1251">
                         </div>
                     </div>
                 </div>
@@ -67,11 +66,12 @@
 
             <!-- *********************** LOCATION ***************** -->
             <div class="panel panel-default">
-                <div class="panel-heading">Your Location
-                    <div class="checkbox" style="display:inline">
+                <div class="panel-heading">Your Location</div>
+                <div class="container">
+                    <div class="checkbox">
                         <label><input type="checkbox" style="float:inherit;" id="locationOverrideCb" name="setCoords"/> override</label>
                     </div>
-                </div>
+               </div>
                 <div class="panel-body" id="locationOverridePanel">
                     <div class="dropdown location" id="locationOverrideDropdownDiv">
                         <button class="btn btn-secondary dropdown-toggle location" type="button" id="myLocationOverride" data-bs-toggle="dropdown" aria-expanded="false">
@@ -85,28 +85,28 @@
                     <div class="container">
                         <div id="input-group locationOverrideCoordsDiv location">
                             <div class="row" >
-                                <div class="col-5">
+                                <div class="col-3">
                                     <label class="location" for="latitudeInput">Latitude <span class="tip">(decimal)</span></label>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-auto">
                                     <input class="location locationOverrideByCoords" type="text" id="latitudeInput" name="latitude" value=""/>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-5">
+                                <div class="col-3">
                                     <label class="location" for="longitudeInput">Longitude <span class="tip">(decimal)</span></label>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-auto">
                                     <input class="location locationOverrideByCoords" type="text" id="longitudeInput" name="longitude" value=""/>
                                 </div>
                             </div>
                         </div>
                         <div id="locationOverrideGridDiv location">
                             <div class="row" >
-                                <div class="col-5">
+                                <div class="col-3">
                                     <label class="location" for="latitudeInput">Grid <span class="tip">(4/6/8/10 char)</span></label>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-auto">
                                     <input class="location locationOverrideByGrid" type="text" id="grid" name="grid" value=""/>
                                 </div>
                             </div>
@@ -127,7 +127,7 @@
                                 <div class="col-3">
                                     <label class="" for="sotaRef">SOTA</label>
                                 </div>
-                                <div class="col-5">
+                                <div class="col-auto">
                                     <input class="" type="text" id="sotaRef" name="sotaRef" value=""/>
                                 </div>
                             </div>
@@ -135,7 +135,7 @@
                                 <div class="col-3">
                                     <label class="" for="wotaRef">WOTA</label>
                                 </div>
-                                <div class="col-5">
+                                <div class="col-auto">
                                     <input class="" type="text" id="wotaRef" name="wotaRef" value=""/>
                                 </div>
                             </div>
@@ -143,7 +143,7 @@
                                 <div class="col-3">
                                     <label class="" for="hemaRef">HEMA</label>
                                 </div>
-                                <div class="col-5">
+                                <div class="col-auto">
                                     <input class="" type="text" id="hemaRef" name="hemaRef" value=""/>
                                 </div>
                             </div>
@@ -151,7 +151,7 @@
                                 <div class="col-3">
                                     <label class="" for="potaRef">POTA</label>
                                 </div>
-                                <div class="col-5">
+                                <div class="col-auto">
                                     <input class="" type="text" id="potaRef" name="potaRef" value=""/>
                                 </div>
                             </div>
@@ -206,6 +206,10 @@
                 $('#spinner').show();
                 $("body").css("cursor", "progress");
                 return;
+            })
+
+            $('a.a-encoding').click(function() {
+                $("#encoding").val(this.innerText);
             })
         });
     </script>

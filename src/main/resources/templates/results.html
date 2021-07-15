@@ -23,8 +23,15 @@
             font-size: 8pt;
             color: darkgreen;
         }
-        label {
+        .form-label {
+            margin-bottom: .5rem;
             font-weight: bold;
+        }
+        .mb-3 {
+            margin-bottom: 1rem!important;
+        }
+        a.btn {
+            background: whitesmoke;
         }
     </style>
 </head>
@@ -35,31 +42,33 @@
         </div>
 
         <div class="panel panel-default">
-            <div class="panel-heading">Result File Downloads</div>
             <div class="panel-body" id="resultPanel">
                 <div class="container">
-                    <div class="form-group" >
-                        <label for="error">Errors</label>
+                    <div class="form-group mb-3" >
+                        <label for="error"  class="form-label">Errors</label>
                         <input class="form-control" type="text" id="error" name="error" th:value="${error}" value=""/>
                     </div>
-                    <div class="form-group" >
-                        <label for="error">Callsigns without Location</label>
+                    <div class="form-group mb-3" >
+                        <label for="callsigns" class="form-label">Callsigns without Location</label>
                         <input class="form-control" type="text" id="callsigns" name="callsigns" th:value="${callsignsWithoutLocation}" value=""/>
                     </div>
-                    <div class="form-group" >
-                        <label for="adiFile">ADI File</label>
-                        <input class="form-control" type="text" id="adiFile" name="adiFile" th:value="${adiFile}" value=""/>
-                        <a href="#" th:href="@{/download(filename=${adiFile})}" class="btn btn-info" role="button">Download</a>
+
+                    <label for="kmlFile" class="form-label">ADI File</label>
+                    <div class="input-group mb-3" >
+                        <input class="form-control" type="text" id="adiFile" name="adiFile" th:value="${adiFile}" value="" placeholder="ADI File" aria-label="ADI File" aria-describedby="button-adif-download"/>
+                        <a href="#" th:href="@{/download(filename=${adiFile})}" class="btn btn-outline-secondary" role="button" id="button-adif-download">Download</a>
                     </div>
-                    <div class="form-group" >
-                        <label for="kmlFile">KML File</label>
-                        <input class="form-control" type="text" id="kmlFile" name="kmlFile" th:value="${kmlFile}" value=""/>
-                        <a href="#" th:href="@{/download(filename=${kmlFile})}" class="btn btn-info" role="button">Download</a>
+
+                    <label for="kmlFile" class="form-label">KML File</label>
+                    <div class="input-group mb-3" >
+                        <input class="form-control" type="text" id="kmlFile" name="kmlFile" th:value="${kmlFile}" value="" placeholder="KML File" aria-label="KML File" aria-describedby="button-kml-download"/>
+                        <a href="#" th:href="@{/download(filename=${kmlFile})}" class="btn btn-outline-secondary" role="button" id="button-kml-download">Download</a>
                     </div>
-                    <div class="form-group" >
-                        <label for="adiFile">Markdown File</label>
-                        <input class="form-control" type="text" id="markdownFile" name="markdownFile" th:value="${markdownFile}" value=""/>
-                        <a href="#" th:href="@{/download(filename=${markdownFile})}" class="btn btn-info" role="button">Download</a>
+
+                    <label for="markdownFile" class="form-label">Markdown File</label>
+                    <div class="input-group mb-3" >
+                        <input class="form-control" type="text" id="markdownFile" name="markdownFile" th:value="${markdownFile}" value="" placeholder="Markdown File" aria-label="Markdown File" aria-describedby="button-markdown-download"/>
+                        <a href="#" th:href="@{/download(filename=${markdownFile})}" class="btn btn-outline-secondary" role="button" id="button-markdown-download">Download</a>
                     </div>
                 </div>
             </div>
