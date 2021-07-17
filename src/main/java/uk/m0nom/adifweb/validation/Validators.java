@@ -15,6 +15,7 @@ public class Validators {
     }
 
     public void setupValidators(ActivityDatabases databases) {
+        validators.put(HtmlParameterType.LATLONG, new LatLongValidator());
         validators.put(HtmlParameterType.LATITUDE, new LatitudeValidator());
         validators.put(HtmlParameterType.LONGITUDE, new LongitudeValidator());
         validators.put(HtmlParameterType.ENCODING, new EncodingValidator());

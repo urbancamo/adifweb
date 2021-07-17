@@ -4,6 +4,7 @@ public enum HtmlParameterType {
     FILENAME,
     LATITUDE,
     LONGITUDE,
+    LATLONG,
     SOTA_REF,
     WOTA_REF,
     HEMA_REF,

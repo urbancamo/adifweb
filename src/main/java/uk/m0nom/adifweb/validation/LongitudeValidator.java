@@ -13,7 +13,7 @@ public class LongitudeValidator implements Validator {
         boolean valid = false;
         try {
             Double d = Double.parseDouble(value);
-            valid = (d <= -180.0 || d >= 180.0);
+            valid = (d >= -180.0 || d <= 180.0);
         } catch (NumberFormatException e) {
             // Let this fall out
         }

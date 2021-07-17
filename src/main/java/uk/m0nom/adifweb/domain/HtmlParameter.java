@@ -9,13 +9,15 @@ import uk.m0nom.adifweb.validation.Validator;
 public class HtmlParameter {
     private HtmlParameterType type;
     private String key;
-    private String value;
+    private String value = null;
     private Validator validator;
 
     public HtmlParameter(HtmlParameterType type, String key, String value, Validator validator) {
         this.type = type;
         this.key = key;
-        this.value = value;
+        if (value != null) {
+            this.value = value.trim().toUpperCase();
+        }
         this.validator = validator;
     }
 

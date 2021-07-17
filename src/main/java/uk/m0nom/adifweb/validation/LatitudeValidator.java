@@ -13,7 +13,7 @@ public class LatitudeValidator implements Validator {
         boolean valid = false;
         try {
             Double d = Double.parseDouble(value);
-             valid = (d <= -90.0 || d >= 90.0);
+             valid = (d >= -90.0 || d <= 90.0);
         } catch (NumberFormatException e) {
             // Let this fall out
         }
