@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import uk.m0nom.maidenheadlocator.MaidenheadLocatorConversion;
 
 public class GridValidator implements Validator {
-    public final static String INVALID_GRID = "INVALID_GRID";
+    public final static String INVALID_GRID = "Invalid Grid, accepts 4/6/8/10 char refs";
 
     @Override
     public ValidationResult isValid(String value) {
@@ -12,7 +12,7 @@ public class GridValidator implements Validator {
             return ValidationResult.EMPTY;
         } else {
             try {
-                MaidenheadLocatorConversion.isAValidGridSquare(value);
+                MaidenheadLocatorConversion.locatorToCoords(value);
             } catch (UnsupportedOperationException e) {
                 return new ValidationResult(INVALID_GRID);
             }

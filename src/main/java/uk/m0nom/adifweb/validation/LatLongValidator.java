@@ -3,7 +3,7 @@ package uk.m0nom.adifweb.validation;
 import org.apache.commons.lang3.StringUtils;
 
 public class LatLongValidator implements Validator {
-    public final static String INCORRECT_FORMAT = "INCORRECT_FORMAT";
+    public final static String INCORRECT_FORMAT = "Incorrect format, use lat,long";
 
     @Override
     public ValidationResult isValid(String value)

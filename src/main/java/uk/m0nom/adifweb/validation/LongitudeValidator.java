@@ -3,9 +3,9 @@ package uk.m0nom.adifweb.validation;
 import org.apache.commons.lang3.StringUtils;
 
 public class LongitudeValidator implements Validator {
-    public final static String NAN = "NAN";
-    public final static String UNDER_RANGE = "UNDER_RANGE";
-    public final static String OVER_RANGE = "OVER_RANGE";
+    public final static String NAN = "Longitude not a number";
+    public final static String UNDER_RANGE = "Latitude must be >= -180.0";
+    public final static String OVER_RANGE = "Latitude must be <= 180.0";
 
     @Override
     public ValidationResult isValid(String value)

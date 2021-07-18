@@ -170,23 +170,6 @@
                 </div>
             </div>
 
-            <!-- *********************** VALIDATION ERRORS ***************** -->
-            <div class="panel panel-default" id ="validationErrors">
-                <div class="panel-heading">Errors
-                </div>
-                <div class="panel-body" id="validationErrorsPanelBody">
-                    <div class="container">
-                        <div id="input-group">
-                            <div class="row" >
-                                <div class="col-8">
-                                    <textarea id="validationErrorMessages" cols="60" name="validationErrorMessages" rows="8" th:text="${validationErrorMessages}"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="container">
                 <div class="row">
                     <div class="col-4">
@@ -210,12 +193,6 @@
         $(function() {
             $('.location').prop('disabled', true);
             $('#spinner').hide();
-
-            // Hide error panel if we don't have any errors
-            const errors = [[${validationErrors}]];
-            if (errors == null) {
-                $('#validationErrors').hide();
-            }
 
             $('#locationOverrideCb').on('change', function() {
                 $('.location').prop('disabled', !this.checked);

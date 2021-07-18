@@ -6,7 +6,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 
 public class EncodingValidator implements Validator {
-    public final static String BAD_CHARSET = "BAD_CHARSET";
+    public final static String BAD_CHARSET = "Unknown character set name";
 
     @Override
     public ValidationResult isValid(String value)
