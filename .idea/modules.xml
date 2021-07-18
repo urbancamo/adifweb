@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../adif-processor/adif-processor.iml" filepath="$PROJECT_DIR$/../adif-processor/adif-processor.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/adifweb.iml" filepath="$PROJECT_DIR$/.idea/adifweb.iml" />
     </modules>
   </component>

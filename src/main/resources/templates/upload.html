@@ -47,16 +47,16 @@
                 <div class="panel-body" id="filePanel">
                     <div class="">
                         <div class="input-group mb-3">
-                            <input type="file" class="form-control" id="fileInput"  name="fileInput">
+                            <input type="file" class="form-control" id="filename"  name="filename" th:value="${parameters.get('filename').getValue()}" >
                         </div>
                         <div class="input-group mb-3">
                             <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Encoding</button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item a-encoding" href="#">windows-1251</a></li>
-                                <li><a class="dropdown-item a-encoding" href="#">iso-8859-1</a></li>
-                                <li><a class="dropdown-item a-encoding" href="#">utf-8</a></li>
+                                <li><a class="dropdown-item a-encoding" href="#">WINDOWS-1251</a></li>
+                                <li><a class="dropdown-item a-encoding" href="#">ISO-8859-1</a></li>
+                                <li><a class="dropdown-item a-encoding" href="#">UTF-8</a></li>
                             </ul>
-                            <input type="text" class="form-control" aria-label="File Encoding" id="encoding" name="encoding" value="windows-1251">
+                            <input type="text" class="form-control" aria-label="File Encoding" id="encoding" name="encoding" th:value="${parameters.get('encoding').getValue()}" value="windows-1251">
                         </div>
                     </div>
                 </div>
@@ -88,8 +88,11 @@
                                 <div class="col-3">
                                     <label class="location" for="latLong">Lat/Long <span class="tip">(decimal comma-separated)</span></label>
                                 </div>
-                                <div class="col-auto">
-                                    <input class="location locationOverrideByCoords" type="text" id="latLong" name="latlong" value=""/>
+                                <div class="col-3">
+                                    <input class="location locationOverrideByCoords" type="text" id="latLong" name="latlong" th:value="${parameters.get('latlong').getValue()}" value=""/>
+                                </div>
+                                <div class="col-2">
+                                    <span class="text-danger" th:text="${parameters.get('latlong').getValidationResult().getError()}"></span>
                                 </div>
                             </div>
                         </div>
@@ -98,8 +101,11 @@
                                 <div class="col-3">
                                     <label class="location" for="grid">Grid <span class="tip">(4/6/8/10 char)</span></label>
                                 </div>
-                                <div class="col-auto">
-                                    <input class="location locationOverrideByGrid" type="text" id="grid" name="grid" value=""/>
+                                <div class="col-3">
+                                    <input class="location locationOverrideByGrid" type="text" id="grid" name="grid" th:value="${parameters.get('grid').getValue()}" value=""/>
+                                </div>
+                                <div class="col-2">
+                                    <span class="text-danger" th:text="${parameters.get('grid').getValidationResult().getError()}"></span>
                                 </div>
                             </div>
                         </div>
@@ -119,38 +125,68 @@
                                 <div class="col-3">
                                     <label class="" for="sotaRef">SOTA</label>
                                 </div>
-                                <div class="col-auto">
-                                    <input class="" type="text" id="sotaRef" name="sotaRef" value=""/>
+                                <div class="col-3">
+                                    <input class="" type="text" id="sotaRef" name="sotaRef" th:value="${parameters.get('sotaRef').getValue()}" value=""/>
+                                </div>
+                                <div class="col-2">
+                                    <span class="text-danger" th:text="${parameters.get('sotaRef').getValidationResult().getError()}"></span>
                                 </div>
                             </div>
                             <div class="row" >
                                 <div class="col-3">
                                     <label class="" for="wotaRef">WOTA</label>
                                 </div>
-                                <div class="col-auto">
-                                    <input class="" type="text" id="wotaRef" name="wotaRef" value=""/>
+                                <div class="col-3">
+                                    <input class="" type="text" id="wotaRef" name="wotaRef" th:value="${parameters.get('wotaRef').getValue()}" value=""/>
+                                </div>
+                                <div class="col-2">
+                                    <span class="text-danger" th:text="${parameters.get('wotaRef').getValidationResult().getError()}"></span>
                                 </div>
                             </div>
                             <div class="row" >
                                 <div class="col-3">
                                     <label class="" for="hemaRef">HEMA</label>
                                 </div>
-                                <div class="col-auto">
-                                    <input class="" type="text" id="hemaRef" name="hemaRef" value=""/>
+                                <div class="col-3">
+                                    <input class="" type="text" id="hemaRef" name="hemaRef" th:value="${parameters.get('hemaRef').getValue()}" value=""/>
+                                </div>
+                                <div class="col-2">
+                                    <span class="text-danger" th:text="${parameters.get('hemaRef').getValidationResult().getError()}"></span>
                                 </div>
                             </div>
                             <div class="row" >
                                 <div class="col-3">
                                     <label class="" for="potaRef">POTA</label>
                                 </div>
-                                <div class="col-auto">
-                                    <input class="" type="text" id="potaRef" name="potaRef" value=""/>
+                                <div class="col-3">
+                                    <input class="" type="text" id="potaRef" name="potaRef" th:value="${parameters.get('potaRef').getValue()}" value=""/>
+                                </div>
+                                <div class="col-2">
+                                    <span class="text-danger" th:text="${parameters.get('potaRef').getValidationResult().getError()}"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- *********************** VALIDATION ERRORS ***************** -->
+            <div class="panel panel-default" id ="validationErrors">
+                <div class="panel-heading">Errors
+                </div>
+                <div class="panel-body" id="validationErrorsPanelBody">
+                    <div class="container">
+                        <div id="input-group">
+                            <div class="row" >
+                                <div class="col-8">
+                                    <textarea id="validationErrorMessages" cols="60" name="validationErrorMessages" rows="8" th:text="${validationErrorMessages}"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="container">
                 <div class="row">
                     <div class="col-4">
@@ -170,10 +206,16 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-    <script>
+    <script th:inline="javascript">
         $(function() {
             $('.location').prop('disabled', true);
             $('#spinner').hide();
+
+            // Hide error panel if we don't have any errors
+            const errors = [[${validationErrors}]];
+            if (errors == null) {
+                $('#validationErrors').hide();
+            }
 
             $('#locationOverrideCb').on('change', function() {
                 $('.location').prop('disabled', !this.checked);

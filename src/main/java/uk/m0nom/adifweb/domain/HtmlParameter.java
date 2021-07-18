@@ -2,7 +2,10 @@ package uk.m0nom.adifweb.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import uk.m0nom.adifweb.validation.ValidationResult;
 import uk.m0nom.adifweb.validation.Validator;
+
+import java.util.Map;
 
 @Getter
 @Setter
@@ -11,6 +14,7 @@ public class HtmlParameter {
     private String key;
     private String value = null;
     private Validator validator;
+    private ValidationResult validationResult;
 
     public HtmlParameter(HtmlParameterType type, String key, String value, Validator validator) {
         this.type = type;
@@ -21,7 +25,15 @@ public class HtmlParameter {
         this.validator = validator;
     }
 
-    public boolean isValid() {
-        return validator.isValid(value);
+    public static boolean isAllValid(Map<String, HtmlParameter> parametersToValidate) {
+        boolean allValid = true;
+        for (HtmlParameter parameter : parametersToValidate.values()) {
+            allValid &= parameter.getValidationResult().isValid();
+        }
+        return allValid;
+    }
+
+    public void validate() {
+        validationResult = validator.isValid(value);
     }
 }

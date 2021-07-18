@@ -6,11 +6,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.tomcat.jni.Global;
 import org.gavaghan.geodesy.GlobalCoordinates;
 import org.marsik.ham.adif.Adif3;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
@@ -35,6 +33,7 @@ import uk.m0nom.adifweb.domain.ControlInfo;
 import uk.m0nom.adifweb.domain.HtmlParameter;
 import uk.m0nom.adifweb.domain.HtmlParameterType;
 import uk.m0nom.adifweb.util.LatLongSplitter;
+import uk.m0nom.adifweb.validation.ValidationResult;
 import uk.m0nom.adifweb.validation.Validators;
 import uk.m0nom.kml.KmlWriter;
 import uk.m0nom.qrz.QrzXmlService;
@@ -52,10 +51,8 @@ import java.util.logging.Logger;
 public class UploadController {
 	private final static String ENCODING_PARAMETER = "encoding";
 	private final static String LATLONG_PARAMETER = "latlong";
-	private final static String LATITUDE_PARAMETER = "latitude";
-	private final static String LONGITUDE_PARAMTER = "longitude";
 	private final static String GRID_PARAMETER = "grid";
-	private final static String FILE_INPUT_PARAMETER = "fileInput";
+	private final static String FILE_INPUT_PARAMETER = "filename";
 	private final static String HEMA_PARAMETER = "hemaRef";
 	private final static String WOTA_PARAMETER = "wotaRef";
 	private final static String SOTA_PARAMETER = "sotaRef";
@@ -66,7 +63,7 @@ public class UploadController {
 	@Autowired
 	private ApplicationConfiguration configuration;
 
-	private Map<String, HtmlParameter> parametersToValidate = new HashMap<>();
+	private Map<String, HtmlParameter> parameters = new HashMap<>();
 	private Validators validators = new Validators();
 
 	@Autowired
@@ -80,8 +77,29 @@ public class UploadController {
 
 	@GetMapping("/upload")
 	public String displayUploadForm(Model model) {
+		validators.setupValidators(configuration.getSummits());
 		model.addAttribute("upload", new ControlInfo());
+		model.addAttribute("parameters", getDefaultParameters());
 		return "upload";
+	}
+	
+	private Map<String, HtmlParameter> getDefaultParameters() {
+		Map<String, HtmlParameter> parameters = new HashMap<>();
+		addParameter(new HtmlParameter(HtmlParameterType.ENCODING, FILE_INPUT_PARAMETER, "", validators.getValidator(HtmlParameterType.FILENAME)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.ENCODING, ENCODING_PARAMETER, "windows-1251", validators.getValidator(HtmlParameterType.ENCODING)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.LATLONG, LATLONG_PARAMETER, "", validators.getValidator(HtmlParameterType.LATLONG)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.GRID, GRID_PARAMETER, "", validators.getValidator(HtmlParameterType.GRID)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.SOTA_REF, SOTA_PARAMETER, "", validators.getValidator(HtmlParameterType.SOTA_REF)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.WOTA_REF, WOTA_PARAMETER, "", validators.getValidator(HtmlParameterType.WOTA_REF)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.HEMA_REF, HEMA_PARAMETER, "", validators.getValidator(HtmlParameterType.HEMA_REF)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.POTA_REF, POTA_PARAMETER, "", validators.getValidator(HtmlParameterType.POTA_REF)), parameters);
+
+		return parameters;
+	}
+
+	private void addParameter(HtmlParameter parameter, Map<String, HtmlParameter> parameters) {
+		parameters.put(parameter.getKey(), parameter);
+		parameter.setValidationResult(ValidationResult.EMPTY);
 	}
 
 	@PostMapping("/upload")
@@ -102,16 +120,23 @@ public class UploadController {
 
 		addParameterFromRequest(HtmlParameterType.ENCODING, ENCODING_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.LATLONG, LATLONG_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.LONGITUDE, LONGITUDE_PARAMTER, request);
 		addParameterFromRequest(HtmlParameterType.GRID, GRID_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.SOTA_REF, SOTA_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.WOTA_REF, WOTA_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.HEMA_REF, HEMA_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.POTA_REF, POTA_PARAMETER, request);
-		parametersToValidate.put("filename", new HtmlParameter(HtmlParameterType.FILENAME, "filename", file.getOriginalFilename(), validators.getValidator(HtmlParameterType.FILENAME)));
+		parameters.put(FILE_INPUT_PARAMETER, new HtmlParameter(HtmlParameterType.FILENAME, FILE_INPUT_PARAMETER,
+				file.getOriginalFilename(), validators.getValidator(HtmlParameterType.FILENAME)));
 
-		if (!validateParameters(parametersToValidate)) {
-			return new ModelAndView("upload", parametersToValidate);
+		validateParameters(parameters);
+
+		if (!HtmlParameter.isAllValid(parameters)) {
+			ModelAndView backToUpload = new ModelAndView("upload");
+			ModelMap map = backToUpload.getModelMap();
+			map.put("validationErrors", "true");
+			map.put("validationErrorMessages", getValidationErrorsString(parameters));
+			map.put("parameters", parameters);
+			return backToUpload;
 		} else {
 			TransformControl control = createTransformControlFromParameters();
 
@@ -123,11 +148,20 @@ public class UploadController {
 
 			IOUtils.copy(uploadedStream, out);
 			TransformResults transformResults = runTransformer(control, tmpPath, adifPath, FilenameUtils.getBaseName(file.getOriginalFilename()));
+
+			if (transformResults.isErrors()) {
+				ModelAndView backToUpload = new ModelAndView("upload");
+				ModelMap map = backToUpload.getModelMap();
+				map.put("error", transformResults.getError());
+				return backToUpload;
+			}
+
 			Map<String, Object> results = new HashMap<>();
 			results.put("adiFile", transformResults.getAdiFile());
 			results.put("kmlFile", transformResults.getKmlFile());
 			results.put("markdownFile", transformResults.getMarkdownFile());
 			results.put("error", StringUtils.defaultIfEmpty(transformResults.getError(), "none"));
+			results.put("validationErrors", getValidationErrorsString(parameters));
 			StringBuilder sb = new StringBuilder("");
 			for (String callsign : transformResults.getContactsWithoutLocation()) {
 				sb.append(String.format("%s, ", callsign));
@@ -141,19 +175,29 @@ public class UploadController {
 		}
 	}
 
-	private void addParameterFromRequest(HtmlParameterType type, String key, StandardMultipartHttpServletRequest request) {
-		HtmlParameter parameter = new HtmlParameter(type, key, request.getParameter(key), validators.getValidator(type));
-		parametersToValidate.put(key, parameter);
+	private String getValidationErrorsString(Map<String, HtmlParameter> parametersToValidate) {
+		StringBuilder sb = new StringBuilder();
+
+		for (HtmlParameter parameter : parametersToValidate.values()) {
+			if (!parameter.getValidationResult().isValid()) {
+				sb.append(parameter.getValidationResult().getError());
+				sb.append(" ");
+			}
+		}
+		return sb.toString();
 	}
 
-	private boolean validateParameters(Map<String, HtmlParameter> parameters) {
+	private void addParameterFromRequest(HtmlParameterType type, String key, StandardMultipartHttpServletRequest request) {
+		HtmlParameter parameter = new HtmlParameter(type, key, request.getParameter(key), validators.getValidator(type));
+		parameters.put(key, parameter);
+	}
+
+	private void validateParameters(Map<String, HtmlParameter> parameters) {
 		boolean valid = true;
 		Collection<HtmlParameter> toValidate = parameters.values();
-
 		for (HtmlParameter parameter : toValidate) {
-			valid &= parameter.isValid();
+			parameter.validate();
 		}
-		return valid;
 	}
 
 	private TransformControl createTransformControlFromParameters() {
@@ -162,20 +206,20 @@ public class UploadController {
 		control.setGenerateKml(true);
 
 		control.setKmlS2s(true);
-		control.setHema(parametersToValidate.get(HEMA_PARAMETER).getValue());
-		control.setSota(parametersToValidate.get(SOTA_PARAMETER).getValue());
-		control.setWota(parametersToValidate.get(WOTA_PARAMETER).getValue());
-		control.setPota(parametersToValidate.get(POTA_PARAMETER).getValue());
-		control.setMyGrid(parametersToValidate.get(GRID_PARAMETER).getValue());
+		control.setHema(parameters.get(HEMA_PARAMETER).getValue());
+		control.setSota(parameters.get(SOTA_PARAMETER).getValue());
+		control.setWota(parameters.get(WOTA_PARAMETER).getValue());
+		control.setPota(parameters.get(POTA_PARAMETER).getValue());
+		control.setMyGrid(parameters.get(GRID_PARAMETER).getValue());
 		//control.setMyLatitude(parametersToValidate.get(LATITUDE_PARAMETER).getValue());
 		//control.setMyLongitude(parametersToValidate.get(LONGITUDE_PARAMTER).getValue());
 
-		GlobalCoordinates coordinates = LatLongSplitter.split(parametersToValidate.get(LATLONG_PARAMETER).getValue());
+		GlobalCoordinates coordinates = LatLongSplitter.split(parameters.get(LATLONG_PARAMETER).getValue());
 		if (coordinates != null) {
 			control.setMyLatitude(String.format("%f", coordinates.getLatitude()));
 			control.setMyLongitude(String.format("%f", coordinates.getLongitude()));
 		}
-		control.setEncoding(parametersToValidate.get(ENCODING_PARAMETER).getValue());
+		control.setEncoding(parameters.get(ENCODING_PARAMETER).getValue());
 
 		control.setKmlContactWidth(3);
 		control.setKmlContactTransparency(20);
@@ -233,7 +277,14 @@ public class UploadController {
 			transformer.configure(adifProcessorConfig.getInputStream(), summits, qrzXmlService);
 
 			logger.info(String.format("Reading input file %s with encoding %s", inPath, control.getEncoding()));
-			Adif3 log = readerWriter.read(inPath, control.getEncoding(), false);
+			Adif3 log = null;
+			try {
+				log = readerWriter.read(inPath, control.getEncoding(), false);
+			} catch (Exception e) {
+				String error = String.format("Error processing ADI file, caught exception:\n\t'%s'", e.getMessage());
+				logger.severe(error);
+				return new TransformResults(error);
+			}
 			Qsos qsos = transformer.transform(log, control);
 			logger.info(String.format("Writing output file %s with encoding %s", out, control.getEncoding()));
 			readerWriter.write(out, control.getEncoding(), log);

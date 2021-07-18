@@ -3,20 +3,28 @@ package uk.m0nom.adifweb.validation;
 import org.apache.commons.lang3.StringUtils;
 
 public class LongitudeValidator implements Validator {
+    public final static String NAN = "NAN";
+    public final static String UNDER_RANGE = "UNDER_RANGE";
+    public final static String OVER_RANGE = "OVER_RANGE";
+
     @Override
-    public boolean isValid(String value)
+    public ValidationResult isValid(String value)
     {
         if (StringUtils.isEmpty(value)) {
-            return true;
+            return ValidationResult.SUCCESS;
         }
 
         boolean valid = false;
         try {
             Double d = Double.parseDouble(value);
-            valid = (d >= -180.0 || d <= 180.0);
+            if (d < -180.0) {
+                return new ValidationResult(UNDER_RANGE);
+            } else if (d > 180.0) {
+                return new ValidationResult(OVER_RANGE);
+            }
+            return ValidationResult.SUCCESS;
         } catch (NumberFormatException e) {
-            // Let this fall out
+            return new ValidationResult(NAN);
         }
-        return valid;
     }
 }

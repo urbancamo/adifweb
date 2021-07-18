@@ -8,9 +8,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="adifweb" />
+        <module name="adif-processor" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="adif-processor" target="11" />
       <module name="adifweb" target="11" />
     </bytecodeTargetLevel>
   </component>
