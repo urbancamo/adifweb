@@ -27,6 +27,7 @@ public class Validators {
         addValidator(HtmlParameterType.HEMA_REF, new ActivityValidator(databases, ActivityType.HEMA));
         addValidator(HtmlParameterType.WOTA_REF, new ActivityValidator(databases, ActivityType.WOTA));
         addValidator(HtmlParameterType.POTA_REF, new ActivityValidator(databases, ActivityType.POTA));
+        addValidator(HtmlParameterType.WWFF_REF, new ActivityValidator(databases, ActivityType.WWFF));
     }
 
     public void addValidator(HtmlParameterType type, Validator validator) {

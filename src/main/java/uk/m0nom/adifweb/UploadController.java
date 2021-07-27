@@ -57,6 +57,7 @@ public class UploadController {
 	private final static String WOTA_PARAMETER = "wotaRef";
 	private final static String SOTA_PARAMETER = "sotaRef";
 	private final static String POTA_PARAMETER = "potaRef";
+	private final static String WWFF_PARAMETER = "wwffRef";
 
 	private static final Logger logger = Logger.getLogger(UploadController.class.getName());
 
@@ -89,6 +90,7 @@ public class UploadController {
 		addParameter(new HtmlParameter(HtmlParameterType.WOTA_REF, WOTA_PARAMETER, "", validators.getValidator(HtmlParameterType.WOTA_REF)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.HEMA_REF, HEMA_PARAMETER, "", validators.getValidator(HtmlParameterType.HEMA_REF)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.POTA_REF, POTA_PARAMETER, "", validators.getValidator(HtmlParameterType.POTA_REF)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.WWFF_REF, WWFF_PARAMETER, "", validators.getValidator(HtmlParameterType.WWFF_REF)), parameters);
 
 		return parameters;
 	}
@@ -121,6 +123,7 @@ public class UploadController {
 		addParameterFromRequest(HtmlParameterType.WOTA_REF, WOTA_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.HEMA_REF, HEMA_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.POTA_REF, POTA_PARAMETER, request);
+		addParameterFromRequest(HtmlParameterType.WWFF_REF, WWFF_PARAMETER, request);
 		parameters.put(FILE_INPUT_PARAMETER, new HtmlParameter(HtmlParameterType.FILENAME, FILE_INPUT_PARAMETER,
 				file.getOriginalFilename(), validators.getValidator(HtmlParameterType.FILENAME)));
 
@@ -206,6 +209,7 @@ public class UploadController {
 		control.setSota(parameters.get(SOTA_PARAMETER).getValue());
 		control.setWota(parameters.get(WOTA_PARAMETER).getValue());
 		control.setPota(parameters.get(POTA_PARAMETER).getValue());
+		control.setWwff(parameters.get(WWFF_PARAMETER).getValue());
 		control.setMyGrid(parameters.get(GRID_PARAMETER).getValue());
 		//control.setMyLatitude(parametersToValidate.get(LATITUDE_PARAMETER).getValue());
 		//control.setMyLongitude(parametersToValidate.get(LONGITUDE_PARAMTER).getValue());
@@ -231,6 +235,7 @@ public class UploadController {
 		control.setKmlSotaIconUrl("http://maps.google.com/mapfiles/kml/shapes/mountains.png");
 		control.setKmlHemaIconUrl("http://maps.google.com/mapfiles/kml/shapes/hospitals.png");
 		control.setKmlWotaIconUrl("http://maps.google.com/mapfiles/kml/shapes/trail.png");
+		control.setKmlWwffIconUrl("http://maps.google.com/mapfiles/kml/shapes/parks.png");
 
 		String qrzUsername = "M0NOM";
 		String qrzPassword = "WindermereIsMyQTH";

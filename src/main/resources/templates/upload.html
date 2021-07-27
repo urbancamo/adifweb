@@ -69,7 +69,7 @@
                 <div class="panel-heading">Your Location</div>
                 <div class="container">
                     <div class="checkbox">
-                        <label><input type="checkbox" style="float:inherit;" id="locationOverrideCb" name="setCoords"/> override</label>
+                        <label><input type="checkbox" style="float:inherit;" id="locationOverrideCb" name="setCoords"/> override <span class="tip">here if your activity doesn't have a location and your ADI input file doesn't have your Maidenhead location set</span></label>
                     </div>
                </div>
                 <div class="panel-body" id="locationOverridePanel">
@@ -116,7 +116,7 @@
 
             <!-- *********************** ACTIVITY ***************** -->
             <div class="panel panel-default">
-                <div class="panel-heading">Activity
+                <div class="panel-heading">Activity <span class="tip">specify one or more activity references. If any activity has a location you don't need to override it above</span>
                 </div>
                 <div class="panel-body" id="activityPanel">
                     <div class="container">
@@ -125,7 +125,7 @@
                                 <div class="col-3">
                                     <label class="" for="sotaRef">SOTA</label>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-5">
                                     <input class="" type="text" id="sotaRef" name="sotaRef" th:value="${parameters.get('sotaRef').getValue()}" value=""/>
                                 </div>
                                 <div class="col-2">
@@ -136,10 +136,10 @@
                                 <div class="col-3">
                                     <label class="" for="wotaRef">WOTA</label>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-5">
                                     <input class="" type="text" id="wotaRef" name="wotaRef" th:value="${parameters.get('wotaRef').getValue()}" value=""/>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-4">
                                     <span class="text-danger" th:text="${parameters.get('wotaRef').getValidationResult().getError()}"></span>
                                 </div>
                             </div>
@@ -147,10 +147,10 @@
                                 <div class="col-3">
                                     <label class="" for="hemaRef">HEMA</label>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-5">
                                     <input class="" type="text" id="hemaRef" name="hemaRef" th:value="${parameters.get('hemaRef').getValue()}" value=""/>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-4">
                                     <span class="text-danger" th:text="${parameters.get('hemaRef').getValidationResult().getError()}"></span>
                                 </div>
                             </div>
@@ -158,11 +158,22 @@
                                 <div class="col-3">
                                     <label class="" for="potaRef">POTA</label>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-5">
                                     <input class="" type="text" id="potaRef" name="potaRef" th:value="${parameters.get('potaRef').getValue()}" value=""/>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-4">
                                     <span class="text-danger" th:text="${parameters.get('potaRef').getValidationResult().getError()}"></span>
+                                </div>
+                            </div>
+                            <div class="row" >
+                                <div class="col-3">
+                                    <label class="" for="wwffRef">WWFF</label>
+                                </div>
+                                <div class="col-5">
+                                    <input class="" type="text" id="wwffRef" name="wwffRef" th:value="${parameters.get('wwffRef').getValue()}" value=""/>
+                                </div>
+                                <div class="col-4">
+                                    <span class="text-danger" th:text="${parameters.get('wwffRef').getValidationResult().getError()}"></span>
                                 </div>
                             </div>
                         </div>

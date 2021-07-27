@@ -9,6 +9,7 @@ public enum HtmlParameterType {
     WOTA_REF,
     HEMA_REF,
     POTA_REF,
+    WWFF_REF,
     GRID,
     ENCODING
 }
