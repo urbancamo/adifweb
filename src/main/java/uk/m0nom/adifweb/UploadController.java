@@ -69,11 +69,7 @@ public class UploadController {
 	@Autowired
 	private ResourceLoader resourceLoader;
 
-	@GetMapping("/")
-	public RedirectView redirectWithUsingRedirectView(
-			RedirectAttributes attributes) {
-		return new RedirectView("/upload");
-	}
+	
 
 	@GetMapping("/upload")
 	public String displayUploadForm(Model model) {
