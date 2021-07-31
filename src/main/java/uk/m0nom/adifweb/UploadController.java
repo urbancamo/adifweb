@@ -238,7 +238,7 @@ public class UploadController {
 		control.setKmlWwffIconUrl("http://maps.google.com/mapfiles/kml/shapes/parks.png");
 
 		String qrzUsername = "M0NOM";
-		String qrzPassword = "WindermereIsMyQTH";
+		String qrzPassword = "mark4qrzasm0nom";
 		control.setUseQrzDotCom(StringUtils.isNotEmpty(qrzUsername));
 		control.setQrzUsername(qrzUsername);
 		control.setQrzPassword(qrzPassword);
