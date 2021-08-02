@@ -52,13 +52,13 @@ columns:
       length: 4
       align: right
   - column:
-      adif: 'RST_RCVD'
-      header: 'RSR'
+      adif: 'RST_SENT'
+      header: 'RST'
       length: 3
       align: right
   - column:
-      adif: 'RST_SENT'
-      header: 'RST'
+      adif: 'RST_RCVD'
+      header: 'RSR'
       length: 3
       align: right
   - column:
@@ -66,13 +66,21 @@ columns:
       header: 'SOTA-TX'
       length: 9
   - column:
+      adif: 'SOTA_REF'
+      header: 'SOTA-RX'
+      length: 9
+  - column:
       adif: 'NAME'
       header: 'OPERATOR'
       length: 10
   - column:
-      adif: 'COUNTRY'
-      header: 'COUNTRY'
-      length: 13
+      adif: 'SIG'
+      header: 'SIG'
+      length: 5
+  - column:
+      adif: 'SIG_INFO'
+      header: 'REF'
+      length: 8
   - column:
       adif: 'COMMENT'
       header: 'COMMENT'

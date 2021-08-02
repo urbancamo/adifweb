@@ -45,40 +45,36 @@
             <div class="panel panel-default">
                 <div class="panel-heading">ADI File
                 </div>
-                <div class="panel-body">
-                    <p>In most cases you only need to upload the ADI file and click process.</p>
-                </div>
                 <div class="panel-body" id="filePanel">
                     <div class="container">
-                        <div class="input-group mb-3">
-                            <input type="file" class="form-control" id="filename"  name="filename" th:value="${parameters.get('filename').getValue()}" >
-                        </div>
-                        <div class="input-group mb-3">
-                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Encoding</button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item a-encoding" href="#">WINDOWS-1251</a></li>
-                                <li><a class="dropdown-item a-encoding" href="#">ISO-8859-1</a></li>
-                                <li><a class="dropdown-item a-encoding" href="#">UTF-8</a></li>
-                            </ul>
-                            <input type="text" class="form-control" aria-label="File Encoding" id="encoding" name="encoding" th:value="${parameters.get('encoding').getValue()}" value="windows-1251">
-                        </div>
+                        <p>In most cases you only need to upload the ADI file and click process.</p>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="file" class="form-control" id="filename"  name="filename" th:value="${parameters.get('filename').getValue()}" >
+                    </div>
+                    <div class="input-group mb-3">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Encoding</button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item a-encoding" href="#">WINDOWS-1251</a></li>
+                            <li><a class="dropdown-item a-encoding" href="#">ISO-8859-1</a></li>
+                            <li><a class="dropdown-item a-encoding" href="#">UTF-8</a></li>
+                        </ul>
+                        <input type="text" class="form-control" aria-label="File Encoding" id="encoding" name="encoding" th:value="${parameters.get('encoding').getValue()}" value="windows-1251">
                     </div>
                 </div>
             </div>
-
-
 
             <!-- *********************** ACTIVITY ***************** -->
             <div class="panel panel-default">
                 <div class="panel-heading">Activity
                 </div>
-                <div class="panel-body">
-                    <p>If your ADI file doesn't have a MY_SOTA record, or a combined SIG/SIG_INFO record then specify one or more activity references here.</p>
-                    <p>If any activity has a location it will be determined automatically, with no need to specify a location override below.
-                    </p>
-                </div>
                 <div class="panel-body" id="activityPanel">
                     <div class="container">
+                        <div>
+                            <p>If your ADI file doesn't have a MY_SOTA record, or a combined SIG/SIG_INFO record then specify one or more activity references here.</p>
+                            <p>If any activity has a location it will be determined automatically, with no need to specify a location override below.
+                            </p>
+                        </div>
                         <div id="input-group activity">
                             <div class="row" >
                                 <div class="col-3">
@@ -148,10 +144,10 @@
                         <label><input type="checkbox" style="float:inherit;" id="locationOverrideCb" name="setCoords"/> override</label>
                     </div>
                 </div>
-                <div class="panel-body">
-                    If your activity doesn't have a location, your ADI input file doesn't have your Maidenhead location set, or you want to specify a more accurate location override it here.</span>
-                </div>
                 <div class="panel-body" id="locationOverridePanel">
+                    <div class="container">
+                        <p>If your activity doesn't have a location, your ADI input file doesn't have your Maidenhead location set, or you want to specify a more accurate location override it here.</p>
+                    </div>
                     <div class="dropdown location" id="locationOverrideDropdownDiv">
                         <button class="btn btn-secondary dropdown-toggle location" type="button" id="myLocationOverride" data-bs-toggle="dropdown" aria-expanded="false">
                             My Location Override:
@@ -192,6 +188,12 @@
                 </div>
             </div>
 
+            <div class="panel panel-default">
+                <div class="panel-heading">Errors</div>
+                <div class="container">
+                    <input type="text" class="form-control" id="error"  name="error" th:value="${error}" >
+                </div>
+            </div>
 
             <div class="container">
                 <div class="row">

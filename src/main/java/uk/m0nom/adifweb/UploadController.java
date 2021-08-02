@@ -75,6 +75,7 @@ public class UploadController {
 	@GetMapping("/upload")
 	public String displayUploadForm(Model model) {
 		validators.setupValidators(configuration.getSummits());
+		model.addAttribute("error", "");
 		model.addAttribute("upload", new ControlInfo());
 		model.addAttribute("parameters", getDefaultParameters());
 		return "upload";
@@ -82,7 +83,7 @@ public class UploadController {
 	
 	private Map<String, HtmlParameter> getDefaultParameters() {
 		Map<String, HtmlParameter> parameters = new HashMap<>();
-		addParameter(new HtmlParameter(HtmlParameterType.ENCODING, FILE_INPUT_PARAMETER, "", validators.getValidator(HtmlParameterType.FILENAME)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.FILENAME, FILE_INPUT_PARAMETER, "", validators.getValidator(HtmlParameterType.FILENAME)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.ENCODING, ENCODING_PARAMETER, "windows-1251", validators.getValidator(HtmlParameterType.ENCODING)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.LATLONG, LATLONG_PARAMETER, "", validators.getValidator(HtmlParameterType.LATLONG)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.GRID, GRID_PARAMETER, "", validators.getValidator(HtmlParameterType.GRID)), parameters);
@@ -152,6 +153,7 @@ public class UploadController {
 				ModelAndView backToUpload = new ModelAndView("upload");
 				ModelMap map = backToUpload.getModelMap();
 				map.put("error", transformResults.getError());
+				map.put("parameters", parameters);
 				return backToUpload;
 			}
 
