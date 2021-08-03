@@ -231,7 +231,7 @@ public class UploadController {
 		control.setKmlContactLineStyle("baby_blue:50:2");
 		control.setKmlFixedIconUrl("http://maps.google.com/mapfiles/kml/shapes/ranger_station.png");
 		control.setKmlPortableIconUrl("http://maps.google.com/mapfiles/kml/shapes/hiker.png");
-		control.setKmlMobileIconUrl("http://maps.google.com/mapfiles/kml/shapes/ranger_station.png");
+		control.setKmlMobileIconUrl("http://maps.google.com/mapfiles/kml/shapes/cabs.png");
 		control.setKmlMaritimeIconUrl("http://maps.google.com/mapfiles/kml/shapes/sailing.png");
 		control.setKmlParkIconUrl("http://maps.google.com/mapfiles/kml/shapes/picnic.png");
 		control.setKmlSotaIconUrl("http://maps.google.com/mapfiles/kml/shapes/mountains.png");

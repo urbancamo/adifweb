@@ -43,11 +43,11 @@
 
             <!-- *********************** FILE ***************** -->
             <div class="panel panel-default">
-                <div class="panel-heading">ADI File
+                <div class="panel-heading">ADIF File
                 </div>
                 <div class="panel-body" id="filePanel">
                     <div class="container">
-                        <p>In most cases you only need to upload the ADI file and click process.</p>
+                        <p>In most cases you only need to upload the ADIF file and click process.</p>
                     </div>
                     <div class="input-group mb-3">
                         <input type="file" class="form-control" id="filename"  name="filename" th:value="${parameters.get('filename').getValue()}" >
@@ -71,7 +71,7 @@
                 <div class="panel-body" id="activityPanel">
                     <div class="container">
                         <div>
-                            <p>If your ADI file doesn't have a MY_SOTA record, or a combined SIG/SIG_INFO record then specify one or more activity references here.</p>
+                            <p>If your ADIF file doesn't have a MY_SOTA record, or a combined SIG/SIG_INFO record then specify one or more activity references here.</p>
                             <p>If any activity has a location it will be determined automatically, with no need to specify a location override below.
                             </p>
                         </div>
@@ -146,7 +146,7 @@
                 </div>
                 <div class="panel-body" id="locationOverridePanel">
                     <div class="container">
-                        <p>If your activity doesn't have a location, your ADI input file doesn't have your Maidenhead location set, or you want to specify a more accurate location override it here.</p>
+                        <p>If your activity doesn't have a location, your ADIF input file doesn't have your Maidenhead location set, or you want to specify a more accurate location override it here.</p>
                     </div>
                     <div class="dropdown location" id="locationOverrideDropdownDiv">
                         <button class="btn btn-secondary dropdown-toggle location" type="button" id="myLocationOverride" data-bs-toggle="dropdown" aria-expanded="false">
