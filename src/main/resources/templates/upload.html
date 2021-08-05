@@ -50,7 +50,7 @@
                         <p>In most cases you only need to upload the ADIF file and click process.</p>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="file" class="form-control" id="filename"  name="filename" th:value="${parameters.get('filename').getValue()}" >
+                        <input type="file" class="form-control" id="filename" name="filename"/>
                     </div>
                     <div class="input-group mb-3">
                         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Encoding</button>
@@ -77,21 +77,21 @@
                         </div>
                         <div id="input-group activity">
                             <div class="row" >
-                                <div class="col-3">
+                                <div class="col-4">
                                     <label class="" for="sotaRef">SOTA</label>
                                 </div>
-                                <div class="col-5">
+                                <div class="col-4">
                                     <input class="" type="text" id="sotaRef" name="sotaRef" th:value="${parameters.get('sotaRef').getValue()}" value=""/>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-4">
                                     <span class="text-danger" th:text="${parameters.get('sotaRef').getValidationResult().getError()}"></span>
                                 </div>
                             </div>
                             <div class="row" >
-                                <div class="col-3">
+                                <div class="col-4">
                                     <label class="" for="wotaRef">WOTA</label>
                                 </div>
-                                <div class="col-5">
+                                <div class="col-4">
                                     <input class="" type="text" id="wotaRef" name="wotaRef" th:value="${parameters.get('wotaRef').getValue()}" value=""/>
                                 </div>
                                 <div class="col-4">
@@ -99,10 +99,10 @@
                                 </div>
                             </div>
                             <div class="row" >
-                                <div class="col-3">
+                                <div class="col-4">
                                     <label class="" for="hemaRef">HEMA</label>
                                 </div>
-                                <div class="col-5">
+                                <div class="col-4">
                                     <input class="" type="text" id="hemaRef" name="hemaRef" th:value="${parameters.get('hemaRef').getValue()}" value=""/>
                                 </div>
                                 <div class="col-4">
@@ -110,10 +110,10 @@
                                 </div>
                             </div>
                             <div class="row" >
-                                <div class="col-3">
+                                <div class="col-4">
                                     <label class="" for="potaRef">POTA</label>
                                 </div>
-                                <div class="col-5">
+                                <div class="col-4">
                                     <input class="" type="text" id="potaRef" name="potaRef" th:value="${parameters.get('potaRef').getValue()}" value=""/>
                                 </div>
                                 <div class="col-4">
@@ -121,10 +121,10 @@
                                 </div>
                             </div>
                             <div class="row" >
-                                <div class="col-3">
+                                <div class="col-4">
                                     <label class="" for="wwffRef">WWFF</label>
                                 </div>
-                                <div class="col-5">
+                                <div class="col-4">
                                     <input class="" type="text" id="wwffRef" name="wwffRef" th:value="${parameters.get('wwffRef').getValue()}" value=""/>
                                 </div>
                                 <div class="col-4">
@@ -160,27 +160,29 @@
                     <div class="container">
                         <div id="input-group locationOverrideCoordsDiv location">
                             <div class="row" >
-                                <div class="col-3">
-                                    <label class="location" for="latLong">Lat/Long <span class="tip">(decimal comma-separated)</span></label>
+                                <div class="col-4">
+                                    <label class="location" for="latLong">Lat/Long</label>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-4">
                                     <input class="location locationOverrideByCoords" type="text" id="latLong" name="latlong" th:value="${parameters.get('latlong').getValue()}" value=""/>
                                 </div>
-                                <div class="col-2">
-                                    <span class="text-danger" th:text="${parameters.get('latlong').getValidationResult().getError()}"></span>
+                                <div class="col-4">
+                                    <span class="text-danger" th:if="${parameters.get('latlong').getValidationResult().hasError()}" th:text="${parameters.get('latlong').getValidationResult().getError()}"></span>
+                                    <span class="text-success" th:unless="${parameters.get('latlong').getValidationResult().hasError()}" >(decimal comma-separated)</span>
                                 </div>
                             </div>
                         </div>
                         <div id="locationOverrideGridDiv location">
                             <div class="row" >
-                                <div class="col-3">
-                                    <label class="location" for="grid">Grid <span class="tip">(4/6/8/10 char)</span></label>
+                                <div class="col-4">
+                                    <label class="location" for="grid">Grid<br/></label>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-4">
                                     <input class="location locationOverrideByGrid" type="text" id="grid" name="grid" th:value="${parameters.get('grid').getValue()}" value=""/>
                                 </div>
-                                <div class="col-2">
-                                    <span class="text-danger" th:text="${parameters.get('grid').getValidationResult().getError()}"></span>
+                                <div class="col-4">
+                                    <span class="text-danger" th:if="${parameters.get('grid').getValidationResult().hasError()}" th:text="${parameters.get('grid').getValidationResult().getError()}"></span>
+                                    <span class="text-success" th:unless="${parameters.get('grid').getValidationResult().hasError()}">(4/6/8/10 char)</span>
                                 </div>
                             </div>
                         </div>
