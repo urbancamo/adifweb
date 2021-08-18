@@ -261,9 +261,9 @@ public class UploadController {
 		String outPath = tmpPath;
 
 		String inBasename = FilenameUtils.getBaseName(inPath);
-		String out = String.format("%s%s-%s.%s", outPath, inBasename, "fta", "adi");
-		String kml = String.format("%s%s-%s.%s", outPath, inBasename, "fta", "kml");
-		String markdown = String.format("%s%s-%s.%s", outPath, inBasename, "fta", "md");
+		String out = String.format("%s%s.%s", outPath, inBasename, "adi");
+		String kml = String.format("%s%s.%s", outPath, inBasename, "kml");
+		String markdown = String.format("%s%s.%s", outPath, inBasename, "md");
 		logger.info(String.format("Running from: %s", new File(".").getAbsolutePath()));
 		try {
 			if (control.getUseQrzDotCom()) {
