@@ -1,6 +1,5 @@
 package uk.m0nom.adifweb.validation;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import uk.m0nom.activity.ActivityDatabases;
 import uk.m0nom.activity.ActivityType;
 import uk.m0nom.adifweb.domain.HtmlParameterType;
@@ -28,6 +27,9 @@ public class Validators {
         addValidator(HtmlParameterType.WOTA_REF, new ActivityValidator(databases, ActivityType.WOTA));
         addValidator(HtmlParameterType.POTA_REF, new ActivityValidator(databases, ActivityType.POTA));
         addValidator(HtmlParameterType.WWFF_REF, new ActivityValidator(databases, ActivityType.WWFF));
+        addValidator(HtmlParameterType.STATION_SUBLABEL, new BooleanValidator());
+        addValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES, new BooleanValidator());
+        addValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, new DistanceValidator());
     }
 
     public void addValidator(HtmlParameterType type, Validator validator) {

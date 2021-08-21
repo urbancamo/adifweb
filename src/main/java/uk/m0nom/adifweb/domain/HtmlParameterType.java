@@ -11,5 +11,8 @@ public enum HtmlParameterType {
     POTA_REF,
     WWFF_REF,
     GRID,
-    ENCODING
+    ENCODING,
+    STATION_SUBLABEL,
+    LOCAL_ACTIVATION_SITES,
+    LOCAL_ACTIVATION_SITES_RADIUS
 }

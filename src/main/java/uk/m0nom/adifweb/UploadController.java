@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 import uk.m0nom.activity.ActivityDatabases;
 import uk.m0nom.adif3.Adif3FileReaderWriter;
 import uk.m0nom.adif3.Adif3Transformer;
@@ -35,6 +33,7 @@ import uk.m0nom.adifweb.domain.HtmlParameterType;
 import uk.m0nom.adifweb.util.LatLongSplitter;
 import uk.m0nom.adifweb.validation.ValidationResult;
 import uk.m0nom.adifweb.validation.Validators;
+import uk.m0nom.kml.KmlLocalActivities;
 import uk.m0nom.kml.KmlWriter;
 import uk.m0nom.qrz.QrzXmlService;
 
@@ -58,7 +57,9 @@ public class UploadController {
 	private final static String SOTA_PARAMETER = "sotaRef";
 	private final static String POTA_PARAMETER = "potaRef";
 	private final static String WWFF_PARAMETER = "wwffRef";
-
+	private final static String STATION_SUBLABEL_PARAMETER = "stationSubLabel";
+	private final static String LOCAL_ACTIVATION_SITES_PARAMETER = "localActivationSites";
+	private final static String LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER = "localActivationSitesRadius";
 	private static final Logger logger = Logger.getLogger(UploadController.class.getName());
 
 	@Autowired
@@ -92,7 +93,9 @@ public class UploadController {
 		addParameter(new HtmlParameter(HtmlParameterType.HEMA_REF, HEMA_PARAMETER, "", validators.getValidator(HtmlParameterType.HEMA_REF)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.POTA_REF, POTA_PARAMETER, "", validators.getValidator(HtmlParameterType.POTA_REF)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.WWFF_REF, WWFF_PARAMETER, "", validators.getValidator(HtmlParameterType.WWFF_REF)), parameters);
-
+		addParameter(new HtmlParameter(HtmlParameterType.STATION_SUBLABEL, STATION_SUBLABEL_PARAMETER, "", validators.getValidator(HtmlParameterType.STATION_SUBLABEL)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES, LOCAL_ACTIVATION_SITES_PARAMETER, "", validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER, KmlLocalActivities.DEFAULT_RADIUS, validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS)), parameters);
 		return parameters;
 	}
 
@@ -125,6 +128,10 @@ public class UploadController {
 		addParameterFromRequest(HtmlParameterType.HEMA_REF, HEMA_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.POTA_REF, POTA_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.WWFF_REF, WWFF_PARAMETER, request);
+		addParameterFromRequest(HtmlParameterType.STATION_SUBLABEL, STATION_SUBLABEL_PARAMETER, request);
+		addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES, LOCAL_ACTIVATION_SITES_PARAMETER, request);
+		addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER, request);
+
 		parameters.put(FILE_INPUT_PARAMETER, new HtmlParameter(HtmlParameterType.FILENAME, FILE_INPUT_PARAMETER,
 				file.getOriginalFilename(), validators.getValidator(HtmlParameterType.FILENAME)));
 
@@ -238,6 +245,11 @@ public class UploadController {
 		control.setKmlHemaIconUrl("http://maps.google.com/mapfiles/kml/shapes/hospitals.png");
 		control.setKmlWotaIconUrl("http://maps.google.com/mapfiles/kml/shapes/trail.png");
 		control.setKmlWwffIconUrl("http://maps.google.com/mapfiles/kml/shapes/parks.png");
+		
+		control.setKmlCwIconUrl("");
+		control.setKmlShowStationSubLabel("TRUE".equals(parameters.get(STATION_SUBLABEL_PARAMETER).getValue()));
+		control.setKmlShowLocalActivationSites("TRUE".equals(parameters.get(LOCAL_ACTIVATION_SITES_PARAMETER).getValue()));
+		control.setKmlLocalActivationSitesRadius(Double.valueOf(parameters.get(LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER).getValue()));
 
 		String qrzUsername = "M0NOM";
 		String qrzPassword = "mark4qrzasm0nom";
