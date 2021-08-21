@@ -201,19 +201,19 @@
                     <div class="panel-body" id="optionsPanelBody">
                         <div class="container">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="true" id="stationSubLabel" name="stationSubLabel" checked>
+                                <input class="form-check-input" type="checkbox" th:value="${parameters.get('stationSubLabel').getValue()}" value="" id="stationSubLabel" name="stationSubLabel" checked>
                                 <label class="form-check-label" for="stationSubLabel">
                                     Station Sub-label (Band/Mode)
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="true" id="localActivationSites" name="localActivationSites" checked>
+                                <input class="form-check-input" type="checkbox" th:value="${parameters.get('localActivationSites').getValue()}" value="" id="localActivationSites" name="localActivationSites">
                                 <label class="form-check-label" for="localActivationSites">
                                     Show Local Activation Sites
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-input" type="text" th:value="${parameters.get('localActivationSitesRadius').getValue()}" value="" id="localActivationSitesRadius" name="localActivationSitesRadius" checked>
+                                <input class="form-input" type="text" th:value="${parameters.get('localActivationSitesRadius').getValue()}" value="" id="localActivationSitesRadius" name="localActivationSitesRadius">
                                 <label class="form-label" for="localActivationSitesRadius">
                                     Local Activation Sites Radius (m)
                                 </label>

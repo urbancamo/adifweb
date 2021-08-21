@@ -93,7 +93,7 @@ public class UploadController {
 		addParameter(new HtmlParameter(HtmlParameterType.HEMA_REF, HEMA_PARAMETER, "", validators.getValidator(HtmlParameterType.HEMA_REF)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.POTA_REF, POTA_PARAMETER, "", validators.getValidator(HtmlParameterType.POTA_REF)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.WWFF_REF, WWFF_PARAMETER, "", validators.getValidator(HtmlParameterType.WWFF_REF)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.STATION_SUBLABEL, STATION_SUBLABEL_PARAMETER, "", validators.getValidator(HtmlParameterType.STATION_SUBLABEL)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.STATION_SUBLABEL, STATION_SUBLABEL_PARAMETER, "TRUE", validators.getValidator(HtmlParameterType.STATION_SUBLABEL)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES, LOCAL_ACTIVATION_SITES_PARAMETER, "", validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER, KmlLocalActivities.DEFAULT_RADIUS, validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS)), parameters);
 		return parameters;
@@ -247,8 +247,8 @@ public class UploadController {
 		control.setKmlWwffIconUrl("http://maps.google.com/mapfiles/kml/shapes/parks.png");
 		
 		control.setKmlCwIconUrl("");
-		control.setKmlShowStationSubLabel("TRUE".equals(parameters.get(STATION_SUBLABEL_PARAMETER).getValue()));
-		control.setKmlShowLocalActivationSites("TRUE".equals(parameters.get(LOCAL_ACTIVATION_SITES_PARAMETER).getValue()));
+		control.setKmlShowStationSubLabel(parameters.get(STATION_SUBLABEL_PARAMETER).getValue() != null);
+		control.setKmlShowLocalActivationSites(parameters.get(LOCAL_ACTIVATION_SITES_PARAMETER).getValue() != null);
 		control.setKmlLocalActivationSitesRadius(Double.valueOf(parameters.get(LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER).getValue()));
 
 		String qrzUsername = "M0NOM";

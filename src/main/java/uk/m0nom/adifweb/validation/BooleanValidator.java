@@ -7,9 +7,6 @@ public class BooleanValidator implements Validator {
 
     @Override
     public ValidationResult isValid(String value) {
-        if (TRUE.equals(value) || StringUtils.isEmpty(value)) {
-            return ValidationResult.SUCCESS;
-        }
-        return new ValidationResult(String.format("Unexpected boolean value: %s", value));
+        return ValidationResult.SUCCESS;
     }
 }
