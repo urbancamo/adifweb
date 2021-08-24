@@ -300,7 +300,13 @@ public class UploadController {
 				logger.severe(error);
 				return new TransformResults(error);
 			}
-			Qsos qsos = transformer.transform(log, control);
+			Qsos qsos = null;
+
+			try {
+				qsos = transformer.transform(log, control);
+			} catch (UnsupportedOperationException e) {
+				return new TransformResults(e.getMessage());
+			}
 			logger.info(String.format("Writing output file %s with encoding %s", out, control.getEncoding()));
 			readerWriter.write(out, control.getEncoding(), log);
 			if (control.getGenerateKml()) {
