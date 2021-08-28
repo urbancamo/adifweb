@@ -213,9 +213,15 @@
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-input" type="text" th:value="${parameters.get('localActivationSitesRadius').getValue()}" value="" id="localActivationSitesRadius" name="localActivationSitesRadius">
+                                <input class="form-input" type="number" th:value="${parameters.get('localActivationSitesRadius').getValue()}" value="5000" id="localActivationSitesRadius" name="localActivationSitesRadius">
                                 <label class="form-label" for="localActivationSitesRadius">
                                     Local Activation Sites Radius (m)
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-input" type="number" th:value="${parameters.get('hfAntennaTakeoffAngle').getValue()}" value="6.00" id="hfAntennaTakeoffAngle" name="hfAntennaTakeoffAngle">
+                                <label class="form-label" for="hfAntennaTakeoffAngle">
+                                    HF Antenna Takeoff Angle (degrees)
                                 </label>
                             </div>
                         </div>

@@ -30,6 +30,7 @@ public class Validators {
         addValidator(HtmlParameterType.STATION_SUBLABEL, new BooleanValidator());
         addValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES, new BooleanValidator());
         addValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, new DistanceValidator());
+        addValidator(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE, new AntennaTakeoffAngleValidator());
     }
 
     public void addValidator(HtmlParameterType type, Validator validator) {

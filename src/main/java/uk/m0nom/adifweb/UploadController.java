@@ -35,6 +35,7 @@ import uk.m0nom.adifweb.validation.ValidationResult;
 import uk.m0nom.adifweb.validation.Validators;
 import uk.m0nom.kml.KmlLocalActivities;
 import uk.m0nom.kml.KmlWriter;
+import uk.m0nom.propagation.Ionosphere;
 import uk.m0nom.qrz.QrzXmlService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -60,6 +61,8 @@ public class UploadController {
 	private final static String STATION_SUBLABEL_PARAMETER = "stationSubLabel";
 	private final static String LOCAL_ACTIVATION_SITES_PARAMETER = "localActivationSites";
 	private final static String LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER = "localActivationSitesRadius";
+	private final static String HF_ANTENNA_TAKEOFF_ANGLE_PARAMETER = "hfAntennaTakeoffAngle";
+
 	private static final Logger logger = Logger.getLogger(UploadController.class.getName());
 
 	@Autowired
@@ -96,6 +99,7 @@ public class UploadController {
 		addParameter(new HtmlParameter(HtmlParameterType.STATION_SUBLABEL, STATION_SUBLABEL_PARAMETER, "TRUE", validators.getValidator(HtmlParameterType.STATION_SUBLABEL)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES, LOCAL_ACTIVATION_SITES_PARAMETER, "", validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER, KmlLocalActivities.DEFAULT_RADIUS, validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE, HF_ANTENNA_TAKEOFF_ANGLE_PARAMETER, String.format("%.2f", Ionosphere.HF_ANTENNA_DEFAULT_TAKEOFF_ANGLE), validators.getValidator(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE)), parameters);
 		return parameters;
 	}
 
@@ -131,6 +135,7 @@ public class UploadController {
 		addParameterFromRequest(HtmlParameterType.STATION_SUBLABEL, STATION_SUBLABEL_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES, LOCAL_ACTIVATION_SITES_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER, request);
+		addParameterFromRequest(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE, HF_ANTENNA_TAKEOFF_ANGLE_PARAMETER, request);
 
 		parameters.put(FILE_INPUT_PARAMETER, new HtmlParameter(HtmlParameterType.FILENAME, FILE_INPUT_PARAMETER,
 				file.getOriginalFilename(), validators.getValidator(HtmlParameterType.FILENAME)));
@@ -250,6 +255,7 @@ public class UploadController {
 		control.setKmlShowStationSubLabel(parameters.get(STATION_SUBLABEL_PARAMETER).getValue() != null);
 		control.setKmlShowLocalActivationSites(parameters.get(LOCAL_ACTIVATION_SITES_PARAMETER).getValue() != null);
 		control.setKmlLocalActivationSitesRadius(Double.valueOf(parameters.get(LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER).getValue()));
+		control.setHfAntennaTakeoffAngle(Double.valueOf(parameters.get(HF_ANTENNA_TAKEOFF_ANGLE_PARAMETER).getValue()));
 
 		String qrzUsername = "M0NOM";
 		String qrzPassword = "mark4qrzasm0nom";
