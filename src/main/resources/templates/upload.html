@@ -224,6 +224,12 @@
                                     HF Antenna Takeoff Angle (degrees)
                                 </label>
                             </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" th:value="${parameters.get('contestResults').getValue()}" value="" id="contestResultsLabel" name="contestResults" >
+                                <label class="form-check-label" for="contestResultsLabel">
+                                    Include Contest Results in ADIF file
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>

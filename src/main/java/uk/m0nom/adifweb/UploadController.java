@@ -33,6 +33,7 @@ import uk.m0nom.adifweb.domain.HtmlParameterType;
 import uk.m0nom.adifweb.util.LatLongSplitter;
 import uk.m0nom.adifweb.validation.ValidationResult;
 import uk.m0nom.adifweb.validation.Validators;
+import uk.m0nom.contest.ContestResultsCalculator;
 import uk.m0nom.kml.KmlLocalActivities;
 import uk.m0nom.kml.KmlWriter;
 import uk.m0nom.propagation.Ionosphere;
@@ -62,6 +63,7 @@ public class UploadController {
 	private final static String LOCAL_ACTIVATION_SITES_PARAMETER = "localActivationSites";
 	private final static String LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER = "localActivationSitesRadius";
 	private final static String HF_ANTENNA_TAKEOFF_ANGLE_PARAMETER = "hfAntennaTakeoffAngle";
+	private final static String CONTEST_RESULTS_PARAMETER = "contestResults";
 
 	private static final Logger logger = Logger.getLogger(UploadController.class.getName());
 
@@ -100,6 +102,7 @@ public class UploadController {
 		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES, LOCAL_ACTIVATION_SITES_PARAMETER, "", validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER, KmlLocalActivities.DEFAULT_RADIUS, validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE, HF_ANTENNA_TAKEOFF_ANGLE_PARAMETER, String.format("%.2f", Ionosphere.HF_ANTENNA_DEFAULT_TAKEOFF_ANGLE), validators.getValidator(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.CONTEST_RESULTS, CONTEST_RESULTS_PARAMETER, "", validators.getValidator(HtmlParameterType.CONTEST_RESULTS)), parameters);
 		return parameters;
 	}
 
@@ -136,6 +139,7 @@ public class UploadController {
 		addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES, LOCAL_ACTIVATION_SITES_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE, HF_ANTENNA_TAKEOFF_ANGLE_PARAMETER, request);
+		addParameterFromRequest(HtmlParameterType.CONTEST_RESULTS, CONTEST_RESULTS_PARAMETER, request);
 
 		parameters.put(FILE_INPUT_PARAMETER, new HtmlParameter(HtmlParameterType.FILENAME, FILE_INPUT_PARAMETER,
 				file.getOriginalFilename(), validators.getValidator(HtmlParameterType.FILENAME)));
@@ -225,6 +229,8 @@ public class UploadController {
 		control.setPota(parameters.get(POTA_PARAMETER).getValue());
 		control.setWwff(parameters.get(WWFF_PARAMETER).getValue());
 		control.setMyGrid(parameters.get(GRID_PARAMETER).getValue());
+		control.setContestResults(parameters.get(CONTEST_RESULTS_PARAMETER).getValue() != null);
+
 		//control.setMyLatitude(parametersToValidate.get(LATITUDE_PARAMETER).getValue());
 		//control.setMyLongitude(parametersToValidate.get(LONGITUDE_PARAMTER).getValue());
 
@@ -313,8 +319,6 @@ public class UploadController {
 			} catch (UnsupportedOperationException e) {
 				return new TransformResults(e.getMessage());
 			}
-			logger.info(String.format("Writing output file %s with encoding %s", out, control.getEncoding()));
-			readerWriter.write(out, control.getEncoding(), log);
 			if (control.getGenerateKml()) {
 
 				kmlWriter.write(kml, originalFilename, summits, qsos, results);
@@ -322,6 +326,13 @@ public class UploadController {
 					kml = "";
 				}
 			}
+			if (control.getContestResults()) {
+				// Contest Calculations
+				log.getHeader().setPreamble(new ContestResultsCalculator(summits).calculateResults(log));
+			}
+			logger.info(String.format("Writing output file %s with encoding %s", out, control.getEncoding()));
+			readerWriter.write(out, control.getEncoding(), log);
+
 			if (control.getMarkdown()) {
 				BufferedWriter markdownWriter = null;
 				try {
