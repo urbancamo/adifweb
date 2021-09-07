@@ -256,7 +256,8 @@ public class UploadController {
 		control.setKmlHemaIconUrl("http://maps.google.com/mapfiles/kml/shapes/hospitals.png");
 		control.setKmlWotaIconUrl("http://maps.google.com/mapfiles/kml/shapes/trail.png");
 		control.setKmlWwffIconUrl("http://maps.google.com/mapfiles/kml/shapes/parks.png");
-		
+		control.setKmlCotaIconUrl("http://maps.google.com/mapfiles/kml/shapes/schools.png");
+
 		control.setKmlCwIconUrl("");
 		control.setKmlShowStationSubLabel(parameters.get(STATION_SUBLABEL_PARAMETER).getValue() != null);
 		control.setKmlShowLocalActivationSites(parameters.get(LOCAL_ACTIVATION_SITES_PARAMETER).getValue() != null);
