@@ -34,9 +34,9 @@ import uk.m0nom.adifweb.util.LatLongSplitter;
 import uk.m0nom.adifweb.validation.ValidationResult;
 import uk.m0nom.adifweb.validation.Validators;
 import uk.m0nom.contest.ContestResultsCalculator;
-import uk.m0nom.kml.KmlLocalActivities;
+import uk.m0nom.kml.activity.KmlLocalActivities;
 import uk.m0nom.kml.KmlWriter;
-import uk.m0nom.propagation.Ionosphere;
+import uk.m0nom.comms.Ionosphere;
 import uk.m0nom.qrz.QrzXmlService;
 
 import javax.servlet.http.HttpServletResponse;
