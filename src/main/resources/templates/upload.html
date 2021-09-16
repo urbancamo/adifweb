@@ -25,11 +25,6 @@
             padding: 2px;
         }
 
-        span.tip {
-            font-size: 8pt;
-            color: darkgreen;
-        }
-
         button.btn {
             background: whitesmoke;
         }
@@ -323,7 +318,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">Errors</div>
             <div class="container">
-                <input type="text" class="form-control" id="error" name="error" th:value="${error}">
+                <label for="error">Errors:</label><input type="text" class="form-control" id="error" name="error" th:value="${error}">
             </div>
         </div>
 
@@ -371,8 +366,8 @@
         })
 
         $('#form').submit(function () {
-            $("#submit").prop('disabled', true);
-            $("#submit").val("Processing");
+            $('#submit').prop('disabled', true);
+            $('#submit').val("Processing");
             $('#spinner').show();
             $("body").css("cursor", "progress");
             return;
