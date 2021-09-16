@@ -27,6 +27,7 @@ public class Validators {
         addValidator(HtmlParameterType.WOTA_REF, new ActivityValidator(databases, ActivityType.WOTA));
         addValidator(HtmlParameterType.POTA_REF, new ActivityValidator(databases, ActivityType.POTA));
         addValidator(HtmlParameterType.WWFF_REF, new ActivityValidator(databases, ActivityType.WWFF));
+        addValidator(HtmlParameterType.COTA_REF, new ActivityValidator(databases, ActivityType.COTA));
         addValidator(HtmlParameterType.STATION_SUBLABEL, new BooleanValidator());
         addValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES, new BooleanValidator());
         addValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, new DistanceValidator());
@@ -34,6 +35,7 @@ public class Validators {
         addValidator(HtmlParameterType.CONTEST_RESULTS, new BooleanValidator());
         addValidator(HtmlParameterType.SATELLITE_NAME, new SatelliteNameValidator());
         addValidator(HtmlParameterType.SATELLITE_MODE, new SatelliteModeValidator());
+        addValidator(HtmlParameterType.SATELLITE_BAND, new SatelliteBandValidator());
         addValidator(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, new BooleanValidator());
     }
 

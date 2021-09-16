@@ -61,6 +61,7 @@ public class UploadController {
 	private final static String SOTA_PARAMETER = "sotaRef";
 	private final static String POTA_PARAMETER = "potaRef";
 	private final static String WWFF_PARAMETER = "wwffRef";
+	private final static String COTA_PARAMETER = "cotaRef";
 	private final static String STATION_SUBLABEL_PARAMETER = "stationSubLabel";
 	private final static String LOCAL_ACTIVATION_SITES_PARAMETER = "localActivationSites";
 	private final static String LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER = "localActivationSitesRadius";
@@ -68,6 +69,7 @@ public class UploadController {
 	private final static String CONTEST_RESULTS_PARAMETER = "contestResults";
 	private final static String SATELLITE_NAME_PARAMETER = "satName";
 	private final static String SATELLITE_MODE_PARAMETER = "satMode";
+	private final static String SATELLITE_BAND_PARAMETER = "satBand";
 	private final static String SOTA_MICROWAVE_AWARD_COMMENT_PARAMETER = "sotaMicrowaveAwardComment";
 
 	private static final Logger logger = Logger.getLogger(UploadController.class.getName());
@@ -103,6 +105,7 @@ public class UploadController {
 		addParameter(new HtmlParameter(HtmlParameterType.HEMA_REF, HEMA_PARAMETER, "", validators.getValidator(HtmlParameterType.HEMA_REF)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.POTA_REF, POTA_PARAMETER, "", validators.getValidator(HtmlParameterType.POTA_REF)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.WWFF_REF, WWFF_PARAMETER, "", validators.getValidator(HtmlParameterType.WWFF_REF)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.COTA_REF, COTA_PARAMETER, "", validators.getValidator(HtmlParameterType.COTA_REF)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.STATION_SUBLABEL, STATION_SUBLABEL_PARAMETER, "TRUE", validators.getValidator(HtmlParameterType.STATION_SUBLABEL)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES, LOCAL_ACTIVATION_SITES_PARAMETER, "", validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER, KmlLocalActivities.DEFAULT_RADIUS, validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS)), parameters);
@@ -110,6 +113,7 @@ public class UploadController {
 		addParameter(new HtmlParameter(HtmlParameterType.CONTEST_RESULTS, CONTEST_RESULTS_PARAMETER, "", validators.getValidator(HtmlParameterType.CONTEST_RESULTS)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.SATELLITE_NAME, SATELLITE_NAME_PARAMETER, "", validators.getValidator(HtmlParameterType.SATELLITE_NAME)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.SATELLITE_MODE, SATELLITE_MODE_PARAMETER, "", validators.getValidator(HtmlParameterType.SATELLITE_MODE)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.SATELLITE_BAND, SATELLITE_BAND_PARAMETER, "", validators.getValidator(HtmlParameterType.SATELLITE_BAND)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, SOTA_MICROWAVE_AWARD_COMMENT_PARAMETER, "", validators.getValidator(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT)), parameters);
 
 		return parameters;
@@ -144,8 +148,10 @@ public class UploadController {
 		addParameterFromRequest(HtmlParameterType.HEMA_REF, HEMA_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.POTA_REF, POTA_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.WWFF_REF, WWFF_PARAMETER, request);
+		addParameterFromRequest(HtmlParameterType.COTA_REF, COTA_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.SATELLITE_NAME, SATELLITE_NAME_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.SATELLITE_MODE, SATELLITE_MODE_PARAMETER, request);
+		addParameterFromRequest(HtmlParameterType.SATELLITE_BAND, SATELLITE_BAND_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.STATION_SUBLABEL, STATION_SUBLABEL_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES, LOCAL_ACTIVATION_SITES_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER, request);
@@ -240,9 +246,11 @@ public class UploadController {
 		control.setWota(parameters.get(WOTA_PARAMETER).getValue());
 		control.setPota(parameters.get(POTA_PARAMETER).getValue());
 		control.setWwff(parameters.get(WWFF_PARAMETER).getValue());
+		control.setCota(parameters.get(COTA_PARAMETER).getValue());
 		control.setMyGrid(parameters.get(GRID_PARAMETER).getValue());
 		control.setSatelliteName(parameters.get(SATELLITE_NAME_PARAMETER).getValue());
 		control.setSatelliteMode(parameters.get(SATELLITE_MODE_PARAMETER).getValue());
+		control.setSatelliteBand(parameters.get(SATELLITE_BAND_PARAMETER).getValue());
 		control.setSotaMicrowaveAwardComment(parameters.get(SOTA_MICROWAVE_AWARD_COMMENT_PARAMETER).getValue() != null);
 
 		control.setContestResults(parameters.get(CONTEST_RESULTS_PARAMETER).getValue() != null);

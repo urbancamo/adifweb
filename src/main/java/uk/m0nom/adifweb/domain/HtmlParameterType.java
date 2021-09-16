@@ -10,6 +10,7 @@ public enum HtmlParameterType {
     HEMA_REF,
     POTA_REF,
     WWFF_REF,
+    COTA_REF,
     GRID,
     ENCODING,
     STATION_SUBLABEL,
@@ -19,5 +20,6 @@ public enum HtmlParameterType {
     CONTEST_RESULTS,
     SATELLITE_NAME,
     SATELLITE_MODE,
+    SATELLITE_BAND,
     SOTA_MICROWAVE_AWARD_COMMENT;
 }

@@ -148,6 +148,19 @@
                                       th:text="${parameters.get('wwffRef').getValidationResult().getError()}"></span>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="" for="cotaRef">COTA</label>
+                            </div>
+                            <div class="col-4">
+                                <input class="" type="text" id="cotaRef" name="cotaRef"
+                                       th:value="${parameters.get('cotaRef').getValue()}" value=""/>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-danger"
+                                      th:text="${parameters.get('cotaRef').getValidationResult().getError()}"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -298,6 +311,19 @@
                             <div class="col-4">
                                 <span class="text-danger"
                                       th:text="${parameters.get('satMode').getValidationResult().getError()}"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="" for="satBand">Satellite Band</label>
+                            </div>
+                            <div class="col-4">
+                                <input class="" type="text" id="satBand" name="satBand"
+                                       th:value="${parameters.get('satBand').getValue()}" value=""/>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-danger"
+                                      th:text="${parameters.get('satBand').getValidationResult().getError()}"></span>
                             </div>
                         </div>
                         <div class="form-check">
