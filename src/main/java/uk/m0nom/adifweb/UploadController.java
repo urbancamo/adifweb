@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.gavaghan.geodesy.GlobalCoordinates;
 import org.marsik.ham.adif.Adif3;
+import org.marsik.ham.adif.types.Sota;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import uk.m0nom.activity.ActivityDatabases;
+import uk.m0nom.activity.sota.SotaSummitInfo;
 import uk.m0nom.adif3.Adif3FileReaderWriter;
 import uk.m0nom.adif3.Adif3Transformer;
 import uk.m0nom.adif3.UnsupportedHeaderException;
@@ -64,6 +66,9 @@ public class UploadController {
 	private final static String LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER = "localActivationSitesRadius";
 	private final static String HF_ANTENNA_TAKEOFF_ANGLE_PARAMETER = "hfAntennaTakeoffAngle";
 	private final static String CONTEST_RESULTS_PARAMETER = "contestResults";
+	private final static String SATELLITE_NAME_PARAMETER = "satName";
+	private final static String SATELLITE_MODE_PARAMETER = "satMode";
+	private final static String SOTA_MICROWAVE_AWARD_COMMENT_PARAMETER = "sotaMicrowaveAwardComment";
 
 	private static final Logger logger = Logger.getLogger(UploadController.class.getName());
 
@@ -103,6 +108,10 @@ public class UploadController {
 		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER, KmlLocalActivities.DEFAULT_RADIUS, validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE, HF_ANTENNA_TAKEOFF_ANGLE_PARAMETER, String.format("%.2f", Ionosphere.HF_ANTENNA_DEFAULT_TAKEOFF_ANGLE), validators.getValidator(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.CONTEST_RESULTS, CONTEST_RESULTS_PARAMETER, "", validators.getValidator(HtmlParameterType.CONTEST_RESULTS)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.SATELLITE_NAME, SATELLITE_NAME_PARAMETER, "", validators.getValidator(HtmlParameterType.SATELLITE_NAME)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.SATELLITE_MODE, SATELLITE_MODE_PARAMETER, "", validators.getValidator(HtmlParameterType.SATELLITE_MODE)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, SOTA_MICROWAVE_AWARD_COMMENT_PARAMETER, "", validators.getValidator(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT)), parameters);
+
 		return parameters;
 	}
 
@@ -135,11 +144,14 @@ public class UploadController {
 		addParameterFromRequest(HtmlParameterType.HEMA_REF, HEMA_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.POTA_REF, POTA_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.WWFF_REF, WWFF_PARAMETER, request);
+		addParameterFromRequest(HtmlParameterType.SATELLITE_NAME, SATELLITE_NAME_PARAMETER, request);
+		addParameterFromRequest(HtmlParameterType.SATELLITE_MODE, SATELLITE_MODE_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.STATION_SUBLABEL, STATION_SUBLABEL_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES, LOCAL_ACTIVATION_SITES_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE, HF_ANTENNA_TAKEOFF_ANGLE_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.CONTEST_RESULTS, CONTEST_RESULTS_PARAMETER, request);
+		addParameterFromRequest(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, SOTA_MICROWAVE_AWARD_COMMENT_PARAMETER, request);
 
 		parameters.put(FILE_INPUT_PARAMETER, new HtmlParameter(HtmlParameterType.FILENAME, FILE_INPUT_PARAMETER,
 				file.getOriginalFilename(), validators.getValidator(HtmlParameterType.FILENAME)));
@@ -229,6 +241,10 @@ public class UploadController {
 		control.setPota(parameters.get(POTA_PARAMETER).getValue());
 		control.setWwff(parameters.get(WWFF_PARAMETER).getValue());
 		control.setMyGrid(parameters.get(GRID_PARAMETER).getValue());
+		control.setSatelliteName(parameters.get(SATELLITE_NAME_PARAMETER).getValue());
+		control.setSatelliteMode(parameters.get(SATELLITE_MODE_PARAMETER).getValue());
+		control.setSotaMicrowaveAwardComment(parameters.get(SOTA_MICROWAVE_AWARD_COMMENT_PARAMETER).getValue() != null);
+
 		control.setContestResults(parameters.get(CONTEST_RESULTS_PARAMETER).getValue() != null);
 
 		//control.setMyLatitude(parametersToValidate.get(LATITUDE_PARAMETER).getValue());

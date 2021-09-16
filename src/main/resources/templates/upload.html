@@ -2,7 +2,7 @@
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
     <title>ADIF Process Control Form</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,290 +12,420 @@
             padding: 10px;
             margin: 10px;
         }
+
         div.dropdown {
             padding: 10px;
         }
+
         div.panel-heading {
             font-weight: bold;
         }
+
         div.row {
             padding: 2px;
         }
+
         span.tip {
             font-size: 8pt;
             color: darkgreen;
         }
+
         button.btn {
             background: whitesmoke;
         }
+
         div.padding-bottom {
             padding-bottom: 30px;
         }
     </style>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
+<div class="container">
     <div class="container">
-        <div class="container">
-            <h1>ADIF Processor Control Form</h1>
-        </div>
-        <form id="form" action="#" th:action="@{/upload}" th:object="${upload}" enctype="multipart/form-data" method="post">
-
-            <!-- *********************** FILE ***************** -->
-            <div class="panel panel-default">
-                <div class="panel-heading">ADIF File
-                </div>
-                <div class="panel-body" id="filePanel">
-                    <div class="container">
-                        <p>In most cases you only need to upload the ADIF file and click process.</p>
-                    </div>
-                    <div class="input-group mb-3">
-                        <input type="file" class="form-control" id="filename" name="filename"/>
-                    </div>
-                    <div class="input-group mb-3">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Encoding</button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item a-encoding" href="#">WINDOWS-1251</a></li>
-                            <li><a class="dropdown-item a-encoding" href="#">ISO-8859-1</a></li>
-                            <li><a class="dropdown-item a-encoding" href="#">UTF-8</a></li>
-                        </ul>
-                        <input type="text" class="form-control" aria-label="File Encoding" id="encoding" name="encoding" th:value="${parameters.get('encoding').getValue()}" value="windows-1251">
-                    </div>
-                </div>
-            </div>
-
-            <!-- *********************** ACTIVITY ***************** -->
-            <div class="panel panel-default">
-                <div class="panel-heading">Activity
-                </div>
-                <div class="panel-body" id="activityPanel">
-                    <div class="container">
-                        <div>
-                            <p>If your ADIF file doesn't have a MY_SOTA record, or a combined SIG/SIG_INFO record then specify one or more activity references here.</p>
-                            <p>If any activity has a location it will be determined automatically, with no need to specify a location override below.
-                            </p>
-                        </div>
-                        <div id="input-group activity">
-                            <div class="row" >
-                                <div class="col-4">
-                                    <label class="" for="sotaRef">SOTA</label>
-                                </div>
-                                <div class="col-4">
-                                    <input class="" type="text" id="sotaRef" name="sotaRef" th:value="${parameters.get('sotaRef').getValue()}" value=""/>
-                                </div>
-                                <div class="col-4">
-                                    <span class="text-danger" th:text="${parameters.get('sotaRef').getValidationResult().getError()}"></span>
-                                </div>
-                            </div>
-                            <div class="row" >
-                                <div class="col-4">
-                                    <label class="" for="wotaRef">WOTA</label>
-                                </div>
-                                <div class="col-4">
-                                    <input class="" type="text" id="wotaRef" name="wotaRef" th:value="${parameters.get('wotaRef').getValue()}" value=""/>
-                                </div>
-                                <div class="col-4">
-                                    <span class="text-danger" th:text="${parameters.get('wotaRef').getValidationResult().getError()}"></span>
-                                </div>
-                            </div>
-                            <div class="row" >
-                                <div class="col-4">
-                                    <label class="" for="hemaRef">HEMA</label>
-                                </div>
-                                <div class="col-4">
-                                    <input class="" type="text" id="hemaRef" name="hemaRef" th:value="${parameters.get('hemaRef').getValue()}" value=""/>
-                                </div>
-                                <div class="col-4">
-                                    <span class="text-danger" th:text="${parameters.get('hemaRef').getValidationResult().getError()}"></span>
-                                </div>
-                            </div>
-                            <div class="row" >
-                                <div class="col-4">
-                                    <label class="" for="potaRef">POTA</label>
-                                </div>
-                                <div class="col-4">
-                                    <input class="" type="text" id="potaRef" name="potaRef" th:value="${parameters.get('potaRef').getValue()}" value=""/>
-                                </div>
-                                <div class="col-4">
-                                    <span class="text-danger" th:text="${parameters.get('potaRef').getValidationResult().getError()}"></span>
-                                </div>
-                            </div>
-                            <div class="row" >
-                                <div class="col-4">
-                                    <label class="" for="wwffRef">WWFF</label>
-                                </div>
-                                <div class="col-4">
-                                    <input class="" type="text" id="wwffRef" name="wwffRef" th:value="${parameters.get('wwffRef').getValue()}" value=""/>
-                                </div>
-                                <div class="col-4">
-                                    <span class="text-danger" th:text="${parameters.get('wwffRef').getValidationResult().getError()}"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- *********************** LOCATION ***************** -->
-            <div class="panel panel-default">
-                <div class="panel-heading">Your Location</div>
-                <div class="container">
-                    <div class="checkbox">
-                        <label><input type="checkbox" style="float:inherit;" id="locationOverrideCb" name="setCoords"/> override</label>
-                    </div>
-                </div>
-                <div class="panel-body" id="locationOverridePanel">
-                    <div class="container">
-                        <p>If your activity doesn't have a location, your ADIF input file doesn't have your Maidenhead location set, or you want to specify a more accurate location override it here.</p>
-                    </div>
-                    <div class="dropdown location" id="locationOverrideDropdownDiv">
-                        <button class="btn btn-secondary dropdown-toggle location" type="button" id="myLocationOverride" data-bs-toggle="dropdown" aria-expanded="false">
-                            My Location Override:
-                        </button>
-                        <ul class="dropdown-menu location" aria-labelledby="myLocationOverride" id="locationOverrideDropdown">
-                            <li><a class="dropdown-item location" href="#" id="locationOverrideByCoordinates">by coordinates</a></li>
-                            <li><a class="dropdown-item location" href="#" id="locationOverrideByGrid">by grid</a></li>
-                        </ul>
-                    </div>
-                    <div class="container">
-                        <div id="input-group locationOverrideCoordsDiv location">
-                            <div class="row" >
-                                <div class="col-4">
-                                    <label class="location" for="latLong">Lat/Long</label>
-                                </div>
-                                <div class="col-4">
-                                    <input class="location locationOverrideByCoords" type="text" id="latLong" name="latlong" th:value="${parameters.get('latlong').getValue()}" value=""/>
-                                </div>
-                                <div class="col-4">
-                                    <span class="text-danger" th:if="${parameters.get('latlong').getValidationResult().hasError()}" th:text="${parameters.get('latlong').getValidationResult().getError()}"></span>
-                                    <span class="text-success" th:unless="${parameters.get('latlong').getValidationResult().hasError()}" >(decimal comma-separated)</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="locationOverrideGridDiv location">
-                            <div class="row" >
-                                <div class="col-4">
-                                    <label class="location" for="grid">Grid<br/></label>
-                                </div>
-                                <div class="col-4">
-                                    <input class="location locationOverrideByGrid" type="text" id="grid" name="grid" th:value="${parameters.get('grid').getValue()}" value=""/>
-                                </div>
-                                <div class="col-4">
-                                    <span class="text-danger" th:if="${parameters.get('grid').getValidationResult().hasError()}" th:text="${parameters.get('grid').getValidationResult().getError()}"></span>
-                                    <span class="text-success" th:unless="${parameters.get('grid').getValidationResult().hasError()}">(4/6/8/10 char)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- *********************** OPTIONS ***************** -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <a  data-bs-toggle="collapse" href="#optionsCollapse" aria-expanded="false" aria-controls="optionsCollapse">
-                        Options
-                    </a>
-                </div>
-                <div class="collapse" id="optionsCollapse">
-                    <div class="panel-body" id="optionsPanelBody">
-                        <div class="container">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" th:value="${parameters.get('stationSubLabel').getValue()}" value="" id="stationSubLabel" name="stationSubLabel" checked>
-                                <label class="form-check-label" for="stationSubLabel">
-                                    Station Sub-label (Band/Mode)
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" th:value="${parameters.get('localActivationSites').getValue()}" value="" id="localActivationSites" name="localActivationSites">
-                                <label class="form-check-label" for="localActivationSites">
-                                    Show Local Activation Sites
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-input" type="number" th:value="${parameters.get('localActivationSitesRadius').getValue()}" value="5000" id="localActivationSitesRadius" name="localActivationSitesRadius">
-                                <label class="form-label" for="localActivationSitesRadius">
-                                    Local Activation Sites Radius (m)
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-input" type="number" th:value="${parameters.get('hfAntennaTakeoffAngle').getValue()}" value="6.00" id="hfAntennaTakeoffAngle" name="hfAntennaTakeoffAngle">
-                                <label class="form-label" for="hfAntennaTakeoffAngle">
-                                    HF Antenna Takeoff Angle (degrees)
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" th:value="${parameters.get('contestResults').getValue()}" value="" id="contestResultsLabel" name="contestResults" >
-                                <label class="form-check-label" for="contestResultsLabel">
-                                    Include Contest Results in ADIF file
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- *********************** ERRORS ***************** -->
-            <div class="panel panel-default">
-                <div class="panel-heading">Errors</div>
-                <div class="container">
-                    <input type="text" class="form-control" id="error"  name="error" th:value="${error}" >
-                </div>
-            </div>
-
-            <div class="container padding-bottom">
-                <div class="row">
-                    <div class="col-4">
-                        <input id="submit" type="submit" value="Process"> the ADIF file
-                    </div>
-                    <div class="col-2">
-                        <div id="spinner" class="spinner-border" role="status">
-                            <span class="sr-only"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-
+        <h1>ADIF Processor Control Form</h1>
     </div>
+    <form id="form" action="#" th:action="@{/upload}" th:object="${upload}" enctype="multipart/form-data" method="post">
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <!-- *********************** FILE ***************** -->
+        <div class="panel panel-default">
+            <div class="panel-heading">ADIF File
+            </div>
+            <div class="panel-body" id="filePanel">
+                <div class="container">
+                    <p>In most cases you only need to upload the ADIF file and click process.</p>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="file" class="form-control" id="filename" name="filename"/>
+                </div>
+                <div class="input-group mb-3">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">Encoding
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item a-encoding" href="#">WINDOWS-1251</a></li>
+                        <li><a class="dropdown-item a-encoding" href="#">ISO-8859-1</a></li>
+                        <li><a class="dropdown-item a-encoding" href="#">UTF-8</a></li>
+                    </ul>
+                    <input type="text" class="form-control" aria-label="File Encoding" id="encoding" name="encoding"
+                           th:value="${parameters.get('encoding').getValue()}" value="windows-1251">
+                </div>
+            </div>
+        </div>
 
-    <script th:inline="javascript">
-        $(function() {
-            $('.location').prop('disabled', true);
-            $('#spinner').hide();
+        <!-- *********************** ACTIVITY ***************** -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Activity
+            </div>
+            <div class="panel-body" id="activityPanel">
+                <div class="container">
+                    <div>
+                        <p>If your ADIF file doesn't have a MY_SOTA record, or a combined SIG/SIG_INFO record then
+                            specify one or more activity references here.</p>
+                        <p>If any activity has a location it will be determined automatically, with no need to specify a
+                            location override below.
+                        </p>
+                    </div>
+                    <div id="input-group activity">
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="" for="sotaRef">SOTA</label>
+                            </div>
+                            <div class="col-4">
+                                <input class="" type="text" id="sotaRef" name="sotaRef"
+                                       th:value="${parameters.get('sotaRef').getValue()}" value=""/>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-danger"
+                                      th:text="${parameters.get('sotaRef').getValidationResult().getError()}"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="" for="wotaRef">WOTA</label>
+                            </div>
+                            <div class="col-4">
+                                <input class="" type="text" id="wotaRef" name="wotaRef"
+                                       th:value="${parameters.get('wotaRef').getValue()}" value=""/>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-danger"
+                                      th:text="${parameters.get('wotaRef').getValidationResult().getError()}"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="" for="hemaRef">HEMA</label>
+                            </div>
+                            <div class="col-4">
+                                <input class="" type="text" id="hemaRef" name="hemaRef"
+                                       th:value="${parameters.get('hemaRef').getValue()}" value=""/>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-danger"
+                                      th:text="${parameters.get('hemaRef').getValidationResult().getError()}"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="" for="potaRef">POTA</label>
+                            </div>
+                            <div class="col-4">
+                                <input class="" type="text" id="potaRef" name="potaRef"
+                                       th:value="${parameters.get('potaRef').getValue()}" value=""/>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-danger"
+                                      th:text="${parameters.get('potaRef').getValidationResult().getError()}"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="" for="wwffRef">WWFF</label>
+                            </div>
+                            <div class="col-4">
+                                <input class="" type="text" id="wwffRef" name="wwffRef"
+                                       th:value="${parameters.get('wwffRef').getValue()}" value=""/>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-danger"
+                                      th:text="${parameters.get('wwffRef').getValidationResult().getError()}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            $('#locationOverrideCb').on('change', function() {
-                $('.location').prop('disabled', !this.checked);
-                if (this.checked) {
-                    $('.locationOverrideByCoords').prop('disabled', true);
-                    $('.locationOverrideByGrid').prop('disabled', true);
-                }
-            });
+        <!-- *********************** SATELLITES ***************** -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Activity
+            </div>
+            <div class="panel-body" id="activityPanel">
+                <div class="container">
+                    <div>
+                        <p>If your ADIF file doesn't have a MY_SOTA record, or a combined SIG/SIG_INFO record then
+                            specify one or more activity references here.</p>
+                        <p>If any activity has a location it will be determined automatically, with no need to specify a
+                            location override below.
+                        </p>
+                    </div>
+                    <div id="input-group activity">
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="" for="sotaRef">SOTA</label>
+                            </div>
+                            <div class="col-4">
+                                <input class="" type="text" id="sotaRef" name="sotaRef"
+                                       th:value="${parameters.get('sotaRef').getValue()}" value=""/>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-danger"
+                                      th:text="${parameters.get('sotaRef').getValidationResult().getError()}"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="" for="wotaRef">WOTA</label>
+                            </div>
+                            <div class="col-4">
+                                <input class="" type="text" id="wotaRef" name="wotaRef"
+                                       th:value="${parameters.get('wotaRef').getValue()}" value=""/>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-danger"
+                                      th:text="${parameters.get('wotaRef').getValidationResult().getError()}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            $('#locationOverrideByCoordinates').on('click', function() {
-                $('.locationOverrideByCoords').prop('disabled', false);
-                $('.locationOverrideByGrid').prop('disabled', true);
-            })
-            $('#locationOverrideByGrid').on('click', function() {
+        <!-- *********************** LOCATION ***************** -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Your Location</div>
+            <div class="container">
+                <div class="checkbox">
+                    <label><input type="checkbox" style="float:inherit;" id="locationOverrideCb" name="setCoords"/>
+                        override</label>
+                </div>
+            </div>
+            <div class="panel-body" id="locationOverridePanel">
+                <div class="container">
+                    <p>If your activity doesn't have a location, your ADIF input file doesn't have your Maidenhead
+                        location set, or you want to specify a more accurate location override it here.</p>
+                </div>
+                <div class="dropdown location" id="locationOverrideDropdownDiv">
+                    <button class="btn btn-secondary dropdown-toggle location" type="button" id="myLocationOverride"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        My Location Override:
+                    </button>
+                    <ul class="dropdown-menu location" aria-labelledby="myLocationOverride"
+                        id="locationOverrideDropdown">
+                        <li><a class="dropdown-item location" href="#" id="locationOverrideByCoordinates">by
+                            coordinates</a></li>
+                        <li><a class="dropdown-item location" href="#" id="locationOverrideByGrid">by grid</a></li>
+                    </ul>
+                </div>
+                <div class="container">
+                    <div id="input-group locationOverrideCoordsDiv location">
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="location" for="latLong">Lat/Long</label>
+                            </div>
+                            <div class="col-4">
+                                <input class="location locationOverrideByCoords" type="text" id="latLong" name="latlong"
+                                       th:value="${parameters.get('latlong').getValue()}" value=""/>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-danger"
+                                      th:if="${parameters.get('latlong').getValidationResult().hasError()}"
+                                      th:text="${parameters.get('latlong').getValidationResult().getError()}"></span>
+                                <span class="text-success"
+                                      th:unless="${parameters.get('latlong').getValidationResult().hasError()}">(decimal comma-separated)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="locationOverrideGridDiv location">
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="location" for="grid">Grid<br/></label>
+                            </div>
+                            <div class="col-4">
+                                <input class="location locationOverrideByGrid" type="text" id="grid" name="grid"
+                                       th:value="${parameters.get('grid').getValue()}" value=""/>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-danger"
+                                      th:if="${parameters.get('grid').getValidationResult().hasError()}"
+                                      th:text="${parameters.get('grid').getValidationResult().getError()}"></span>
+                                <span class="text-success"
+                                      th:unless="${parameters.get('grid').getValidationResult().hasError()}">(4/6/8/10 char)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- *********************** OPTIONS ***************** -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <a data-bs-toggle="collapse" href="#optionsCollapse" aria-expanded="false"
+                   aria-controls="optionsCollapse">
+                    Options
+                </a>
+            </div>
+            <div class="collapse" id="optionsCollapse">
+                <div class="panel-body" id="optionsPanelBody">
+                    <div class="container">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                   th:value="${parameters.get('stationSubLabel').getValue()}" value=""
+                                   id="stationSubLabel" name="stationSubLabel" checked>
+                            <label class="form-check-label" for="stationSubLabel">
+                                Station Sub-label (Band/Mode)
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                   th:value="${parameters.get('localActivationSites').getValue()}" value=""
+                                   id="localActivationSites" name="localActivationSites">
+                            <label class="form-check-label" for="localActivationSites">
+                                Show Local Activation Sites
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-input" type="number"
+                                   th:value="${parameters.get('localActivationSitesRadius').getValue()}" value="5000"
+                                   id="localActivationSitesRadius" name="localActivationSitesRadius">
+                            <label class="form-label" for="localActivationSitesRadius">
+                                Local Activation Sites Radius (m)
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-input" type="number"
+                                   th:value="${parameters.get('hfAntennaTakeoffAngle').getValue()}" value="6.00"
+                                   id="hfAntennaTakeoffAngle" name="hfAntennaTakeoffAngle">
+                            <label class="form-label" for="hfAntennaTakeoffAngle">
+                                HF Antenna Takeoff Angle (degrees)
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                   th:value="${parameters.get('contestResults').getValue()}" value=""
+                                   id="contestResultsLabel" name="contestResults">
+                            <label class="form-check-label" for="contestResultsLabel">
+                                Include Contest Results in ADIF file
+                            </label>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="" for="satName">Satellite Name</label>
+                            </div>
+                            <div class="col-4">
+                                <input class="" type="text" id="satName" name="satName"
+                                       th:value="${parameters.get('satName').getValue()}" value=""/>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-danger"
+                                      th:text="${parameters.get('satName').getValidationResult().getError()}"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="" for="satMode">Satellite Mode</label>
+                            </div>
+                            <div class="col-4">
+                                <input class="" type="text" id="satMode" name="satMode"
+                                       th:value="${parameters.get('satMode').getValue()}" value=""/>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-danger"
+                                      th:text="${parameters.get('satMode').getValidationResult().getError()}"></span>
+                            </div>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                   th:value="${parameters.get('sotaMicrowaveAwardComment').getValue()}" value=""
+                                   id="sotaMicrowaveAwardComment" name="sotaMicrowaveAwardComment">
+                            <label class="form-check-label" for="sotaMicrowaveAwardComment">
+                                Add SAT_NAME %QRA%MHL6% to comment field
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- *********************** ERRORS ***************** -->
+        <div class="panel panel-default">
+            <div class="panel-heading">Errors</div>
+            <div class="container">
+                <input type="text" class="form-control" id="error" name="error" th:value="${error}">
+            </div>
+        </div>
+
+        <div class="container padding-bottom">
+            <div class="row">
+                <div class="col-4">
+                    <input id="submit" type="submit" value="Process"> the ADIF file
+                </div>
+                <div class="col-2">
+                    <div id="spinner" class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script th:inline="javascript">
+    $(function () {
+        $('.location').prop('disabled', true);
+        $('#spinner').hide();
+
+        $('#locationOverrideCb').on('change', function () {
+            $('.location').prop('disabled', !this.checked);
+            if (this.checked) {
                 $('.locationOverrideByCoords').prop('disabled', true);
-                $('.locationOverrideByGrid').prop('disabled', false);
-            })
-
-            $('#form').submit(function() {
-                $("#submit").prop('disabled', true);
-                $("#submit").val("Processing");
-                $('#spinner').show();
-                $("body").css("cursor", "progress");
-                return;
-            })
-
-            $('a.a-encoding').click(function() {
-                $("#encoding").val(this.innerText);
-            })
+                $('.locationOverrideByGrid').prop('disabled', true);
+            }
         });
-    </script>
+
+        $('#locationOverrideByCoordinates').on('click', function () {
+            $('.locationOverrideByCoords').prop('disabled', false);
+            $('.locationOverrideByGrid').prop('disabled', true);
+        })
+        $('#locationOverrideByGrid').on('click', function () {
+            $('.locationOverrideByCoords').prop('disabled', true);
+            $('.locationOverrideByGrid').prop('disabled', false);
+        })
+
+        $('#form').submit(function () {
+            $("#submit").prop('disabled', true);
+            $("#submit").val("Processing");
+            $('#spinner').show();
+            $("body").css("cursor", "progress");
+            return;
+        })
+
+        $('a.a-encoding').click(function () {
+            $("#encoding").val(this.innerText);
+        })
+    });
+</script>
 
 </body>

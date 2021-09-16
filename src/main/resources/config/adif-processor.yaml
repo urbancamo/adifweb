@@ -15,4 +15,10 @@ HEMA: HemaRef
 LAT: Latitude
 LONG: Longitude
 POTA: PotaRef
+WWFF: WwffRef
+PATH: AntPath
+PROP: Propagation
+SKCC: Skcc
 COTA: CotaRef
+SAT_NAME: SatelliteName
+SAT_MODE: SatelliteMode

@@ -32,6 +32,9 @@ public class Validators {
         addValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, new DistanceValidator());
         addValidator(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE, new AntennaTakeoffAngleValidator());
         addValidator(HtmlParameterType.CONTEST_RESULTS, new BooleanValidator());
+        addValidator(HtmlParameterType.SATELLITE_NAME, new SatelliteNameValidator());
+        addValidator(HtmlParameterType.SATELLITE_MODE, new SatelliteModeValidator());
+        addValidator(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, new BooleanValidator());
     }
 
     public void addValidator(HtmlParameterType type, Validator validator) {
