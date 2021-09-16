@@ -158,50 +158,6 @@
             </div>
         </div>
 
-        <!-- *********************** SATELLITES ***************** -->
-        <div class="panel panel-default">
-            <div class="panel-heading">Activity
-            </div>
-            <div class="panel-body" id="activityPanel">
-                <div class="container">
-                    <div>
-                        <p>If your ADIF file doesn't have a MY_SOTA record, or a combined SIG/SIG_INFO record then
-                            specify one or more activity references here.</p>
-                        <p>If any activity has a location it will be determined automatically, with no need to specify a
-                            location override below.
-                        </p>
-                    </div>
-                    <div id="input-group activity">
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="" for="sotaRef">SOTA</label>
-                            </div>
-                            <div class="col-4">
-                                <input class="" type="text" id="sotaRef" name="sotaRef"
-                                       th:value="${parameters.get('sotaRef').getValue()}" value=""/>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:text="${parameters.get('sotaRef').getValidationResult().getError()}"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="" for="wotaRef">WOTA</label>
-                            </div>
-                            <div class="col-4">
-                                <input class="" type="text" id="wotaRef" name="wotaRef"
-                                       th:value="${parameters.get('wotaRef').getValue()}" value=""/>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:text="${parameters.get('wotaRef').getValidationResult().getError()}"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- *********************** LOCATION ***************** -->
         <div class="panel panel-default">
