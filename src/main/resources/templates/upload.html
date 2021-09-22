@@ -32,6 +32,10 @@
         div.padding-bottom {
             padding-bottom: 30px;
         }
+
+        a.infolink {
+            text-decoration: none;
+        }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -85,7 +89,7 @@
                     <div id="input-group activity">
                         <div class="row">
                             <div class="col-4">
-                                <label class="" for="sotaRef">SOTA</label>
+                                <label class="" for="sotaRef">Summits on the Air <a href="https://www.sota.org.uk/" target="_blank" class="infolink" rel="noopener noreferrer">🛈</a></label>
                             </div>
                             <div class="col-4">
                                 <input class="" type="text" id="sotaRef" name="sotaRef"
@@ -98,7 +102,7 @@
                         </div>
                         <div class="row">
                             <div class="col-4">
-                                <label class="" for="wotaRef">WOTA</label>
+                                <label class="" for="wotaRef">Wainwrights on the Air <a href="https://www.wota.org.uk/" target="_blank" class="infolink" rel="noopener noreferrer">🛈</a></label>
                             </div>
                             <div class="col-4">
                                 <input class="" type="text" id="wotaRef" name="wotaRef"
@@ -111,7 +115,7 @@
                         </div>
                         <div class="row">
                             <div class="col-4">
-                                <label class="" for="hemaRef">HEMA</label>
+                                <label class="" for="hemaRef">HuMPs Excluding Marilyns Award <a href="http://hema.org.uk/" target="_blank" class="infolink" rel="noopener noreferrer">🛈</a></label>
                             </div>
                             <div class="col-4">
                                 <input class="" type="text" id="hemaRef" name="hemaRef"
@@ -124,7 +128,7 @@
                         </div>
                         <div class="row">
                             <div class="col-4">
-                                <label class="" for="potaRef">POTA</label>
+                                <label class="" for="potaRef">Parks on the Air <a href="https://parksontheair.com/" target="_blank" class="infolink" rel="noopener noreferrer">🛈</a></label>
                             </div>
                             <div class="col-4">
                                 <input class="" type="text" id="potaRef" name="potaRef"
@@ -137,7 +141,7 @@
                         </div>
                         <div class="row">
                             <div class="col-4">
-                                <label class="" for="wwffRef">WWFF</label>
+                                <label class="" for="wwffRef">World Wide Flora Fauna <a href="https://wwff.co/" target="_blank" class="infolink" rel="noopener noreferrer">🛈</a></label>
                             </div>
                             <div class="col-4">
                                 <input class="" type="text" id="wwffRef" name="wwffRef"
@@ -150,7 +154,7 @@
                         </div>
                         <div class="row">
                             <div class="col-4">
-                                <label class="" for="cotaRef">COTA</label>
+                                <label class="" for="cotaRef">World Castles Award <a href="http://www.wca.qrz.ru/ENG/main.html" class="infolink" target="_blank" rel="noopener noreferrer">🛈</a></label>
                             </div>
                             <div class="col-4">
                                 <input class="" type="text" id="cotaRef" name="cotaRef"
@@ -159,6 +163,19 @@
                             <div class="col-4">
                                 <span class="text-danger"
                                       th:text="${parameters.get('cotaRef').getValidationResult().getError()}"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="" for="lotaRef">International Lighthouse Lightship Weekend <a href="https://illw.net/" class="infolink" target="_blank" rel="noopener noreferrer">🛈</a></label>
+                            </div>
+                            <div class="col-4">
+                                <input class="" type="text" id="lotaRef" name="lotaRef"
+                                       th:value="${parameters.get('lotaRef').getValue()}" value=""/>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-danger"
+                                      th:text="${parameters.get('lotaRef').getValidationResult().getError()}"></span>
                             </div>
                         </div>
                     </div>

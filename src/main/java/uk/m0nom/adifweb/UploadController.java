@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import uk.m0nom.activity.ActivityDatabases;
+import uk.m0nom.activity.ActivityType;
 import uk.m0nom.activity.sota.SotaSummitInfo;
 import uk.m0nom.adif3.Adif3FileReaderWriter;
 import uk.m0nom.adif3.Adif3Transformer;
@@ -62,6 +63,7 @@ public class UploadController {
 	private final static String POTA_PARAMETER = "potaRef";
 	private final static String WWFF_PARAMETER = "wwffRef";
 	private final static String COTA_PARAMETER = "cotaRef";
+	private final static String LOTA_PARAMETER = "lotaRef";
 	private final static String STATION_SUBLABEL_PARAMETER = "stationSubLabel";
 	private final static String LOCAL_ACTIVATION_SITES_PARAMETER = "localActivationSites";
 	private final static String LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER = "localActivationSitesRadius";
@@ -106,6 +108,7 @@ public class UploadController {
 		addParameter(new HtmlParameter(HtmlParameterType.POTA_REF, POTA_PARAMETER, "", validators.getValidator(HtmlParameterType.POTA_REF)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.WWFF_REF, WWFF_PARAMETER, "", validators.getValidator(HtmlParameterType.WWFF_REF)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.COTA_REF, COTA_PARAMETER, "", validators.getValidator(HtmlParameterType.COTA_REF)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.LOTA_REF, LOTA_PARAMETER, "", validators.getValidator(HtmlParameterType.LOTA_REF)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.STATION_SUBLABEL, STATION_SUBLABEL_PARAMETER, "TRUE", validators.getValidator(HtmlParameterType.STATION_SUBLABEL)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES, LOCAL_ACTIVATION_SITES_PARAMETER, "", validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER, KmlLocalActivities.DEFAULT_RADIUS, validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS)), parameters);
@@ -149,6 +152,7 @@ public class UploadController {
 		addParameterFromRequest(HtmlParameterType.POTA_REF, POTA_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.WWFF_REF, WWFF_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.COTA_REF, COTA_PARAMETER, request);
+		addParameterFromRequest(HtmlParameterType.LOTA_REF, LOTA_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.SATELLITE_NAME, SATELLITE_NAME_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.SATELLITE_MODE, SATELLITE_MODE_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.SATELLITE_BAND, SATELLITE_BAND_PARAMETER, request);
@@ -241,12 +245,13 @@ public class UploadController {
 		control.setGenerateKml(true);
 
 		control.setKmlS2s(true);
-		control.setHema(parameters.get(HEMA_PARAMETER).getValue());
-		control.setSota(parameters.get(SOTA_PARAMETER).getValue());
-		control.setWota(parameters.get(WOTA_PARAMETER).getValue());
-		control.setPota(parameters.get(POTA_PARAMETER).getValue());
-		control.setWwff(parameters.get(WWFF_PARAMETER).getValue());
-		control.setCota(parameters.get(COTA_PARAMETER).getValue());
+		for (ActivityType activity : ActivityType.values()) {
+			String ref = String.format("%sRef", activity.getActivityName().toLowerCase());
+			if (parameters.get(ref) != null) {
+				control.setActivityRef(activity, parameters.get(ref).getValue());
+			}
+		}
+
 		control.setMyGrid(parameters.get(GRID_PARAMETER).getValue());
 		control.setSatelliteName(parameters.get(SATELLITE_NAME_PARAMETER).getValue());
 		control.setSatelliteMode(parameters.get(SATELLITE_MODE_PARAMETER).getValue());
@@ -275,12 +280,14 @@ public class UploadController {
 		control.setKmlPortableIconUrl("http://maps.google.com/mapfiles/kml/shapes/hiker.png");
 		control.setKmlMobileIconUrl("http://maps.google.com/mapfiles/kml/shapes/cabs.png");
 		control.setKmlMaritimeIconUrl("http://maps.google.com/mapfiles/kml/shapes/sailing.png");
-		control.setKmlParkIconUrl("http://maps.google.com/mapfiles/kml/shapes/picnic.png");
-		control.setKmlSotaIconUrl("http://maps.google.com/mapfiles/kml/shapes/mountains.png");
-		control.setKmlHemaIconUrl("http://maps.google.com/mapfiles/kml/shapes/hospitals.png");
-		control.setKmlWotaIconUrl("http://maps.google.com/mapfiles/kml/shapes/trail.png");
-		control.setKmlWwffIconUrl("http://maps.google.com/mapfiles/kml/shapes/parks.png");
-		control.setKmlCotaIconUrl("http://maps.google.com/mapfiles/kml/shapes/schools.png");
+
+		control.setActivityIcon(ActivityType.POTA, "http://maps.google.com/mapfiles/kml/shapes/picnic.png");
+		control.setActivityIcon(ActivityType.SOTA, "http://maps.google.com/mapfiles/kml/shapes/mountains.png");
+		control.setActivityIcon(ActivityType.HEMA, "http://maps.google.com/mapfiles/kml/shapes/hospitals.png");
+		control.setActivityIcon(ActivityType.WOTA, "http://maps.google.com/mapfiles/kml/shapes/trail.png");
+		control.setActivityIcon(ActivityType.WWFF, "http://maps.google.com/mapfiles/kml/shapes/parks.png");
+		control.setActivityIcon(ActivityType.COTA, "http://maps.google.com/mapfiles/kml/shapes/schools.png");
+		control.setActivityIcon(ActivityType.LOTA, "http://maps.google.com/mapfiles/kml/shapes/marina.png");
 
 		control.setKmlCwIconUrl("");
 		control.setKmlShowStationSubLabel(parameters.get(STATION_SUBLABEL_PARAMETER).getValue() != null);

@@ -38,5 +38,6 @@ public class ApplicationConfiguration implements ApplicationListener<Application
         summits = new ActivityDatabases();
         formatter = new Adif3PrintFormatter();
         summits.loadData();
+        logger.info("Initialising complete, ready to process requests...");
     }
 }

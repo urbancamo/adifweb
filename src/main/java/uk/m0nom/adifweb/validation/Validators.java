@@ -28,6 +28,7 @@ public class Validators {
         addValidator(HtmlParameterType.POTA_REF, new ActivityValidator(databases, ActivityType.POTA));
         addValidator(HtmlParameterType.WWFF_REF, new ActivityValidator(databases, ActivityType.WWFF));
         addValidator(HtmlParameterType.COTA_REF, new ActivityValidator(databases, ActivityType.COTA));
+        addValidator(HtmlParameterType.LOTA_REF, new ActivityValidator(databases, ActivityType.LOTA));
         addValidator(HtmlParameterType.STATION_SUBLABEL, new BooleanValidator());
         addValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES, new BooleanValidator());
         addValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, new DistanceValidator());
