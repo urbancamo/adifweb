@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.gavaghan.geodesy.GlobalCoordinates;
 import org.marsik.ham.adif.Adif3;
-import org.marsik.ham.adif.types.Sota;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -22,11 +21,10 @@ import org.springframework.web.multipart.support.StandardMultipartHttpServletReq
 import org.springframework.web.servlet.ModelAndView;
 import uk.m0nom.activity.ActivityDatabases;
 import uk.m0nom.activity.ActivityType;
-import uk.m0nom.activity.sota.SotaSummitInfo;
 import uk.m0nom.adif3.Adif3FileReaderWriter;
 import uk.m0nom.adif3.Adif3Transformer;
 import uk.m0nom.adif3.UnsupportedHeaderException;
-import uk.m0nom.adif3.args.TransformControl;
+import uk.m0nom.adif3.control.TransformControl;
 import uk.m0nom.adif3.contacts.Qsos;
 import uk.m0nom.adif3.print.Adif3PrintFormatter;
 import uk.m0nom.adif3.transform.TransformResults;
@@ -201,19 +199,27 @@ public class UploadController {
 			results.put("markdownFile", transformResults.getMarkdownFile());
 			results.put("error", StringUtils.defaultIfEmpty(transformResults.getError(), "none"));
 			results.put("validationErrors", getValidationErrorsString(parameters));
-			StringBuilder sb = new StringBuilder("");
-			for (String callsign : transformResults.getContactsWithoutLocation()) {
-				sb.append(String.format("%s, ", callsign));
-			}
-			String callsignsWithoutLocation = "none";
-			if (sb.length() > 0) {
-				callsignsWithoutLocation = sb.substring(0, sb.length()-2);
-			}
-			results.put("callsignsWithoutLocation", callsignsWithoutLocation);
+
+			results.put("callsignsWithoutLocation", buildCallsignList(transformResults.getContactsWithoutLocation()));
+			results.put("callsignsWithDubiousLocation", buildCallsignList(transformResults.getContactsWithDubiousLocation()));
+
+			String callsignsWithDubiousLocation = "none";
+
 			return new ModelAndView("results", results);
 		}
 	}
 
+	private String buildCallsignList(Collection<String> callsigns) {
+		StringBuilder sb = new StringBuilder("");
+		for (String callsign : callsigns) {
+			sb.append(String.format("%s, ", callsign));
+		}
+		String rtn = "none";
+		if (sb.length() > 0) {
+			rtn = sb.substring(0, sb.length()-2);
+		}
+		return rtn;
+	}
 	private String getValidationErrorsString(Map<String, HtmlParameter> parametersToValidate) {
 		StringBuilder sb = new StringBuilder();
 
@@ -408,6 +414,7 @@ public class UploadController {
 			logger.severe(String.format("Caught exception %s processing file: %s", e.getMessage(), inPath));
 			logger.severe(ExceptionUtils.getStackTrace(e));
 		}
+		logger.info("Processing complete...");
 		return results;
 	}
 }

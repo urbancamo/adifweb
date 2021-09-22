@@ -49,8 +49,12 @@
                         <input class="form-control" type="text" id="error" name="error" th:value="${error}" value=""/>
                     </div>
                     <div class="form-group mb-3" >
-                        <label for="callsigns" class="form-label">Callsigns without Location</label>
-                        <input class="form-control" type="text" id="callsigns" name="callsigns" th:value="${callsignsWithoutLocation}" value=""/>
+                        <label for="callsignsWithoutLocation" class="form-label">Contacts without a location</label>
+                        <input class="form-control" type="text" id="callsignsWithoutLocation" name="callsignsWithoutLocation" th:value="${callsignsWithoutLocation}" value=""/>
+                    </div>
+                    <div class="form-group mb-3" >
+                        <label for="callsignsWithDubiousLocation" class="form-label">Contacts with a dubious location</label>
+                        <input class="form-control" type="text" id="callsignsWithDubiousLocation" name="callsignsWithDubiousLocation" th:value="${callsignsWithDubiousLocation}" value=""/>
                     </div>
 
                     <label for="kmlFile" class="form-label">ADI File</label>

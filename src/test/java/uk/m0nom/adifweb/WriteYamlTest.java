@@ -3,7 +3,7 @@ package uk.m0nom.adifweb;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.Yaml;
-import uk.m0nom.adif3.args.TransformControl;
+import uk.m0nom.adif3.control.TransformControl;
 
 import java.io.File;
 import java.io.IOException;
