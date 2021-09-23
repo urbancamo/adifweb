@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class Validators {
 
-    private Map<HtmlParameterType, Validator> validators;
+    private final Map<HtmlParameterType, Validator> validators;
 
     public Validators() {
         validators = new HashMap<>();
@@ -44,6 +44,7 @@ public class Validators {
     public void addValidator(HtmlParameterType type, Validator validator) {
         validators.put(type, validator);
     }
+
     public Validator getValidator(HtmlParameterType type) {
         return validators.get(type);
     }

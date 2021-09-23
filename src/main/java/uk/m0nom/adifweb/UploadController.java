@@ -1,7 +1,6 @@
 package uk.m0nom.adifweb;
 
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -24,8 +23,8 @@ import uk.m0nom.activity.ActivityType;
 import uk.m0nom.adif3.Adif3FileReaderWriter;
 import uk.m0nom.adif3.Adif3Transformer;
 import uk.m0nom.adif3.UnsupportedHeaderException;
-import uk.m0nom.adif3.control.TransformControl;
 import uk.m0nom.adif3.contacts.Qsos;
+import uk.m0nom.adif3.control.TransformControl;
 import uk.m0nom.adif3.print.Adif3PrintFormatter;
 import uk.m0nom.adif3.transform.TransformResults;
 import uk.m0nom.adifweb.domain.ControlInfo;
@@ -34,19 +33,21 @@ import uk.m0nom.adifweb.domain.HtmlParameterType;
 import uk.m0nom.adifweb.util.LatLongSplitter;
 import uk.m0nom.adifweb.validation.ValidationResult;
 import uk.m0nom.adifweb.validation.Validators;
-import uk.m0nom.contest.ContestResultsCalculator;
-import uk.m0nom.kml.activity.KmlLocalActivities;
-import uk.m0nom.kml.KmlWriter;
 import uk.m0nom.comms.Ionosphere;
+import uk.m0nom.contest.ContestResultsCalculator;
+import uk.m0nom.kml.KmlWriter;
+import uk.m0nom.kml.activity.KmlLocalActivities;
 import uk.m0nom.qrz.QrzXmlService;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @Controller
@@ -78,8 +79,8 @@ public class UploadController {
 	@Autowired
 	private ApplicationConfiguration configuration;
 
-	private Map<String, HtmlParameter> parameters = new HashMap<>();
-	private Validators validators = new Validators();
+	private final Map<String, HtmlParameter> parameters = new HashMap<>();
+	private final Validators validators = new Validators();
 
 	@Autowired
 	private ResourceLoader resourceLoader;
@@ -128,7 +129,7 @@ public class UploadController {
 	}
 
 	@PostMapping("/upload")
-	public ModelAndView handleUpload(StandardMultipartHttpServletRequest request, ModelMap model, HttpServletResponse response) throws Exception {
+	public ModelAndView handleUpload(StandardMultipartHttpServletRequest request) throws Exception {
 		validators.setupValidators(configuration.getSummits());
 
 		var factory = new DiskFileItemFactory();
@@ -140,7 +141,6 @@ public class UploadController {
 		factory.setSizeThreshold(DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD);
 		factory.setFileCleaningTracker(null);
 
-		ServletFileUpload upload = new ServletFileUpload(factory);
 		MultipartFile file = request.getFile(FILE_INPUT_PARAMETER);
 
 		addParameterFromRequest(HtmlParameterType.ENCODING, ENCODING_PARAMETER, request);
@@ -164,6 +164,7 @@ public class UploadController {
 		addParameterFromRequest(HtmlParameterType.CONTEST_RESULTS, CONTEST_RESULTS_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, SOTA_MICROWAVE_AWARD_COMMENT_PARAMETER, request);
 
+		assert file != null;
 		parameters.put(FILE_INPUT_PARAMETER, new HtmlParameter(HtmlParameterType.FILENAME, FILE_INPUT_PARAMETER,
 				file.getOriginalFilename(), validators.getValidator(HtmlParameterType.FILENAME)));
 
@@ -206,14 +207,12 @@ public class UploadController {
 			results.put("callsignsWithoutLocation", buildCallsignList(transformResults.getContactsWithoutLocation()));
 			results.put("callsignsWithDubiousLocation", buildCallsignList(transformResults.getContactsWithDubiousLocation()));
 
-			String callsignsWithDubiousLocation = "none";
-
 			return new ModelAndView("results", results);
 		}
 	}
 
 	private String buildCallsignList(Collection<String> callsigns) {
-		StringBuilder sb = new StringBuilder("");
+		StringBuilder sb = new StringBuilder();
 		for (String callsign : callsigns) {
 			sb.append(String.format("%s, ", callsign));
 		}
@@ -241,7 +240,6 @@ public class UploadController {
 	}
 
 	private void validateParameters(Map<String, HtmlParameter> parameters) {
-		boolean valid = true;
 		Collection<HtmlParameter> toValidate = parameters.values();
 		for (HtmlParameter parameter : toValidate) {
 			parameter.validate();
@@ -285,19 +283,19 @@ public class UploadController {
 		control.setKmlContactShadow(true);
 		control.setKmlS2sContactLineStyle("brick_red:50:2");
 		control.setKmlContactLineStyle("baby_blue:50:2");
-		control.setKmlFixedIconUrl("http://maps.google.com/mapfiles/kml/shapes/ranger_station.png");
-		control.setKmlPortableIconUrl("http://maps.google.com/mapfiles/kml/shapes/hiker.png");
-		control.setKmlMobileIconUrl("http://maps.google.com/mapfiles/kml/shapes/cabs.png");
-		control.setKmlMaritimeIconUrl("http://maps.google.com/mapfiles/kml/shapes/sailing.png");
+		control.setKmlFixedIconUrl("https://maps.google.com/mapfiles/kml/shapes/ranger_station.png");
+		control.setKmlPortableIconUrl("https://maps.google.com/mapfiles/kml/shapes/hiker.png");
+		control.setKmlMobileIconUrl("https://maps.google.com/mapfiles/kml/shapes/cabs.png");
+		control.setKmlMaritimeIconUrl("https://maps.google.com/mapfiles/kml/shapes/sailing.png");
 
-		control.setActivityIcon(ActivityType.POTA, "http://maps.google.com/mapfiles/kml/shapes/picnic.png");
-		control.setActivityIcon(ActivityType.SOTA, "http://maps.google.com/mapfiles/kml/shapes/mountains.png");
-		control.setActivityIcon(ActivityType.HEMA, "http://maps.google.com/mapfiles/kml/shapes/hospitals.png");
-		control.setActivityIcon(ActivityType.WOTA, "http://maps.google.com/mapfiles/kml/shapes/trail.png");
-		control.setActivityIcon(ActivityType.WWFF, "http://maps.google.com/mapfiles/kml/shapes/parks.png");
-		control.setActivityIcon(ActivityType.COTA, "http://maps.google.com/mapfiles/kml/shapes/schools.png");
-		control.setActivityIcon(ActivityType.LOTA, "http://maps.google.com/mapfiles/kml/shapes/marina.png");
-		control.setActivityIcon(ActivityType.ROTA, "http://maps.google.com/mapfiles/kml/shapes/rail.png");
+		control.setActivityIcon(ActivityType.POTA, "https://maps.google.com/mapfiles/kml/shapes/picnic.png");
+		control.setActivityIcon(ActivityType.SOTA, "https://maps.google.com/mapfiles/kml/shapes/mountains.png");
+		control.setActivityIcon(ActivityType.HEMA, "https://maps.google.com/mapfiles/kml/shapes/hospitals.png");
+		control.setActivityIcon(ActivityType.WOTA, "https://maps.google.com/mapfiles/kml/shapes/trail.png");
+		control.setActivityIcon(ActivityType.WWFF, "https://maps.google.com/mapfiles/kml/shapes/parks.png");
+		control.setActivityIcon(ActivityType.COTA, "https://maps.google.com/mapfiles/kml/shapes/schools.png");
+		control.setActivityIcon(ActivityType.LOTA, "https://maps.google.com/mapfiles/kml/shapes/marina.png");
+		control.setActivityIcon(ActivityType.ROTA, "https://maps.google.com/mapfiles/kml/shapes/rail.png");
 
 		control.setKmlCwIconUrl("");
 		control.setKmlShowStationSubLabel(parameters.get(STATION_SUBLABEL_PARAMETER).getValue() != null);
@@ -324,12 +322,10 @@ public class UploadController {
 		Adif3FileReaderWriter readerWriter = configuration.getReaderWriter();
 		Adif3PrintFormatter formatter = configuration.getFormatter();
 
-		String outPath = tmpPath;
-
 		String inBasename = FilenameUtils.getBaseName(inPath);
-		String out = String.format("%s%s.%s", outPath, inBasename, "adi");
-		String kml = String.format("%s%s.%s", outPath, inBasename, "kml");
-		String markdown = String.format("%s%s.%s", outPath, inBasename, "md");
+		String out = String.format("%s%s.%s", tmpPath, inBasename, "adi");
+		String kml = String.format("%s%s.%s", tmpPath, inBasename, "kml");
+		String markdown = String.format("%s%s.%s", tmpPath, inBasename, "md");
 		logger.info(String.format("Running from: %s", new File(".").getAbsolutePath()));
 		try {
 			if (control.getUseQrzDotCom()) {
@@ -346,7 +342,7 @@ public class UploadController {
 			transformer.configure(adifProcessorConfig.getInputStream(), summits, qrzXmlService);
 
 			logger.info(String.format("Reading input file %s with encoding %s", inPath, control.getEncoding()));
-			Adif3 log = null;
+			Adif3 log;
 			try {
 				log = readerWriter.read(inPath, control.getEncoding(), false);
 			} catch (Exception e) {
@@ -354,7 +350,7 @@ public class UploadController {
 				logger.severe(error);
 				return new TransformResults(error);
 			}
-			Qsos qsos = null;
+			Qsos qsos;
 
 			try {
 				qsos = transformer.transform(log, control);

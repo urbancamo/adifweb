@@ -15,7 +15,7 @@ public class DistanceValidator implements Validator {
         }
 
         try {
-            Double d = Double.parseDouble(value);
+            double d = Double.parseDouble(value);
              if (d <= 0.0) {
                  return new ValidationResult(UNDER_RANGE);
              } else if (d > 25000){

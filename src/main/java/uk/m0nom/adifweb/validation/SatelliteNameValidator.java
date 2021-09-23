@@ -1,7 +1,6 @@
 package uk.m0nom.adifweb.validation;
 
 import org.apache.commons.lang3.StringUtils;
-import uk.m0nom.maidenheadlocator.MaidenheadLocatorConversion;
 import uk.m0nom.satellite.Satellites;
 
 public class SatelliteNameValidator implements Validator {

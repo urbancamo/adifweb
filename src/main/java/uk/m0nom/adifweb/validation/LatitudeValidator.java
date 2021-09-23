@@ -15,7 +15,7 @@ public class LatitudeValidator implements Validator {
         }
 
         try {
-            Double d = Double.parseDouble(value);
+            double d = Double.parseDouble(value);
              if (d < -90.0) {
                  return new ValidationResult(UNDER_RANGE);
              } else if (d > 90.0){

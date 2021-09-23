@@ -3,8 +3,6 @@ package uk.m0nom.adifweb.validation;
 import org.apache.commons.lang3.StringUtils;
 import org.marsik.ham.adif.enums.Band;
 
-import java.util.Locale;
-
 public class SatelliteBandValidator implements Validator {
     private final static String INVALID_BAND = "Invalid Band";
 
