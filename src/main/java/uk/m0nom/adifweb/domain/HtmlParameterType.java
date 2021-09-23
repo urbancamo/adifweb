@@ -12,6 +12,7 @@ public enum HtmlParameterType {
     WWFF_REF,
     COTA_REF,
     LOTA_REF,
+    ROTA_REF,
     GRID,
     ENCODING,
     STATION_SUBLABEL,

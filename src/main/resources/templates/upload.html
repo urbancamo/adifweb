@@ -152,6 +152,7 @@
                                       th:text="${parameters.get('wwffRef').getValidationResult().getError()}"></span>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-4">
                                 <label class="" for="cotaRef">World Castles Award <a href="http://www.wca.qrz.ru/ENG/main.html" class="infolink" target="_blank" rel="noopener noreferrer">🛈</a></label>
@@ -165,6 +166,7 @@
                                       th:text="${parameters.get('cotaRef').getValidationResult().getError()}"></span>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-4">
                                 <label class="" for="lotaRef">International Lighthouse Lightship Weekend <a href="https://illw.net/" class="infolink" target="_blank" rel="noopener noreferrer">🛈</a></label>
@@ -176,6 +178,20 @@
                             <div class="col-4">
                                 <span class="text-danger"
                                       th:text="${parameters.get('lotaRef').getValidationResult().getError()}"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="" for="rotaRef">Railways on the Air <a href="https://rota.barac.org.uk/" class="infolink" target="_blank" rel="noopener noreferrer">🛈</a></label>
+                            </div>
+                            <div class="col-4">
+                                <input class="" type="text" id="rotaRef" name="rotaRef"
+                                       th:value="${parameters.get('rotaRef').getValue()}" value=""/>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-danger"
+                                      th:text="${parameters.get('rotaRef').getValidationResult().getError()}"></span>
                             </div>
                         </div>
                     </div>

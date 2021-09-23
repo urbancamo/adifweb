@@ -62,6 +62,7 @@ public class UploadController {
 	private final static String WWFF_PARAMETER = "wwffRef";
 	private final static String COTA_PARAMETER = "cotaRef";
 	private final static String LOTA_PARAMETER = "lotaRef";
+	private final static String ROTA_PARAMETER = "rotaRef";
 	private final static String STATION_SUBLABEL_PARAMETER = "stationSubLabel";
 	private final static String LOCAL_ACTIVATION_SITES_PARAMETER = "localActivationSites";
 	private final static String LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER = "localActivationSitesRadius";
@@ -107,6 +108,7 @@ public class UploadController {
 		addParameter(new HtmlParameter(HtmlParameterType.WWFF_REF, WWFF_PARAMETER, "", validators.getValidator(HtmlParameterType.WWFF_REF)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.COTA_REF, COTA_PARAMETER, "", validators.getValidator(HtmlParameterType.COTA_REF)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.LOTA_REF, LOTA_PARAMETER, "", validators.getValidator(HtmlParameterType.LOTA_REF)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.ROTA_REF, ROTA_PARAMETER, "", validators.getValidator(HtmlParameterType.ROTA_REF)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.STATION_SUBLABEL, STATION_SUBLABEL_PARAMETER, "TRUE", validators.getValidator(HtmlParameterType.STATION_SUBLABEL)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES, LOCAL_ACTIVATION_SITES_PARAMETER, "", validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES)), parameters);
 		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER, KmlLocalActivities.DEFAULT_RADIUS, validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS)), parameters);
@@ -151,6 +153,7 @@ public class UploadController {
 		addParameterFromRequest(HtmlParameterType.WWFF_REF, WWFF_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.COTA_REF, COTA_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.LOTA_REF, LOTA_PARAMETER, request);
+		addParameterFromRequest(HtmlParameterType.ROTA_REF, ROTA_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.SATELLITE_NAME, SATELLITE_NAME_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.SATELLITE_MODE, SATELLITE_MODE_PARAMETER, request);
 		addParameterFromRequest(HtmlParameterType.SATELLITE_BAND, SATELLITE_BAND_PARAMETER, request);
@@ -294,6 +297,7 @@ public class UploadController {
 		control.setActivityIcon(ActivityType.WWFF, "http://maps.google.com/mapfiles/kml/shapes/parks.png");
 		control.setActivityIcon(ActivityType.COTA, "http://maps.google.com/mapfiles/kml/shapes/schools.png");
 		control.setActivityIcon(ActivityType.LOTA, "http://maps.google.com/mapfiles/kml/shapes/marina.png");
+		control.setActivityIcon(ActivityType.ROTA, "http://maps.google.com/mapfiles/kml/shapes/rail.png");
 
 		control.setKmlCwIconUrl("");
 		control.setKmlShowStationSubLabel(parameters.get(STATION_SUBLABEL_PARAMETER).getValue() != null);
