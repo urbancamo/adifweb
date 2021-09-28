@@ -20,8 +20,9 @@ import org.springframework.web.multipart.support.StandardMultipartHttpServletReq
 import org.springframework.web.servlet.ModelAndView;
 import uk.m0nom.activity.ActivityDatabases;
 import uk.m0nom.activity.ActivityType;
-import uk.m0nom.adif3.Adif3FileReaderWriter;
+import uk.m0nom.adif3.Adif3FileReader;
 import uk.m0nom.adif3.Adif3Transformer;
+import uk.m0nom.adif3.Adif3FileWriter;
 import uk.m0nom.adif3.UnsupportedHeaderException;
 import uk.m0nom.adif3.contacts.Qsos;
 import uk.m0nom.adif3.control.TransformControl;
@@ -38,6 +39,8 @@ import uk.m0nom.contest.ContestResultsCalculator;
 import uk.m0nom.kml.KmlWriter;
 import uk.m0nom.kml.activity.KmlLocalActivities;
 import uk.m0nom.qrz.QrzXmlService;
+import uk.m0nom.qsofile.QsoFileReader;
+import uk.m0nom.qsofile.QsoFileWriter;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -183,11 +186,11 @@ public class UploadController {
 			InputStream uploadedStream = file.getInputStream();
 			long timestamp = new Date().getTime();
 
-			String adifPath = String.format("%s%d-%s", tmpPath, timestamp, file.getOriginalFilename());
-			OutputStream out = new FileOutputStream(adifPath);
+			String inputPath = String.format("%s%d-%s", tmpPath, timestamp, file.getOriginalFilename());
+			OutputStream out = new FileOutputStream(inputPath);
 
 			IOUtils.copy(uploadedStream, out);
-			TransformResults transformResults = runTransformer(control, tmpPath, adifPath, FilenameUtils.getBaseName(file.getOriginalFilename()));
+			TransformResults transformResults = runTransformer(control, tmpPath, inputPath, FilenameUtils.getBaseName(file.getOriginalFilename()));
 
 			if (transformResults.isErrors()) {
 				ModelAndView backToUpload = new ModelAndView("upload");
@@ -319,7 +322,9 @@ public class UploadController {
 
 		Adif3Transformer transformer = configuration.getTransformer();
 		ActivityDatabases summits = configuration.getSummits();
-		Adif3FileReaderWriter readerWriter = configuration.getReaderWriter();
+		QsoFileReader reader = configuration.getReader(inPath);
+		QsoFileWriter writer = configuration.getWriter();
+
 		Adif3PrintFormatter formatter = configuration.getFormatter();
 
 		String inBasename = FilenameUtils.getBaseName(inPath);
@@ -344,7 +349,7 @@ public class UploadController {
 			logger.info(String.format("Reading input file %s with encoding %s", inPath, control.getEncoding()));
 			Adif3 log;
 			try {
-				log = readerWriter.read(inPath, control.getEncoding(), false);
+				log = reader.read(inPath, control.getEncoding(), false);
 			} catch (Exception e) {
 				String error = String.format("Error processing ADI file, caught exception:\n\t'%s'", e.getMessage());
 				logger.severe(error);
@@ -369,7 +374,7 @@ public class UploadController {
 				log.getHeader().setPreamble(new ContestResultsCalculator(summits).calculateResults(log));
 			}
 			logger.info(String.format("Writing output file %s with encoding %s", out, control.getEncoding()));
-			readerWriter.write(out, control.getEncoding(), log);
+			writer.write(out, control.getEncoding(), log);
 
 			if (control.getMarkdown()) {
 				BufferedWriter markdownWriter = null;
