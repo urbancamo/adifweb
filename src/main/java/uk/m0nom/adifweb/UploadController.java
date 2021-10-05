@@ -20,9 +20,7 @@ import org.springframework.web.multipart.support.StandardMultipartHttpServletReq
 import org.springframework.web.servlet.ModelAndView;
 import uk.m0nom.activity.ActivityDatabases;
 import uk.m0nom.activity.ActivityType;
-import uk.m0nom.adif3.Adif3FileReader;
 import uk.m0nom.adif3.Adif3Transformer;
-import uk.m0nom.adif3.Adif3FileWriter;
 import uk.m0nom.adif3.UnsupportedHeaderException;
 import uk.m0nom.adif3.contacts.Qsos;
 import uk.m0nom.adif3.control.TransformControl;
@@ -38,7 +36,8 @@ import uk.m0nom.comms.Ionosphere;
 import uk.m0nom.contest.ContestResultsCalculator;
 import uk.m0nom.kml.KmlWriter;
 import uk.m0nom.kml.activity.KmlLocalActivities;
-import uk.m0nom.qrz.QrzXmlService;
+import uk.m0nom.qrz.CachingQrzXmlService;
+import uk.m0nom.qrz.QrzService;
 import uk.m0nom.qsofile.QsoFileReader;
 import uk.m0nom.qsofile.QsoFileWriter;
 
@@ -317,7 +316,7 @@ public class UploadController {
 
 	private TransformResults runTransformer(TransformControl control, String tmpPath, String inPath, String originalFilename) {
 		TransformResults results = new TransformResults();
-		QrzXmlService qrzXmlService = new QrzXmlService(control.getQrzUsername(), control.getQrzPassword());
+		QrzService qrzService = new CachingQrzXmlService(control.getQrzUsername(), control.getQrzPassword());
 		KmlWriter kmlWriter = new KmlWriter(control);
 
 		Adif3Transformer transformer = configuration.getTransformer();
@@ -334,17 +333,17 @@ public class UploadController {
 		logger.info(String.format("Running from: %s", new File(".").getAbsolutePath()));
 		try {
 			if (control.getUseQrzDotCom()) {
-				qrzXmlService.enable();
-				if (!qrzXmlService.getSessionKey()) {
+				qrzService.enable();
+				if (!qrzService.getSessionKey()) {
 					logger.warning("Could not connect to QRZ.COM, disabling lookups and continuing...");
-					qrzXmlService.disable();
+					qrzService.disable();
 				}
 			}
 			String adifProcessingConfigFilename = "classpath:config/adif-processor.yaml";
 			Resource adifProcessorConfig = resourceLoader.getResource(adifProcessingConfigFilename);
 			logger.info(String.format("Configuring transformer using: %s", adifProcessingConfigFilename));
 
-			transformer.configure(adifProcessorConfig.getInputStream(), summits, qrzXmlService);
+			transformer.configure(adifProcessorConfig.getInputStream(), summits, qrzService);
 
 			logger.info(String.format("Reading input file %s with encoding %s", inPath, control.getEncoding()));
 			Adif3 log;
