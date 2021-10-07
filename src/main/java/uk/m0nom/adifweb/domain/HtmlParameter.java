@@ -16,9 +16,9 @@ public class HtmlParameter {
     private Validator validator;
     private ValidationResult validationResult;
 
-    public HtmlParameter(HtmlParameterType type, String key, String value, Validator validator) {
+    public HtmlParameter(HtmlParameterType type, String value, Validator validator) {
         this.type = type;
-        this.key = key;
+        this.key = type.getParameterName();
         if (value != null) {
             this.value = value.trim().toUpperCase();
         }

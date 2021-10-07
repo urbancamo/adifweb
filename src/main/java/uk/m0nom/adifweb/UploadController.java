@@ -55,27 +55,6 @@ import java.util.logging.Logger;
 
 @Controller
 public class UploadController {
-	private final static String ENCODING_PARAMETER = "encoding";
-	private final static String LATLONG_PARAMETER = "latlong";
-	private final static String GRID_PARAMETER = "grid";
-	private final static String FILE_INPUT_PARAMETER = "filename";
-	private final static String HEMA_PARAMETER = "hemaRef";
-	private final static String WOTA_PARAMETER = "wotaRef";
-	private final static String SOTA_PARAMETER = "sotaRef";
-	private final static String POTA_PARAMETER = "potaRef";
-	private final static String WWFF_PARAMETER = "wwffRef";
-	private final static String COTA_PARAMETER = "cotaRef";
-	private final static String LOTA_PARAMETER = "lotaRef";
-	private final static String ROTA_PARAMETER = "rotaRef";
-	private final static String STATION_SUBLABEL_PARAMETER = "stationSubLabel";
-	private final static String LOCAL_ACTIVATION_SITES_PARAMETER = "localActivationSites";
-	private final static String LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER = "localActivationSitesRadius";
-	private final static String HF_ANTENNA_TAKEOFF_ANGLE_PARAMETER = "hfAntennaTakeoffAngle";
-	private final static String CONTEST_RESULTS_PARAMETER = "contestResults";
-	private final static String SATELLITE_NAME_PARAMETER = "satName";
-	private final static String SATELLITE_MODE_PARAMETER = "satMode";
-	private final static String SATELLITE_BAND_PARAMETER = "satBand";
-	private final static String SOTA_MICROWAVE_AWARD_COMMENT_PARAMETER = "sotaMicrowaveAwardComment";
 
 	private static final Logger logger = Logger.getLogger(UploadController.class.getName());
 
@@ -101,27 +80,27 @@ public class UploadController {
 	
 	private Map<String, HtmlParameter> getDefaultParameters() {
 		Map<String, HtmlParameter> parameters = new HashMap<>();
-		addParameter(new HtmlParameter(HtmlParameterType.FILENAME, FILE_INPUT_PARAMETER, "", validators.getValidator(HtmlParameterType.FILENAME)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.ENCODING, ENCODING_PARAMETER, "windows-1251", validators.getValidator(HtmlParameterType.ENCODING)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.LATLONG, LATLONG_PARAMETER, "", validators.getValidator(HtmlParameterType.LATLONG)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.GRID, GRID_PARAMETER, "", validators.getValidator(HtmlParameterType.GRID)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.SOTA_REF, SOTA_PARAMETER, "", validators.getValidator(HtmlParameterType.SOTA_REF)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.WOTA_REF, WOTA_PARAMETER, "", validators.getValidator(HtmlParameterType.WOTA_REF)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.HEMA_REF, HEMA_PARAMETER, "", validators.getValidator(HtmlParameterType.HEMA_REF)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.POTA_REF, POTA_PARAMETER, "", validators.getValidator(HtmlParameterType.POTA_REF)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.WWFF_REF, WWFF_PARAMETER, "", validators.getValidator(HtmlParameterType.WWFF_REF)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.COTA_REF, COTA_PARAMETER, "", validators.getValidator(HtmlParameterType.COTA_REF)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.LOTA_REF, LOTA_PARAMETER, "", validators.getValidator(HtmlParameterType.LOTA_REF)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.ROTA_REF, ROTA_PARAMETER, "", validators.getValidator(HtmlParameterType.ROTA_REF)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.STATION_SUBLABEL, STATION_SUBLABEL_PARAMETER, "TRUE", validators.getValidator(HtmlParameterType.STATION_SUBLABEL)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES, LOCAL_ACTIVATION_SITES_PARAMETER, "", validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER, KmlLocalActivities.DEFAULT_RADIUS, validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE, HF_ANTENNA_TAKEOFF_ANGLE_PARAMETER, String.format("%.2f", Ionosphere.HF_ANTENNA_DEFAULT_TAKEOFF_ANGLE), validators.getValidator(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.CONTEST_RESULTS, CONTEST_RESULTS_PARAMETER, "", validators.getValidator(HtmlParameterType.CONTEST_RESULTS)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.SATELLITE_NAME, SATELLITE_NAME_PARAMETER, "", validators.getValidator(HtmlParameterType.SATELLITE_NAME)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.SATELLITE_MODE, SATELLITE_MODE_PARAMETER, "", validators.getValidator(HtmlParameterType.SATELLITE_MODE)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.SATELLITE_BAND, SATELLITE_BAND_PARAMETER, "", validators.getValidator(HtmlParameterType.SATELLITE_BAND)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, SOTA_MICROWAVE_AWARD_COMMENT_PARAMETER, "", validators.getValidator(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.FILENAME, "", validators.getValidator(HtmlParameterType.FILENAME)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.ENCODING, "windows-1251", validators.getValidator(HtmlParameterType.ENCODING)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.LATLONG, "", validators.getValidator(HtmlParameterType.LATLONG)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.GRID, "", validators.getValidator(HtmlParameterType.GRID)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.SOTA_REF, "", validators.getValidator(HtmlParameterType.SOTA_REF)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.WOTA_REF, "", validators.getValidator(HtmlParameterType.WOTA_REF)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.HEMA_REF, "", validators.getValidator(HtmlParameterType.HEMA_REF)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.POTA_REF, "", validators.getValidator(HtmlParameterType.POTA_REF)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.WWFF_REF, "", validators.getValidator(HtmlParameterType.WWFF_REF)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.COTA_REF, "", validators.getValidator(HtmlParameterType.COTA_REF)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.LOTA_REF, "", validators.getValidator(HtmlParameterType.LOTA_REF)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.ROTA_REF, "", validators.getValidator(HtmlParameterType.ROTA_REF)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.STATION_SUBLABEL, "TRUE", validators.getValidator(HtmlParameterType.STATION_SUBLABEL)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES, "", validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, KmlLocalActivities.DEFAULT_RADIUS, validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE, String.format("%.2f", Ionosphere.HF_ANTENNA_DEFAULT_TAKEOFF_ANGLE), validators.getValidator(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.CONTEST_RESULTS, "", validators.getValidator(HtmlParameterType.CONTEST_RESULTS)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.SATELLITE_NAME, "", validators.getValidator(HtmlParameterType.SATELLITE_NAME)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.SATELLITE_MODE, "", validators.getValidator(HtmlParameterType.SATELLITE_MODE)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.SATELLITE_BAND, "", validators.getValidator(HtmlParameterType.SATELLITE_BAND)), parameters);
+		addParameter(new HtmlParameter(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, "", validators.getValidator(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT)), parameters);
 
 		return parameters;
 	}
@@ -144,32 +123,33 @@ public class UploadController {
 		factory.setSizeThreshold(DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD);
 		factory.setFileCleaningTracker(null);
 
-		MultipartFile file = request.getFile(FILE_INPUT_PARAMETER);
+		MultipartFile file = request.getFile(HtmlParameterType.FILENAME.getParameterName());
 
-		addParameterFromRequest(HtmlParameterType.ENCODING, ENCODING_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.LATLONG, LATLONG_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.GRID, GRID_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.SOTA_REF, SOTA_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.WOTA_REF, WOTA_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.HEMA_REF, HEMA_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.POTA_REF, POTA_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.WWFF_REF, WWFF_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.COTA_REF, COTA_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.LOTA_REF, LOTA_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.ROTA_REF, ROTA_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.SATELLITE_NAME, SATELLITE_NAME_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.SATELLITE_MODE, SATELLITE_MODE_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.SATELLITE_BAND, SATELLITE_BAND_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.STATION_SUBLABEL, STATION_SUBLABEL_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES, LOCAL_ACTIVATION_SITES_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE, HF_ANTENNA_TAKEOFF_ANGLE_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.CONTEST_RESULTS, CONTEST_RESULTS_PARAMETER, request);
-		addParameterFromRequest(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, SOTA_MICROWAVE_AWARD_COMMENT_PARAMETER, request);
+		addParameterFromRequest(HtmlParameterType.ENCODING, request);
+		addParameterFromRequest(HtmlParameterType.LATLONG, request);
+		addParameterFromRequest(HtmlParameterType.GRID, request);
+		addParameterFromRequest(HtmlParameterType.SOTA_REF, request);
+		addParameterFromRequest(HtmlParameterType.WOTA_REF, request);
+		addParameterFromRequest(HtmlParameterType.HEMA_REF, request);
+		addParameterFromRequest(HtmlParameterType.POTA_REF, request);
+		addParameterFromRequest(HtmlParameterType.WWFF_REF, request);
+		addParameterFromRequest(HtmlParameterType.COTA_REF, request);
+		addParameterFromRequest(HtmlParameterType.LOTA_REF, request);
+		addParameterFromRequest(HtmlParameterType.ROTA_REF, request);
+		addParameterFromRequest(HtmlParameterType.SATELLITE_NAME, request);
+		addParameterFromRequest(HtmlParameterType.SATELLITE_MODE, request);
+		addParameterFromRequest(HtmlParameterType.SATELLITE_BAND, request);
+		addParameterFromRequest(HtmlParameterType.STATION_SUBLABEL, request);
+		addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES, request);
+		addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, request);
+		addParameterFromRequest(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE, request);
+		addParameterFromRequest(HtmlParameterType.CONTEST_RESULTS, request);
+		addParameterFromRequest(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, request);
 
 		assert file != null;
-		parameters.put(FILE_INPUT_PARAMETER, new HtmlParameter(HtmlParameterType.FILENAME, FILE_INPUT_PARAMETER,
-				file.getOriginalFilename(), validators.getValidator(HtmlParameterType.FILENAME)));
+		HtmlParameter fileParam = new HtmlParameter(HtmlParameterType.FILENAME,
+				file.getOriginalFilename(), validators.getValidator(HtmlParameterType.FILENAME));
+		parameters.put(fileParam.getType().getParameterName(), fileParam);
 
 		validateParameters(parameters);
 
@@ -237,8 +217,9 @@ public class UploadController {
 		return sb.toString();
 	}
 
-	private void addParameterFromRequest(HtmlParameterType type, String key, StandardMultipartHttpServletRequest request) {
-		HtmlParameter parameter = new HtmlParameter(type, key, request.getParameter(key), validators.getValidator(type));
+	private void addParameterFromRequest(HtmlParameterType type, StandardMultipartHttpServletRequest request) {
+		String key = type.getParameterName();
+		HtmlParameter parameter = new HtmlParameter(type, request.getParameter(key), validators.getValidator(type));
 		parameters.put(key, parameter);
 	}
 
@@ -262,23 +243,23 @@ public class UploadController {
 			}
 		}
 
-		control.setMyGrid(parameters.get(GRID_PARAMETER).getValue());
-		control.setSatelliteName(parameters.get(SATELLITE_NAME_PARAMETER).getValue());
-		control.setSatelliteMode(parameters.get(SATELLITE_MODE_PARAMETER).getValue());
-		control.setSatelliteBand(parameters.get(SATELLITE_BAND_PARAMETER).getValue());
-		control.setSotaMicrowaveAwardComment(parameters.get(SOTA_MICROWAVE_AWARD_COMMENT_PARAMETER).getValue() != null);
+		control.setMyGrid(parameters.get(HtmlParameterType.GRID.getParameterName()).getValue());
+		control.setSatelliteName(parameters.get(HtmlParameterType.SATELLITE_NAME.getParameterName()).getValue());
+		control.setSatelliteMode(parameters.get(HtmlParameterType.SATELLITE_MODE.getParameterName()).getValue());
+		control.setSatelliteBand(parameters.get(HtmlParameterType.SATELLITE_BAND.getParameterName()).getValue());
+		control.setSotaMicrowaveAwardComment(parameters.get(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT.getParameterName()).getValue() != null);
 
-		control.setContestResults(parameters.get(CONTEST_RESULTS_PARAMETER).getValue() != null);
+		control.setContestResults(parameters.get(HtmlParameterType.CONTEST_RESULTS.getParameterName()).getValue() != null);
 
 		//control.setMyLatitude(parametersToValidate.get(LATITUDE_PARAMETER).getValue());
-		//control.setMyLongitude(parametersToValidate.get(LONGITUDE_PARAMTER).getValue());
+		//control.setMyLongitude(parametersToValidate.get(LONGITUDE_PARAMETER).getValue());
 
-		GlobalCoordinates coordinates = LatLongSplitter.split(parameters.get(LATLONG_PARAMETER).getValue());
+		GlobalCoordinates coordinates = LatLongSplitter.split(parameters.get(HtmlParameterType.LATLONG.getParameterName()).getValue());
 		if (coordinates != null) {
 			control.setMyLatitude(String.format("%f", coordinates.getLatitude()));
 			control.setMyLongitude(String.format("%f", coordinates.getLongitude()));
 		}
-		control.setEncoding(parameters.get(ENCODING_PARAMETER).getValue());
+		control.setEncoding(parameters.get(HtmlParameterType.ENCODING.getParameterName()).getValue());
 
 		control.setKmlContactWidth(3);
 		control.setKmlContactTransparency(20);
@@ -301,10 +282,10 @@ public class UploadController {
 		control.setIcon(ActivityType.ROTA.getActivityName(), IconResource.ROTA_DEFAULT_ICON_URL);
 
 		control.setIcon(IconResource.CW_ICON_NAME, IconResource.CW_DEFAULT_ICON_URL);
-		control.setKmlShowStationSubLabel(parameters.get(STATION_SUBLABEL_PARAMETER).getValue() != null);
-		control.setKmlShowLocalActivationSites(parameters.get(LOCAL_ACTIVATION_SITES_PARAMETER).getValue() != null);
-		control.setKmlLocalActivationSitesRadius(Double.valueOf(parameters.get(LOCAL_ACTIVATION_SITES_RADIUS_PARAMETER).getValue()));
-		control.setHfAntennaTakeoffAngle(Double.valueOf(parameters.get(HF_ANTENNA_TAKEOFF_ANGLE_PARAMETER).getValue()));
+		control.setKmlShowStationSubLabel(parameters.get(HtmlParameterType.STATION_SUBLABEL.getParameterName()).getValue() != null);
+		control.setKmlShowLocalActivationSites(parameters.get(HtmlParameterType.LOCAL_ACTIVATION_SITES.getParameterName()).getValue() != null);
+		control.setKmlLocalActivationSitesRadius(Double.valueOf(parameters.get(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS.getParameterName()).getValue()));
+		control.setHfAntennaTakeoffAngle(Double.valueOf(parameters.get(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE.getParameterName()).getValue()));
 
 		String qrzUsername = "M0NOM";
 		String qrzPassword = "mark4qrzasm0nom";
