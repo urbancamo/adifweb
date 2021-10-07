@@ -324,8 +324,12 @@
                                 <label class="" for="satName">Satellite Name</label>
                             </div>
                             <div class="col-4">
-                                <input class="" type="text" id="satName" name="satName"
-                                       th:value="${parameters.get('satName').getValue()}" value=""/>
+                                <select class="form-control form-control-sm" id="satName" name="satName">
+                                    <option></option>
+                                    <option>QO-100</option>
+                                </select>
+                                <!--<input class="" type="text" id="satName" name="satName"
+                                       th:value="${parameters.get('satName').getValue()}" value=""/>-->
                             </div>
                             <div class="col-4">
                                 <span class="text-danger"
@@ -435,6 +439,16 @@
         $('a.a-encoding').click(function () {
             $("#encoding").val(this.innerText);
         })
+
+        $('#satName').change(function() {
+           if (this.value === 'QO-100') {
+               $('#satMode').val("S/X");
+               $('#satBand').val("13cm");
+           } else {
+               $('#satMode').val("");
+               $('#satBand').val("");
+           }
+        });
     });
 </script>
 
