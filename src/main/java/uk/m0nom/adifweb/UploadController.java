@@ -1,5 +1,6 @@
 package uk.m0nom.adifweb;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -7,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.gavaghan.geodesy.GlobalCoordinates;
 import org.marsik.ham.adif.Adif3;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
@@ -54,20 +54,16 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 @Controller
+@RequiredArgsConstructor
 public class UploadController {
 
 	private static final Logger logger = Logger.getLogger(UploadController.class.getName());
 
-	@Autowired
-	private ApplicationConfiguration configuration;
+	private final ApplicationConfiguration configuration;
+	private final ResourceLoader resourceLoader;
 
 	private final Map<String, HtmlParameter> parameters = new HashMap<>();
 	private final Validators validators = new Validators();
-
-	@Autowired
-	private ResourceLoader resourceLoader;
-
-	
 
 	@GetMapping("/upload")
 	public String displayUploadForm(Model model) {
