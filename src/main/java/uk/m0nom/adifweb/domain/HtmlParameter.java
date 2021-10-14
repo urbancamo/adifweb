@@ -25,14 +25,6 @@ public class HtmlParameter {
         this.validator = validator;
     }
 
-    public static boolean isAllValid(Map<String, HtmlParameter> parametersToValidate) {
-        boolean allValid = true;
-        for (HtmlParameter parameter : parametersToValidate.values()) {
-            allValid &= parameter.getValidationResult().isValid();
-        }
-        return allValid;
-    }
-
     public void validate() {
         validationResult = validator.isValid(value);
     }

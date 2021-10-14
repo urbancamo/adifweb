@@ -26,7 +26,8 @@ public enum HtmlParameterType {
     SATELLITE_NAME("satName"),
     SATELLITE_MODE("satMode"),
     SATELLITE_BAND("satBand"),
-    SOTA_MICROWAVE_AWARD_COMMENT("sotaMicrowaveAwardComment");
+    SOTA_MICROWAVE_AWARD_COMMENT("sotaMicrowaveAwardComment"),
+    STRIP_COMMENT("stripComment");
 
     private String parameterName;
 

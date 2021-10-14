@@ -29,14 +29,11 @@ import uk.m0nom.adif3.transform.TransformResults;
 import uk.m0nom.adifweb.domain.ControlInfo;
 import uk.m0nom.adifweb.domain.HtmlParameter;
 import uk.m0nom.adifweb.domain.HtmlParameterType;
+import uk.m0nom.adifweb.domain.HtmlParameters;
 import uk.m0nom.adifweb.util.LatLongSplitter;
-import uk.m0nom.adifweb.validation.ValidationResult;
-import uk.m0nom.adifweb.validation.Validators;
-import uk.m0nom.comms.Ionosphere;
 import uk.m0nom.contest.ContestResultsCalculator;
 import uk.m0nom.icons.IconResource;
 import uk.m0nom.kml.KmlWriter;
-import uk.m0nom.kml.activity.KmlLocalActivities;
 import uk.m0nom.qrz.CachingQrzXmlService;
 import uk.m0nom.qrz.QrzService;
 import uk.m0nom.qsofile.QsoFileReader;
@@ -54,62 +51,30 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 @Controller
-@RequiredArgsConstructor
 public class UploadController {
 
 	private static final Logger logger = Logger.getLogger(UploadController.class.getName());
 
 	private final ApplicationConfiguration configuration;
 	private final ResourceLoader resourceLoader;
+	private final HtmlParameters parameters;
 
-	private final Map<String, HtmlParameter> parameters = new HashMap<>();
-	private final Validators validators = new Validators();
-
+	public UploadController(ApplicationConfiguration configuration, ResourceLoader resourceLoader) {
+		this.configuration = configuration;
+		this.resourceLoader = resourceLoader;
+		parameters = new HtmlParameters(configuration.getSummits());
+	}
 	@GetMapping("/upload")
 	public String displayUploadForm(Model model) {
-		validators.setupValidators(configuration.getSummits());
 		model.addAttribute("error", "");
 		model.addAttribute("upload", new ControlInfo());
-		model.addAttribute("parameters", getDefaultParameters());
+		parameters.reset();
+		model.addAttribute("parameters", parameters.getParameters());
 		return "upload";
-	}
-	
-	private Map<String, HtmlParameter> getDefaultParameters() {
-		Map<String, HtmlParameter> parameters = new HashMap<>();
-		addParameter(new HtmlParameter(HtmlParameterType.FILENAME, "", validators.getValidator(HtmlParameterType.FILENAME)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.ENCODING, "windows-1251", validators.getValidator(HtmlParameterType.ENCODING)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.LATLONG, "", validators.getValidator(HtmlParameterType.LATLONG)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.GRID, "", validators.getValidator(HtmlParameterType.GRID)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.SOTA_REF, "", validators.getValidator(HtmlParameterType.SOTA_REF)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.WOTA_REF, "", validators.getValidator(HtmlParameterType.WOTA_REF)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.HEMA_REF, "", validators.getValidator(HtmlParameterType.HEMA_REF)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.POTA_REF, "", validators.getValidator(HtmlParameterType.POTA_REF)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.WWFF_REF, "", validators.getValidator(HtmlParameterType.WWFF_REF)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.COTA_REF, "", validators.getValidator(HtmlParameterType.COTA_REF)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.LOTA_REF, "", validators.getValidator(HtmlParameterType.LOTA_REF)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.ROTA_REF, "", validators.getValidator(HtmlParameterType.ROTA_REF)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.STATION_SUBLABEL, "TRUE", validators.getValidator(HtmlParameterType.STATION_SUBLABEL)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES, "", validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, KmlLocalActivities.DEFAULT_RADIUS, validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE, String.format("%.2f", Ionosphere.HF_ANTENNA_DEFAULT_TAKEOFF_ANGLE), validators.getValidator(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.CONTEST_RESULTS, "", validators.getValidator(HtmlParameterType.CONTEST_RESULTS)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.SATELLITE_NAME, "", validators.getValidator(HtmlParameterType.SATELLITE_NAME)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.SATELLITE_MODE, "", validators.getValidator(HtmlParameterType.SATELLITE_MODE)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.SATELLITE_BAND, "", validators.getValidator(HtmlParameterType.SATELLITE_BAND)), parameters);
-		addParameter(new HtmlParameter(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, "", validators.getValidator(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT)), parameters);
-
-		return parameters;
-	}
-
-	private void addParameter(HtmlParameter parameter, Map<String, HtmlParameter> parameters) {
-		parameters.put(parameter.getKey(), parameter);
-		parameter.setValidationResult(ValidationResult.EMPTY);
 	}
 
 	@PostMapping("/upload")
 	public ModelAndView handleUpload(StandardMultipartHttpServletRequest request) throws Exception {
-		validators.setupValidators(configuration.getSummits());
-
 		var factory = new DiskFileItemFactory();
 		String tmpPath = System.getProperty("java.io.tmpdir");
 		if (!StringUtils.endsWith(tmpPath, File.separator)) {
@@ -121,35 +86,17 @@ public class UploadController {
 
 		MultipartFile file = request.getFile(HtmlParameterType.FILENAME.getParameterName());
 
-		addParameterFromRequest(HtmlParameterType.ENCODING, request);
-		addParameterFromRequest(HtmlParameterType.LATLONG, request);
-		addParameterFromRequest(HtmlParameterType.GRID, request);
-		addParameterFromRequest(HtmlParameterType.SOTA_REF, request);
-		addParameterFromRequest(HtmlParameterType.WOTA_REF, request);
-		addParameterFromRequest(HtmlParameterType.HEMA_REF, request);
-		addParameterFromRequest(HtmlParameterType.POTA_REF, request);
-		addParameterFromRequest(HtmlParameterType.WWFF_REF, request);
-		addParameterFromRequest(HtmlParameterType.COTA_REF, request);
-		addParameterFromRequest(HtmlParameterType.LOTA_REF, request);
-		addParameterFromRequest(HtmlParameterType.ROTA_REF, request);
-		addParameterFromRequest(HtmlParameterType.SATELLITE_NAME, request);
-		addParameterFromRequest(HtmlParameterType.SATELLITE_MODE, request);
-		addParameterFromRequest(HtmlParameterType.SATELLITE_BAND, request);
-		addParameterFromRequest(HtmlParameterType.STATION_SUBLABEL, request);
-		addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES, request);
-		addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, request);
-		addParameterFromRequest(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE, request);
-		addParameterFromRequest(HtmlParameterType.CONTEST_RESULTS, request);
-		addParameterFromRequest(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, request);
+		parameters.addParametersFromRequest(request);
 
 		assert file != null;
 		HtmlParameter fileParam = new HtmlParameter(HtmlParameterType.FILENAME,
-				file.getOriginalFilename(), validators.getValidator(HtmlParameterType.FILENAME));
+				file.getOriginalFilename(), parameters.getValidator(HtmlParameterType.FILENAME));
+
 		parameters.put(fileParam.getType().getParameterName(), fileParam);
 
-		validateParameters(parameters);
+		parameters.validate();
 
-		if (!HtmlParameter.isAllValid(parameters)) {
+		if (!parameters.isAllValid()) {
 			ModelAndView backToUpload = new ModelAndView("upload");
 			ModelMap map = backToUpload.getModelMap();
 			map.put("validationErrors", "true");
@@ -201,7 +148,7 @@ public class UploadController {
 		}
 		return rtn;
 	}
-	private String getValidationErrorsString(Map<String, HtmlParameter> parametersToValidate) {
+	private String getValidationErrorsString(HtmlParameters parametersToValidate) {
 		StringBuilder sb = new StringBuilder();
 
 		for (HtmlParameter parameter : parametersToValidate.values()) {
@@ -211,19 +158,6 @@ public class UploadController {
 			}
 		}
 		return sb.toString();
-	}
-
-	private void addParameterFromRequest(HtmlParameterType type, StandardMultipartHttpServletRequest request) {
-		String key = type.getParameterName();
-		HtmlParameter parameter = new HtmlParameter(type, request.getParameter(key), validators.getValidator(type));
-		parameters.put(key, parameter);
-	}
-
-	private void validateParameters(Map<String, HtmlParameter> parameters) {
-		Collection<HtmlParameter> toValidate = parameters.values();
-		for (HtmlParameter parameter : toValidate) {
-			parameter.validate();
-		}
 	}
 
 	private TransformControl createTransformControlFromParameters() {
@@ -244,6 +178,7 @@ public class UploadController {
 		control.setSatelliteMode(parameters.get(HtmlParameterType.SATELLITE_MODE.getParameterName()).getValue());
 		control.setSatelliteBand(parameters.get(HtmlParameterType.SATELLITE_BAND.getParameterName()).getValue());
 		control.setSotaMicrowaveAwardComment(parameters.get(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT.getParameterName()).getValue() != null);
+		control.setStripComment(parameters.get(HtmlParameterType.STRIP_COMMENT.getParameterName()).getValue() != null);
 
 		control.setContestResults(parameters.get(HtmlParameterType.CONTEST_RESULTS.getParameterName()).getValue() != null);
 
@@ -346,14 +281,14 @@ public class UploadController {
 					kml = "";
 				}
 			}
-			if (control.getContestResults()) {
+			if (control.isContestResults()) {
 				// Contest Calculations
 				log.getHeader().setPreamble(new ContestResultsCalculator(summits).calculateResults(log));
 			}
 			logger.info(String.format("Writing output file %s with encoding %s", out, control.getEncoding()));
 			writer.write(out, control.getEncoding(), log);
 
-			if (control.getMarkdown()) {
+			if (control.isMarkdown()) {
 				BufferedWriter markdownWriter = null;
 				try {
 					File markdownFile = new File(markdown);
