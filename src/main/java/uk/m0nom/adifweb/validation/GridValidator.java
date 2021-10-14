@@ -1,6 +1,7 @@
 package uk.m0nom.adifweb.validation;
 
 import org.apache.commons.lang3.StringUtils;
+import uk.m0nom.coords.LocationSource;
 import uk.m0nom.maidenheadlocator.MaidenheadLocatorConversion;
 
 public class GridValidator implements Validator {
@@ -12,7 +13,7 @@ public class GridValidator implements Validator {
             return ValidationResult.EMPTY;
         } else {
             try {
-                MaidenheadLocatorConversion.locatorToCoords(value);
+                MaidenheadLocatorConversion.locatorToCoords(LocationSource.UNDEFINED, value);
             } catch (UnsupportedOperationException e) {
                 return new ValidationResult(INVALID_GRID);
             }
