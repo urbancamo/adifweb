@@ -18,8 +18,6 @@ import uk.m0nom.qsofile.QsoFileReader;
 import uk.m0nom.qsofile.QsoFileWriter;
 import uk.m0nom.sotacsv.SotaCsvFileReader;
 
-import java.io.File;
-import java.util.Locale;
 import java.util.logging.Logger;
 
 @Component

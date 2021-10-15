@@ -1,6 +1,5 @@
 package uk.m0nom.adifweb;
 
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -64,6 +63,7 @@ public class UploadController {
 		this.resourceLoader = resourceLoader;
 		parameters = new HtmlParameters(configuration.getSummits());
 	}
+
 	@GetMapping("/upload")
 	public String displayUploadForm(Model model) {
 		model.addAttribute("error", "");
