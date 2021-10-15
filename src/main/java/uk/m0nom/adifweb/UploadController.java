@@ -62,7 +62,7 @@ public class UploadController {
 	@Value("${build.timestamp}")
 	private String buildTimestamp;
 
-	@Value("${pom.version}")
+	@Value("${build.version}")
 	private String pomVersion;
 
 
