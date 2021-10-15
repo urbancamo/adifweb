@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.gavaghan.geodesy.GlobalCoordinates;
 import org.marsik.ham.adif.Adif3;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
@@ -52,6 +53,19 @@ import java.util.logging.Logger;
 @Controller
 public class UploadController {
 
+	@Value("${qrz.username}")
+	private String qrzUsername;
+
+	@Value("${qrz.password}")
+	private String qrzPassword;
+
+	@Value("${build.timestamp}")
+	private String buildTimestamp;
+
+	@Value("${build.version}")
+	private String pomVersion;
+
+
 	private static final Logger logger = Logger.getLogger(UploadController.class.getName());
 
 	private final ApplicationConfiguration configuration;
@@ -70,6 +84,9 @@ public class UploadController {
 		model.addAttribute("upload", new ControlInfo());
 		parameters.reset();
 		model.addAttribute("parameters", parameters.getParameters());
+		model.addAttribute("build_timestamp", buildTimestamp);
+		model.addAttribute("pom_version", pomVersion);
+
 		return "upload";
 	}
 
@@ -218,11 +235,9 @@ public class UploadController {
 		control.setKmlLocalActivationSitesRadius(Double.valueOf(parameters.get(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS.getParameterName()).getValue()));
 		control.setHfAntennaTakeoffAngle(Double.valueOf(parameters.get(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE.getParameterName()).getValue()));
 
-		String qrzUsername = "M0NOM";
-		String qrzPassword = "mark4qrzasm0nom";
-		control.setUseQrzDotCom(StringUtils.isNotEmpty(qrzUsername));
 		control.setQrzUsername(qrzUsername);
 		control.setQrzPassword(qrzPassword);
+		control.setUseQrzDotCom(StringUtils.isNotEmpty(qrzUsername) && StringUtils.isNotEmpty(qrzPassword));
 
 		return control;
 	}
