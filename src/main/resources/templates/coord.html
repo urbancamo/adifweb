@@ -39,7 +39,15 @@
             <div class="panel-heading">Convert Coordinates</div>
             <div class="panel-body" id="locationOverridePanel">
                 <div class="container">
-                    <p>Paste any form of: Latitude and Longitude, Maidenhead Locator (4 to 10 characters), Activity Reference or address in the Location box below</p>
+                    <span>Paste any form of: </span>
+                    <ul>
+                        <li>Latitude and Longitude, eg: Decimal Degrees Lat Long, DMS Lat Long</li>
+                        <li>Maidenhead Locator (4/6/8/10 character), eg: IO84NI</li>
+                        <li>Activity Reference, eg: SOTA Reference G/LD-050</li>
+                        <li>An OSGB36 Ordnance Survey Reference, eg: SD 40891 97674</li>
+                        <li>An Address for geocoding</li>
+                    </ul>
+                    <span>in theLocation box below</span>
                 </div>
                 <div class="container">
                     <div class="form-group mb-3" >
@@ -67,7 +75,7 @@
                 <div class="panel-heading">Results</div>
                 <div class="container">
                     <div class="col-auto">
-                        <textarea rows = "14" cols="40" th:text="${results}" form="form" ></textarea>
+                        <textarea rows = "15" cols="40" th:text="${results}" form="form" ></textarea>
                     </div>
                 </div>
             </div>
