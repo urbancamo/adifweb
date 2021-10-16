@@ -32,7 +32,7 @@ public class ApplicationConfiguration implements ApplicationListener<Application
     private QsoFileWriter writer;
     private KmlWriter kmlWriter;
 
-    private ActivityDatabases summits;
+    private ActivityDatabases activityDatabases;
 
     private Adif3PrintFormatter formatter;
 
@@ -42,9 +42,9 @@ public class ApplicationConfiguration implements ApplicationListener<Application
         logger.info("ApplicationStartupListener#onApplicationEvent()");
         transformer = new Adif3Transformer();
         writer = new Adif3FileWriter();
-        summits = new ActivityDatabases();
+        activityDatabases = new ActivityDatabases();
         formatter = new Adif3PrintFormatter();
-        summits.loadData();
+        activityDatabases.loadData();
         logger.info("Initialising complete, ready to process requests...");
     }
 

@@ -1,15 +1,19 @@
 package uk.m0nom.adifweb;
 
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import uk.m0nom.activity.Activity;
+import uk.m0nom.activity.ActivityDatabases;
 import uk.m0nom.coords.GlobalCoordinatesWithSourceAccuracy;
 import uk.m0nom.coords.LocationParsers;
 import uk.m0nom.coords.LocationSource;
+import uk.m0nom.geocoding.GeocodingProvider;
+import uk.m0nom.geocoding.GeocodingResult;
+import uk.m0nom.geocoding.NominatimGeocodingProvider;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,9 +26,13 @@ public class CoordinateConverterController {
 	private static final Logger logger = Logger.getLogger(CoordinateConverterController.class.getName());
 
 	private final LocationParsers parsers;
+	private final ApplicationConfiguration configuration;
+	private final GeocodingProvider geocodingProvider;
 
 	public CoordinateConverterController(ApplicationConfiguration configuration) {
-		this.parsers = new LocationParsers(configuration.getSummits());
+		this.configuration = configuration;
+		this.parsers = new LocationParsers(configuration.getActivityDatabases());
+		this.geocodingProvider = new NominatimGeocodingProvider();
 	}
 
 	@GetMapping("/coord")
@@ -37,16 +45,38 @@ public class CoordinateConverterController {
 
 	@PostMapping("/coord")
 	public ModelAndView handleCoord(@RequestParam String location) {
-		logger.info(String.format("Processing location: %s", location));
+		String locationToCheck = location.trim();
+		logger.info(String.format("Processing location: %s", locationToCheck));
 		String resultCoords = "";
 		String errors = "";
+		String info = "";
 
-		GlobalCoordinatesWithSourceAccuracy coordinates = parsers.parseStringForCoordinates(LocationSource.UNDEFINED, location);
+		GlobalCoordinatesWithSourceAccuracy coordinates = parsers.parseStringForCoordinates(LocationSource.UNDEFINED, locationToCheck);
 		logger.info(String.format("Location parsed successfully: %s", coordinates));
 
 		if (coordinates == null) {
-			errors = "Can't parse the input string";
-		} else {
+			// OK try and find an activity reference
+			Activity activity = configuration.getActivityDatabases().findActivity(locationToCheck);
+			if (activity != null) {
+				coordinates = activity.getCoords();
+				if (coordinates == null) {
+					info = String.format("Activity for %s found but it doesn't have a location", locationToCheck);
+				} else {
+					info = String.format("Activity reference match for %s location %s", activity.getType().getActivityDescription(), activity.getName());
+				}
+			} else {
+				try {
+					// OK try and find an address
+					GeocodingResult result = geocodingProvider.getLocationFromAddress(locationToCheck);
+					coordinates = result.getCoordinates();
+					info = String.format("Geocoding result based on match of substring '%s'", result.getMatchedOn());
+				} catch (Exception e) {
+					errors = "Problem using the geocoding provider";
+				}
+			}
+		}
+
+		if (coordinates != null) {
 			StringBuilder sb = new StringBuilder();
 			List<String> formatted = parsers.format(coordinates);
 			for (String format: formatted) {
@@ -57,8 +87,9 @@ public class CoordinateConverterController {
 		}
 
 		Map<String, Object> results = new HashMap<>();
-		results.put("location", location);
+		results.put("location", locationToCheck);
 		results.put("results", resultCoords);
+		results.put("info", info);
 		results.put("errors", errors);
 
 		return new ModelAndView("coord", results);

@@ -39,7 +39,7 @@
             <div class="panel-heading">Convert Coordinates</div>
             <div class="panel-body" id="locationOverridePanel">
                 <div class="container">
-                    <p>Paste any form of Latitude and Longitude or Maidenhead Locator (4 to 10 characters) in the Location box below</p>
+                    <p>Paste any form of: Latitude and Longitude, Maidenhead Locator (4 to 10 characters), Activity Reference or address in the Location box below</p>
                 </div>
                 <div class="container">
                     <div class="form-group mb-3" >
@@ -49,6 +49,18 @@
                 </div>
             </div>
         </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Info</div>
+            <div class="panel-body" id="infoPanel">
+                <div class="container">
+                    <div class="form-group mb-3" >
+                        <input class="form-control" type="text" id="info" name="info" th:value="${info}" value=""/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <div class="panel panel-default">
             <div class="panel-body" id="resultPanel">
@@ -93,9 +105,10 @@
     $(function () {
         $('#spinner').hide();
         $('#errorPanel').hide();
+
         $('#form').submit(function () {
             $('#submit').prop('disabled', true);
-            $('#submit').val("Processing");
+            $('#submit').val("Converting");
             $('#spinner').show();
             $("body").css("cursor", "progress");
             return;

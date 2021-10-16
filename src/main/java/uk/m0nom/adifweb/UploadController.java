@@ -75,7 +75,7 @@ public class UploadController {
 	public UploadController(ApplicationConfiguration configuration, ResourceLoader resourceLoader) {
 		this.configuration = configuration;
 		this.resourceLoader = resourceLoader;
-		parameters = new HtmlParameters(configuration.getSummits());
+		parameters = new HtmlParameters(configuration.getActivityDatabases());
 	}
 
 	@GetMapping("/upload")
@@ -230,7 +230,7 @@ public class UploadController {
 		control.setIcon(ActivityType.ROTA.getActivityName(), IconResource.ROTA_DEFAULT_ICON_URL);
 
 		control.setIcon(IconResource.CW_ICON_NAME, IconResource.CW_DEFAULT_ICON_URL);
-		control.setKmlShowStationSubLabel(parameters.get(HtmlParameterType.STATION_SUBLABEL.getParameterName()).getValue() != null);
+		control.setKmlShowStationSubLabel(null != parameters.get(HtmlParameterType.STATION_SUBLABEL.getParameterName()).getValue());
 		control.setKmlShowLocalActivationSites(parameters.get(HtmlParameterType.LOCAL_ACTIVATION_SITES.getParameterName()).getValue() != null);
 		control.setKmlLocalActivationSitesRadius(Double.valueOf(parameters.get(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS.getParameterName()).getValue()));
 		control.setHfAntennaTakeoffAngle(Double.valueOf(parameters.get(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE.getParameterName()).getValue()));
@@ -248,7 +248,7 @@ public class UploadController {
 		KmlWriter kmlWriter = new KmlWriter(control);
 
 		Adif3Transformer transformer = configuration.getTransformer();
-		ActivityDatabases summits = configuration.getSummits();
+		ActivityDatabases summits = configuration.getActivityDatabases();
 		QsoFileReader reader = configuration.getReader(inPath);
 		QsoFileWriter writer = configuration.getWriter();
 
