@@ -44,7 +44,7 @@
                         <li>Latitude and Longitude, eg: 54.3709 -2.9099 or 54° 22.260' N, 3° 5.403' W</li>
                         <li>Maidenhead Locator (4/6/8/10 character), eg: IO84NI</li>
                         <li>Activity Reference, eg: G/LD-050</li>
-                        <li>An OSGB36 British National Grid Reference, eg: SD 40891 97674</li>
+                        <li>An OSGB36 British National Grid Reference, 4 or 5 digit, eg: SD 40891 97674</li>
                         <li>A street address for geocoding</li>
                     </ul>
                     <span>All the formats shown in the results can be used as a location format to convert.</span>
@@ -75,7 +75,7 @@
                 <div class="panel-heading">Results</div>
                 <div class="container">
                     <div class="col-auto">
-                        <textarea rows = "15" cols="40" th:text="${results}" form="form" ></textarea>
+                        <textarea rows = "17" cols="25" th:text="${results}" form="form" ></textarea>
                     </div>
                 </div>
             </div>
@@ -90,13 +90,19 @@
 
         <div class="container padding-bottom">
             <div class="row">
-                <div class="col-4">
+                <div class="col">
                     <input id="submit" type="submit" value="Convert">
                 </div>
-                <div class="col-2">
+                <div class="col">
                     <div id="spinner" class="spinner-border" role="status">
                         <span class="sr-only"></span>
                     </div>
+                </div>
+                <div class="col-auto" style="font-family:monospace">
+                    <span th:text="${pom_version}">x.x-SNAPSHOT</span>
+                    <span> built </span>
+                    <span th:text="${build_timestamp}">yyyy-MM-dd HH:mm</span>
+                    <span> UTC</span>
                 </div>
             </div>
         </div>

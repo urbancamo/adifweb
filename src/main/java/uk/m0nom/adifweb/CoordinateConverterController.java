@@ -1,5 +1,6 @@
 package uk.m0nom.adifweb;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,12 @@ public class CoordinateConverterController {
 
 	private static final Logger logger = Logger.getLogger(CoordinateConverterController.class.getName());
 
+	@Value("${build.timestamp}")
+	private String buildTimestamp;
+
+	@Value("${build.version}")
+	private String pomVersion;
+
 	private final LocationParsers parsers;
 	private final ApplicationConfiguration configuration;
 	private final GeocodingProvider geocodingProvider;
@@ -40,6 +47,9 @@ public class CoordinateConverterController {
 		model.addAttribute("location", "");
 		model.addAttribute("errors", "");
 		model.addAttribute("results", "");
+		model.addAttribute("build_timestamp", buildTimestamp);
+		model.addAttribute("pom_version", pomVersion);
+
 		return "coord";
 	}
 
@@ -69,7 +79,11 @@ public class CoordinateConverterController {
 					// OK try and find an address
 					GeocodingResult result = geocodingProvider.getLocationFromAddress(locationToCheck);
 					coordinates = result.getCoordinates();
-					info = String.format("Geocoding result based on match of substring '%s'", result.getMatchedOn());
+					if (coordinates == null) {
+						info = result.getError();
+					} else {
+						info = String.format("Geocoding result based on match of '%s'", result.getMatchedOn());
+					}
 				} catch (Exception e) {
 					errors = "Problem using the geocoding provider";
 				}
