@@ -105,6 +105,8 @@ public class CoordinateConverterController {
 		results.put("results", resultCoords);
 		results.put("info", info);
 		results.put("errors", errors);
+		results.put("build_timestamp", buildTimestamp);
+		results.put("pom_version", pomVersion);
 
 		return new ModelAndView("coord", results);
 	}
