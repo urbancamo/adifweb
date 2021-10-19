@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import uk.m0nom.activity.Activity;
 import uk.m0nom.activity.ActivityDatabases;
 import uk.m0nom.coords.GlobalCoordinatesWithSourceAccuracy;
+import uk.m0nom.coords.LocationParserResult;
 import uk.m0nom.coords.LocationParsers;
 import uk.m0nom.coords.LocationSource;
 import uk.m0nom.geocoding.GeocodingProvider;
@@ -18,6 +19,7 @@ import uk.m0nom.geocoding.NominatimGeocodingProvider;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -61,12 +63,15 @@ public class CoordinateConverterController {
 		String errors = "";
 		String info = "";
 
-		GlobalCoordinatesWithSourceAccuracy coordinates = parsers.parseStringForCoordinates(LocationSource.UNDEFINED, locationToCheck);
-		logger.info(String.format("Location parsed successfully: %s", coordinates));
-
-		if (coordinates == null) {
+		GlobalCoordinatesWithSourceAccuracy coordinates = null;
+		LocationParserResult result = parsers.parseStringForCoordinates(LocationSource.UNDEFINED, locationToCheck);
+		if (result != null) {
+			coordinates = result.getCoords();
+			logger.info(String.format("Location parsed successfully as %s: %s", result.getParser().getName(), coordinates));
+			info = String.format("Location parsed successfully as %s", result.getParser().getName());
+		} else {
 			// OK try and find an activity reference
-			Activity activity = configuration.getActivityDatabases().findActivity(locationToCheck);
+			Activity activity = configuration.getActivityDatabases().findActivity(locationToCheck.toUpperCase());
 			if (activity != null) {
 				coordinates = activity.getCoords();
 				if (coordinates == null) {
@@ -77,12 +82,12 @@ public class CoordinateConverterController {
 			} else {
 				try {
 					// OK try and find an address
-					GeocodingResult result = geocodingProvider.getLocationFromAddress(locationToCheck);
-					coordinates = result.getCoordinates();
+					GeocodingResult geocodingResult = geocodingProvider.getLocationFromAddress(locationToCheck);
+					coordinates = geocodingResult.getCoordinates();
 					if (coordinates == null) {
-						info = result.getError();
+						info = geocodingResult.getError();
 					} else {
-						info = String.format("Geocoding result based on match of '%s'", result.getMatchedOn());
+						info = String.format("Geocoding result based on match of '%s'", geocodingResult.getMatchedOn());
 					}
 				} catch (Exception e) {
 					errors = "Problem using the geocoding provider";
