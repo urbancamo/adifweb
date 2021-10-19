@@ -75,9 +75,9 @@ public class CoordinateConverterController {
 			if (activity != null) {
 				coordinates = activity.getCoords();
 				if (coordinates == null) {
-					info = String.format("Activity for %s found but it doesn't have a location", locationToCheck);
+					info = String.format("Activity reference match for %s location '%s' has no coordinates defined", activity.getType().getActivityDescription(), activity.getName());
 				} else {
-					info = String.format("Activity reference match for %s location %s", activity.getType().getActivityDescription(), activity.getName());
+					info = String.format("Activity reference match for %s location '%s'", activity.getType().getActivityDescription(), activity.getName());
 				}
 			} else {
 				try {
