@@ -43,7 +43,7 @@
                     <ul>
                         <li>Latitude and Longitude, eg: 54.3709 -2.9099 or 54° 22.260' N, 3° 5.403' W</li>
                         <li>Maidenhead Locator (4/6/8/10 character), eg: IO84NI</li>
-                        <li>Activity Reference, eg: G/LD-050</li>
+                        <li>Activity Reference in the SOTA/WOTA/LOTA/POTA/ROTA/COTA/WWFF programmes eg: G/LD-050</li>
                         <li>An OSGB36 British National Grid Reference, 4 or 5 digit, eg: SD 40891 97674</li>
                         <li>An OSGB36 British National Grid Easting/Northing, eg: E 332222, N 527763</li>
                         <li>A street address for geocoding</li>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="container">
                     <div class="form-group mb-3" >
-                        <label for="location" class="form-label" style="font-weight:bold;">Location:</label>
+                        <label for="location" class="form-label" style="font-weight:bold;">Location to find:</label>
                         <input class="form-control" type="text" id="location" name="location" th:value="${location}" value=""/>
                     </div>
                 </div>
@@ -74,8 +74,8 @@
         <div class="panel panel-default">
             <div class="panel-body" id="resultPanel">
                 <div class="panel-heading">Results</div>
-                <div class="container">
-                    <div class="col-auto">
+                <div class="row">
+                    <div class="col-8">
                         <textarea rows = "18" cols="28" th:text="${results}" form="form" ></textarea>
                     </div>
                 </div>
@@ -95,11 +95,17 @@
                     <input id="submit" type="submit" value="Convert">
                 </div>
                 <div class="col">
+                    <input id="googleMaps" type="button" value="Google Maps">
+                </div>
+                <div class="col">
+                    <input id="osm" type="button" value="Open Street Map">
+                </div>
+                <div class="col">
                     <div id="spinner" class="spinner-border" role="status">
                         <span class="sr-only"></span>
                     </div>
                 </div>
-                <div class="col-auto" style="font-family:monospace">
+                <div class="col-auto" style="font-family:monospace; text-align: right">
                     <span th:text="${pom_version}">x.x-SNAPSHOT</span>
                     <span> built </span>
                     <span th:text="${build_timestamp}">yyyy-MM-dd HH:mm</span>
@@ -120,6 +126,29 @@
     $(function () {
         $('#spinner').hide();
         $('#errorPanel').hide();
+        $('#googleMaps').hide();
+        $('#osm').hide();
+
+        const haveLoc = /*[[${haveLocation}]]*/ 'false';
+        if (haveLoc === 'true') {
+            $('#googleMaps').show();
+            $('#googleMaps').click(function(){
+                const lat =  /*[[${latitude}]]*/ null;
+                const long = /*[[${longitude}]]*/ null;
+                const url = "https://maps.google.com/maps?z=12&t=k&q=loc:" + lat + "+" + long;
+                window.open(url);
+                return false;
+            });
+
+            $('#osm').show();
+            $('#osm').click(function(){
+                const lat =  /*[[${latitude}]]*/ null;
+                const long = /*[[${longitude}]]*/ null;
+                const url = "https://www.openstreetmap.org/#map=16/" + lat + "/" + long;
+                window.open(url);
+                return false;
+            });
+        }
 
         $('#form').submit(function () {
             $('#submit').prop('disabled', true);
@@ -128,6 +157,7 @@
             $("body").css("cursor", "progress");
             return;
         })
+
     });
 </script>
 

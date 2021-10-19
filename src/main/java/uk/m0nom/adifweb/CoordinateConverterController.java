@@ -95,6 +95,7 @@ public class CoordinateConverterController {
 			}
 		}
 
+		Map<String, Object> results = new HashMap<>();
 		if (coordinates != null) {
 			StringBuilder sb = new StringBuilder();
 			List<String> formatted = parsers.format(coordinates);
@@ -103,9 +104,13 @@ public class CoordinateConverterController {
 				sb.append("\n");
 			}
 			resultCoords = sb.toString();
+			results.put("latitude", String.format("%.6f", coordinates.getLatitude()));
+			results.put("longitude", String.format("%.6f", coordinates.getLongitude()));
+			results.put("haveLocation", "true");
+		} else {
+			results.put("haveLocation", "false");
 		}
 
-		Map<String, Object> results = new HashMap<>();
 		results.put("location", locationToCheck);
 		results.put("results", resultCoords);
 		results.put("info", info);
