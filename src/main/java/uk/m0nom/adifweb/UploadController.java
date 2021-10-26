@@ -70,19 +70,20 @@ public class UploadController {
 
 	private final ApplicationConfiguration configuration;
 	private final ResourceLoader resourceLoader;
-	private final HtmlParameters parameters;
+	private HtmlParameters parameters;
 
 	public UploadController(ApplicationConfiguration configuration, ResourceLoader resourceLoader) {
 		this.configuration = configuration;
 		this.resourceLoader = resourceLoader;
-		parameters = new HtmlParameters(configuration.getActivityDatabases());
+		this.parameters = null;
 	}
 
 	@GetMapping("/upload")
 	public String displayUploadForm(Model model) {
+		parameters = new HtmlParameters(configuration.getActivityDatabases());
+		parameters.reset();
 		model.addAttribute("error", "");
 		model.addAttribute("upload", new ControlInfo());
-		parameters.reset();
 		model.addAttribute("parameters", parameters.getParameters());
 		model.addAttribute("build_timestamp", buildTimestamp);
 		model.addAttribute("pom_version", pomVersion);
