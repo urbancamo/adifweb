@@ -3,6 +3,7 @@ printJob:
   outEncoding:  utf-8
   startCommand: ''
   endCommand:   ''
+  filenameExtension:  'md'
 
 page:
   pageEnd:      ''

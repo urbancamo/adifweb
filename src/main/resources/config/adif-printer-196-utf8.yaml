@@ -1,6 +1,6 @@
 printJob:
   inEncoding:   iso-8859-1
-  outEncoding:  iso-8859-1
+  outEncoding:  utf-8
   startCommand: ''
   endCommand:   ''
   filenameExtension:  'txt'
@@ -11,7 +11,7 @@ page:
   headerLine:   'COLUMN_NAMES'
   headerSeparator: ''
   pageHeight:   66
-  pageWidth:    158
+  pageWidth:    196
   topMargin:    1
   headerMargin: 0
   bottomMargin: 1
@@ -22,14 +22,14 @@ columns:
   - column:
       adif: 'QSO_DATE'
       header: 'DATE'
-      length: 8
-      format: 'YYYYMMdd'
+      length: 10
+      format: 'YYYY-MM-dd'
       align:  left
   - column:
       adif: 'TIME_ON'
       header: 'TIME'
-      length: 4
-      format: 'HHmm'
+      length: 5
+      format: 'HH:mm'
       align: left
 #  - column:
 #      adif: 'STATION_CALLSIGN'
@@ -39,7 +39,7 @@ columns:
   - column:
       adif: 'CALL'
       header: 'THEIR CALL'
-      length: 13
+      length: 14
       align: left
   - column:
       adif: 'FREQ'
@@ -73,11 +73,11 @@ columns:
   - column:
       adif: 'NAME'
       header: 'OPERATOR'
-      length: 23
+      length: 26
   - column:
       adif: 'COUNTRY'
       header: 'COUNTRY'
-      length: 13
+      length: 16
   - column:
       adif: 'GRIDSQUARE'
       header: 'MHL'
@@ -88,19 +88,11 @@ columns:
       length: 5
       format: '%4.0f'
       align: right
-  - column: 
-      adif: 'QSL_STATUS'
-      header: 'QSL'
-      length: 4
+  - column:
+      adif: 'QTH'
+      header: 'QTH'
+      length: 31
   - column:
       adif: 'COMMENT'
       header: 'COMMENT'
       length: 30
-#     TIME_ON: 4
-#     STATION_CALLSIGN: 10,left
-#     BAND: 3
-#     MODE: 3
-#     FREQ: 8,decimal
-#     RST_SENT: 3
-#     RST_RCVD: 3
-#     COMMENT: 60

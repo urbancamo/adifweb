@@ -69,10 +69,10 @@
                         <a href="#" th:href="@{/download(filename=${kmlFile})}" class="btn btn-outline-secondary" role="button" id="button-kml-download">Download</a>
                     </div>
 
-                    <label for="markdownFile" class="form-label">Markdown File</label>
+                    <label for="formattedQsoFile" class="form-label">Formatted QSO File</label>
                     <div class="input-group mb-3" >
-                        <input class="form-control" type="text" id="markdownFile" name="markdownFile" th:value="${markdownFile}" value="" placeholder="Markdown File" aria-label="Markdown File" aria-describedby="button-markdown-download"/>
-                        <a href="#" th:href="@{/download(filename=${markdownFile})}" class="btn btn-outline-secondary" role="button" id="button-markdown-download">Download</a>
+                        <input class="form-control" type="text" id="formattedQsoFile" name="formattedQsoFile" th:value="${formattedQsoFile}" value="" placeholder="Markdown File" aria-label="Markdown File" aria-describedby="button-markdown-download"/>
+                        <a href="#" th:href="@{/download(filename=${formattedQsoFile})}" class="btn btn-outline-secondary" role="button" id="button-markdown-download">Download</a>
                     </div>
                 </div>
             </div>

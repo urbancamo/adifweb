@@ -3,6 +3,7 @@ printJob:
   outEncoding:  iso-8859-1
   startCommand: ''
   endCommand:   ''
+  filenameExtension:  'txt'
 
 page:
   pageEnd:      ''
@@ -16,7 +17,7 @@ page:
   bottomMargin: 1
   leftMargin:   0
   rightMargin:  0
-  columnSeparator: ''
+  columnSeparator: ' '
 columns:
   - column:
       adif: 'QSO_DATE'
@@ -33,7 +34,7 @@ columns:
   - column:
       adif: 'CALL'
       header: 'CALLSIGN'
-      length: 10
+      length: 14
       align: left
   - column:
       adif: 'FREQ'
@@ -49,42 +50,30 @@ columns:
   - column:
       adif: 'RST_RCVD'
       header: 'RSR'
-      length: 3
+      length: 4
       align: right
   - column:
       adif: 'RST_SENT'
       header: 'RST'
-      length: 3
+      length: 4
       align: right
   - column:
       adif: 'MY_SOTA_REF'
       header: 'SOTA-TX'
-      length: 9
+      length: 11
   - column:
       adif: 'SOTA_REF'
       header: 'SOTA-RX'
-      length: 9
+      length: 11
   - column:
       adif: 'NAME'
       header: 'OPERATOR'
-      length: 16
+      length: 24
   - column:
       adif: 'COUNTRY'
       header: 'COUNTRY'
-      length: 16
+      length: 19
   - column:
       adif: 'GRIDSQUARE'
       header: 'MHL'
       length: 6
-  - column:
-      adif: 'QTH'
-      header: 'QTH'
-      length: 20
-#     TIME_ON: 4
-#     STATION_CALLSIGN: 10,left
-#     BAND: 3
-#     MODE: 3
-#     FREQ: 8,decimal
-#     RST_SENT: 3
-#     RST_RCVD: 3
-#     COMMENT: 60

@@ -78,10 +78,14 @@ public class UploadController {
 		this.parameters = null;
 	}
 
-	@GetMapping("/upload")
-	public String displayUploadForm(Model model) {
+	private void reset() {
 		parameters = new HtmlParameters(configuration.getActivityDatabases());
 		parameters.reset();
+	}
+
+	@GetMapping("/upload")
+	public String displayUploadForm(Model model) {
+		reset();
 		model.addAttribute("error", "");
 		model.addAttribute("upload", new ControlInfo());
 		model.addAttribute("parameters", parameters.getParameters());
@@ -93,6 +97,9 @@ public class UploadController {
 
 	@PostMapping("/upload")
 	public ModelAndView handleUpload(StandardMultipartHttpServletRequest request) throws Exception {
+		if (parameters == null) {
+			reset();
+		}
 		var factory = new DiskFileItemFactory();
 		String tmpPath = System.getProperty("java.io.tmpdir");
 		if (!StringUtils.endsWith(tmpPath, File.separator)) {
@@ -144,7 +151,7 @@ public class UploadController {
 			Map<String, Object> results = new HashMap<>();
 			results.put("adiFile", transformResults.getAdiFile());
 			results.put("kmlFile", transformResults.getKmlFile());
-			results.put("markdownFile", transformResults.getMarkdownFile());
+			results.put("formattedQsoFile", transformResults.getFormattedQsoFile());
 			results.put("error", StringUtils.defaultIfEmpty(transformResults.getError(), "none"));
 			results.put("validationErrors", getValidationErrorsString(parameters));
 
@@ -259,7 +266,7 @@ public class UploadController {
 		String inBasename = FilenameUtils.getBaseName(inPath);
 		String out = String.format("%s%s.%s", tmpPath, inBasename, "adi");
 		String kml = String.format("%s%s.%s", tmpPath, inBasename, "kml");
-		String markdown = String.format("%s%s.%s", tmpPath, inBasename, "md");
+
 		logger.info(String.format("Running from: %s", new File(".").getAbsolutePath()));
 		try {
 			if (control.getUseQrzDotCom()) {
@@ -306,28 +313,30 @@ public class UploadController {
 			writer.write(out, control.getEncoding(), log);
 
 			if (control.isMarkdown()) {
+				String adifPrinterConfigFilename = String.format("classpath:config/%s", control.getPrintConfigFile());
+				Resource adifPrinterConfig = resourceLoader.getResource(adifPrinterConfigFilename);
+				logger.info(String.format("Configuring print job using: %s", adifPrinterConfigFilename));
+
+				formatter.getPrintJobConfig().configure(adifPrinterConfig.getInputStream());
+				String markdown = String.format("%s%s.%s", tmpPath, inBasename, formatter.getPrintJobConfig().getFilenameExtension());
 				BufferedWriter markdownWriter = null;
+
 				try {
-					File markdownFile = new File(markdown);
-					if (markdownFile.exists()) {
-						if (!markdownFile.delete()) {
+					File formattedQsoFile = new File(markdown);
+					if (formattedQsoFile.exists()) {
+						if (!formattedQsoFile.delete()) {
 							logger.severe(String.format("Error deleting Markdown file %s, check permissions?", markdown));
 						}
 					}
-					if (markdownFile.createNewFile()) {
-						String adifPrinterConfigFilename = String.format("classpath:config/%s", control.getPrintConfigFile());
-						Resource adifPrinterConfig = resourceLoader.getResource(adifPrinterConfigFilename);
-						logger.info(String.format("Configuring print job using: %s", adifPrinterConfigFilename));
-
-						formatter.getPrintJobConfig().configure(adifPrinterConfig.getInputStream());
+					if (formattedQsoFile.createNewFile()) {
 						logger.info(String.format("Writing printer job to: %s", markdown));
 						StringBuilder sb = formatter.format(log);
-						markdownWriter = Files.newBufferedWriter(markdownFile.toPath(), Charset.forName(formatter.getPrintJobConfig().getOutEncoding()), StandardOpenOption.WRITE);
+						markdownWriter = Files.newBufferedWriter(formattedQsoFile.toPath(), Charset.forName(formatter.getPrintJobConfig().getOutEncoding()), StandardOpenOption.WRITE);
 						markdownWriter.write(sb.toString());
 
 						results.setAdiFile(FilenameUtils.getName(out));
 						results.setKmlFile(FilenameUtils.getName(kml));
-						results.setMarkdownFile(FilenameUtils.getName(markdown));
+						results.setFormattedQsoFile(FilenameUtils.getName(markdown));
 					} else {
 						logger.severe(String.format("Error creating Markdown file %s, check permissions?", markdown));
 					}

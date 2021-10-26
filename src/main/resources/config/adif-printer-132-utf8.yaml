@@ -3,22 +3,28 @@ printJob:
   outEncoding:  utf-8
   startCommand: ''
   endCommand:   ''
-  filenameExtension:  'md'
+  filenameExtension:  'txt'
 
 page:
   pageEnd:      ''
   lineEnd:      'windows'
   headerLine:   'COLUMN_NAMES'
-  headerSeparator: '-'
-  pageHeight:   9999
-  pageWidth:    71
+  headerSeparator: ''
+  pageHeight:   66
+  pageWidth:    132
   topMargin:    1
   headerMargin: 0
   bottomMargin: 1
   leftMargin:   0
   rightMargin:  0
-  columnSeparator: '|'
+  columnSeparator: ' '
 columns:
+  - column:
+      adif: 'QSO_DATE'
+      header: 'DATE'
+      length: 10
+      format: 'YYYY.MM.dd'
+      align:  left
   - column:
       adif: 'TIME_ON'
       header: 'TIME'
@@ -28,12 +34,13 @@ columns:
   - column:
       adif: 'CALL'
       header: 'CALLSIGN'
-      length: 12
+      length: 14
       align: left
   - column:
-      adif: 'BAND'
-      header: 'BAND'
-      length: 5
+      adif: 'FREQ'
+      header: 'FREQ'
+      length: 8
+      format: '%8.3f'
       align: right
   - column:
       adif: 'MODE'
@@ -41,24 +48,32 @@ columns:
       length: 4
       align: right
   - column:
-      adif: 'RST_SENT'
-      header: 'RST'
-      length: 3
-      align: right
-  - column:
       adif: 'RST_RCVD'
       header: 'RSR'
-      length: 3
+      length: 4
       align: right
+  - column:
+      adif: 'RST_SENT'
+      header: 'RST'
+      length: 4
+      align: right
+  - column:
+      adif: 'MY_SOTA_REF'
+      header: 'SOTA-TX'
+      length: 11
+  - column:
+      adif: 'SOTA_REF'
+      header: 'SOTA-RX'
+      length: 11
   - column:
       adif: 'NAME'
       header: 'OPERATOR'
+      length: 24
+  - column:
+      adif: 'COUNTRY'
+      header: 'COUNTRY'
       length: 19
   - column:
-      adif: 'SIG'
-      header: 'SIG'
-      length: 4
-  - column:
-      adif: 'SIG_INFO'
-      header: 'REF'
-      length: 10
+      adif: 'GRIDSQUARE'
+      header: 'MHL'
+      length: 6
