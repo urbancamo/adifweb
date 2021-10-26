@@ -49,6 +49,7 @@ public class HtmlParameters {
         addParameter(new HtmlParameter(HtmlParameterType.SATELLITE_BAND, "", validators.getValidator(HtmlParameterType.SATELLITE_BAND)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, "", validators.getValidator(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.STRIP_COMMENT, "", validators.getValidator(HtmlParameterType.STRIP_COMMENT)), parameters);
+        addParameter(new HtmlParameter(HtmlParameterType.PRINTER_CONFIG, "", validators.getValidator(HtmlParameterType.PRINTER_CONFIG)), parameters);
     }
 
     public void addParameter(HtmlParameter parameter, Map<String, HtmlParameter> parameters) {
@@ -78,6 +79,7 @@ public class HtmlParameters {
         addParameterFromRequest(HtmlParameterType.CONTEST_RESULTS, request);
         addParameterFromRequest(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, request);
         addParameterFromRequest(HtmlParameterType.STRIP_COMMENT, request);
+        addParameterFromRequest(HtmlParameterType.PRINTER_CONFIG, request);
     }
 
     private void addParameterFromRequest(HtmlParameterType type, StandardMultipartHttpServletRequest request) {

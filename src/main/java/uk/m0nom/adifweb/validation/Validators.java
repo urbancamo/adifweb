@@ -21,6 +21,7 @@ public class Validators {
         addValidator(HtmlParameterType.LONGITUDE, new LongitudeValidator());
         addValidator(HtmlParameterType.ENCODING, new EncodingValidator());
         addValidator(HtmlParameterType.FILENAME, new FilenameValidator());
+        addValidator(HtmlParameterType.PRINTER_CONFIG, new PrinterConfigValidator());
         addValidator(HtmlParameterType.GRID, new GridValidator());
         addValidator(HtmlParameterType.SOTA_REF, new ActivityValidator(databases, ActivityType.SOTA));
         addValidator(HtmlParameterType.HEMA_REF, new ActivityValidator(databases, ActivityType.HEMA));

@@ -239,6 +239,7 @@ public class UploadController {
 		control.setQrzUsername(qrzUsername);
 		control.setQrzPassword(qrzPassword);
 		control.setUseQrzDotCom(StringUtils.isNotEmpty(qrzUsername) && StringUtils.isNotEmpty(qrzPassword));
+		control.setPrintConfigFile(parameters.get(HtmlParameterType.PRINTER_CONFIG.getParameterName()).getValue().toLowerCase());
 
 		return control;
 	}
@@ -314,12 +315,12 @@ public class UploadController {
 						}
 					}
 					if (markdownFile.createNewFile()) {
-						String adifPrinterConfigFilename = "classpath:config/adif-printer-132-markdown.yaml";
+						String adifPrinterConfigFilename = String.format("classpath:config/%s", control.getPrintConfigFile());
 						Resource adifPrinterConfig = resourceLoader.getResource(adifPrinterConfigFilename);
 						logger.info(String.format("Configuring print job using: %s", adifPrinterConfigFilename));
 
 						formatter.getPrintJobConfig().configure(adifPrinterConfig.getInputStream());
-						logger.info(String.format("Writing Markdown to: %s", markdown));
+						logger.info(String.format("Writing printer job to: %s", markdown));
 						StringBuilder sb = formatter.format(log);
 						markdownWriter = Files.newBufferedWriter(markdownFile.toPath(), Charset.forName(formatter.getPrintJobConfig().getOutEncoding()), StandardOpenOption.WRITE);
 						markdownWriter.write(sb.toString());
