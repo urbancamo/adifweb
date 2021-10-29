@@ -17,7 +17,7 @@ public class LocationValidator implements Validator {
 
         LocationParsers parsers = new LocationParsers();
         LocationParserResult result = parsers.parseStringForCoordinates(LocationSource.UNDEFINED, value);
-        if (result.getCoords() == null) {
+        if (result == null || result.getCoords() == null) {
             return new ValidationResult(INCORRECT_FORMAT);
         }
         return ValidationResult.SUCCESS;

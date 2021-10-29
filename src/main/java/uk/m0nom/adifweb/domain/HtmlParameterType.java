@@ -25,7 +25,8 @@ public enum HtmlParameterType {
     SATELLITE_BAND("satBand"),
     SOTA_MICROWAVE_AWARD_COMMENT("sotaMicrowaveAwardComment"),
     STRIP_COMMENT("stripComment"),
-    PRINTER_CONFIG("printerConfig");
+    PRINTER_CONFIG("printerConfig"),
+    OPTIONS_VISIBLE("optionsVisible");
 
     private String parameterName;
 

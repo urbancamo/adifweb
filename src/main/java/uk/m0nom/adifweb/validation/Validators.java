@@ -38,6 +38,7 @@ public class Validators {
         addValidator(HtmlParameterType.SATELLITE_BAND, new SatelliteBandValidator());
         addValidator(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, new BooleanValidator());
         addValidator(HtmlParameterType.STRIP_COMMENT, new BooleanValidator());
+        addValidator(HtmlParameterType.OPTIONS_VISIBLE, new BooleanValidator());
     }
 
     public void addValidator(HtmlParameterType type, Validator validator) {

@@ -1,4 +1,5 @@
 printJob:
+  name:         'Fixed Width (158 column)'
   inEncoding:   iso-8859-1
   outEncoding:  iso-8859-1
   startCommand: ''

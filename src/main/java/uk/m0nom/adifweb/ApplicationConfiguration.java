@@ -13,9 +13,11 @@ import uk.m0nom.adif3.Adif3FileReader;
 import uk.m0nom.adif3.Adif3FileWriter;
 import uk.m0nom.adif3.Adif3Transformer;
 import uk.m0nom.adif3.print.Adif3PrintFormatter;
+import uk.m0nom.adifweb.domain.PrintJobConfigs;
 import uk.m0nom.kml.KmlWriter;
 import uk.m0nom.qsofile.QsoFileReader;
 import uk.m0nom.qsofile.QsoFileWriter;
+import uk.m0nom.satellite.Satellites;
 import uk.m0nom.sotacsv.SotaCsvFileReader;
 
 import java.util.logging.Logger;
@@ -31,9 +33,8 @@ public class ApplicationConfiguration implements ApplicationListener<Application
     private QsoFileReader reader;
     private QsoFileWriter writer;
     private KmlWriter kmlWriter;
-
+    private Satellites satellites;
     private ActivityDatabases activityDatabases;
-
     private Adif3PrintFormatter formatter;
 
 
@@ -45,6 +46,7 @@ public class ApplicationConfiguration implements ApplicationListener<Application
         activityDatabases = new ActivityDatabases();
         formatter = new Adif3PrintFormatter();
         activityDatabases.loadData();
+        satellites = new Satellites();
         logger.info("Initialising complete, ready to process requests...");
     }
 

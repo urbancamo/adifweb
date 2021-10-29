@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,10 +26,7 @@ import uk.m0nom.adif3.contacts.Qsos;
 import uk.m0nom.adif3.control.TransformControl;
 import uk.m0nom.adif3.print.Adif3PrintFormatter;
 import uk.m0nom.adif3.transform.TransformResults;
-import uk.m0nom.adifweb.domain.ControlInfo;
-import uk.m0nom.adifweb.domain.HtmlParameter;
-import uk.m0nom.adifweb.domain.HtmlParameterType;
-import uk.m0nom.adifweb.domain.HtmlParameters;
+import uk.m0nom.adifweb.domain.*;
 import uk.m0nom.contest.ContestResultsCalculator;
 import uk.m0nom.icons.IconResource;
 import uk.m0nom.kml.KmlWriter;
@@ -38,6 +36,7 @@ import uk.m0nom.qsofile.QsoFileReader;
 import uk.m0nom.qsofile.QsoFileWriter;
 
 import javax.servlet.http.HttpSession;
+import java.awt.*;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -66,6 +65,7 @@ public class UploadController {
 	@Value("${build.version}")
 	private String pomVersion;
 
+	private PrintJobConfigs printJobConfigs;
 
 	private static final Logger logger = Logger.getLogger(UploadController.class.getName());
 
@@ -75,10 +75,14 @@ public class UploadController {
 	public UploadController(ApplicationConfiguration configuration, ResourceLoader resourceLoader) {
 		this.configuration = configuration;
 		this.resourceLoader = resourceLoader;
+		this.printJobConfigs = new PrintJobConfigs(resourceLoader);
 	}
 
 	private HtmlParameters setParametersFromSession(HttpSession session) {
-		HtmlParameters parameters = (HtmlParameters) session.getAttribute(HTML_PARAMETERS);
+		HtmlParameters parameters = null;
+		if (session != null) {
+			parameters = (HtmlParameters) session.getAttribute(HTML_PARAMETERS);
+		}
 		if (parameters == null) {
 			parameters = new HtmlParameters(configuration.getActivityDatabases());
 			parameters.reset();
@@ -87,13 +91,20 @@ public class UploadController {
 	}
 
 	@GetMapping("/upload")
-	public String displayUploadForm(Model model, HttpSession session) {
-		HtmlParameters parameters = setParametersFromSession(session);
+	public String displayUploadForm(Model model, HttpSession session, @RequestParam(required=false) Boolean clear) {
+		HtmlParameters parameters = null;
+		if (clear != null) {
+			parameters = setParametersFromSession(null);
+		} else {
+			parameters = setParametersFromSession(session);
+		}
 		model.addAttribute("error", "");
 		model.addAttribute("upload", new ControlInfo());
 		model.addAttribute("parameters", parameters.getParameters());
 		model.addAttribute("build_timestamp", buildTimestamp);
 		model.addAttribute("pom_version", pomVersion);
+		model.addAttribute("satellites", configuration.getSatellites().getSatelliteNames());
+		model.addAttribute("printJobConfigs", printJobConfigs.getConfigs());
 
 		return "upload";
 	}
@@ -130,6 +141,8 @@ public class UploadController {
 			map.put("validationErrors", "true");
 			map.put("validationErrorMessages", getValidationErrorsString(parameters));
 			map.put("parameters", parameters);
+			map.put("satellites", configuration.getSatellites().getSatelliteNames());
+			map.put("printJobConfigs", printJobConfigs.getConfigs());
 			return backToUpload;
 		} else {
 			TransformControl control = createTransformControlFromParameters(parameters);
@@ -148,6 +161,8 @@ public class UploadController {
 				ModelMap map = backToUpload.getModelMap();
 				map.put("error", transformResults.getError());
 				map.put("parameters", parameters);
+				map.put("satellites", configuration.getSatellites().getSatelliteNames());
+				map.put("printJobConfigs", printJobConfigs.getConfigs());
 				return backToUpload;
 			}
 
@@ -313,7 +328,7 @@ public class UploadController {
 				Resource adifPrinterConfig = resourceLoader.getResource(adifPrinterConfigFilename);
 				logger.info(String.format("Configuring print job using: %s", adifPrinterConfigFilename));
 
-				formatter.getPrintJobConfig().configure(adifPrinterConfig.getInputStream());
+				formatter.getPrintJobConfig().configure(adifPrinterConfigFilename, adifPrinterConfig.getInputStream());
 				String markdown = String.format("%s%s.%s", tmpPath, inBasename, formatter.getPrintJobConfig().getFilenameExtension());
 				BufferedWriter markdownWriter = null;
 

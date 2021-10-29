@@ -13,10 +13,6 @@
             margin: 10px;
         }
 
-        div.dropdown {
-            padding: 10px;
-        }
-
         div.panel-heading {
             font-weight: bold;
         }
@@ -49,7 +45,7 @@
 
         <!-- *********************** FILE ***************** -->
         <div class="panel panel-default">
-            <div class="panel-heading">ADIF File
+            <div class="panel-heading">ADIF/SOTA CSV File
             </div>
             <div class="panel-body" id="filePanel">
                 <div class="container">
@@ -242,15 +238,15 @@
                     <div class="container">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox"
-                                   th:value="${parameters.get('stationSubLabel').getValue()}" value=""
-                                   id="stationSubLabel" name="stationSubLabel" checked>
+                                   th:checked="${parameters.get('stationSubLabel').getValueAsBoolean()}"
+                                   id="stationSubLabel" name="stationSubLabel">
                             <label class="form-check-label" for="stationSubLabel">
                                 Station Sub-label (Band/Mode)
                             </label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox"
-                                   th:value="${parameters.get('localActivationSites').getValue()}" value=""
+                                   th:checked="${parameters.get('localActivationSites').getValueAsBoolean()}"
                                    id="localActivationSites" name="localActivationSites">
                             <label class="form-check-label" for="localActivationSites">
                                 Show Local Activation Sites
@@ -266,7 +262,7 @@
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox"
-                                   th:value="${parameters.get('stripComment').getValue()}" value=""
+                                   th:checked="${parameters.get('stripComment').getValueAsBoolean()}"
                                    id="stripComment" name="stripComment">
                             <label class="form-check-label" for="stripComment">
                                 Strip processed fields from the ADIF comment
@@ -282,7 +278,7 @@
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox"
-                                   th:value="${parameters.get('contestResults').getValue()}" value=""
+                                   th:checked="${parameters.get('contestResults').getValueAsBoolean()}"
                                    id="contestResultsLabel" name="contestResults">
                             <label class="form-check-label" for="contestResultsLabel">
                                 Include Contest Results in ADIF file
@@ -296,10 +292,8 @@
                             <div class="col-4">
                                 <select class="form-select" id="satName" name="satName">
                                     <option></option>
-                                    <option>QO-100</option>
+                                    <option th:each="satellite : ${satellites}" th:value="${satellite}" th:text="${satellite}" th:selected="${satellite} == ${parameters.get('satName').getValue()}"></option>
                                 </select>
-                                <!--<input class="" type="text" id="satName" name="satName"
-                                       th:value="${parameters.get('satName').getValue()}" value=""/>-->
                             </div>
                             <div class="col-4">
                                 <span class="text-danger"
@@ -336,7 +330,7 @@
 
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox"
-                                   th:value="${parameters.get('sotaMicrowaveAwardComment').getValue()}" value=""
+                                   th:checked="${parameters.get('sotaMicrowaveAwardComment').getValueAsBoolean()}"
                                    id="sotaMicrowaveAwardComment" name="sotaMicrowaveAwardComment">
                             <label class="form-check-label" for="sotaMicrowaveAwardComment">
                                 Add SAT_NAME %QRA%MHL6% to comment field
@@ -349,14 +343,7 @@
                             </div>
                             <div class="col-auto">
                                 <select class="form-select" id="printerConfig" name="printerConfig" aria-label="Printer Config">
-                                    <option value="adif-printer-132-md.yaml" selected>Default (132 column UTF-8 Markdown)</option>
-                                    <option value="adif-printer-sota-md.yaml">SOTA Report (UTF-8 Markdown)</option>
-                                    <option value="adif-printer-132.yaml">Fixed Width (132 column)</option>
-                                    <option value="adif-printer-132-utf8.yaml">Fixed Width (132 column UTF-8)</option>
-                                    <option value="adif-printer-158.yaml">Fixed Width (158 column)</option>
-                                    <option value="adif-printer-158-utf8.yaml">Fixed Width (158 column UTF-8)</option>
-                                    <option value="adif-printer-196.yaml">Fixed Width (196 column)</option>
-                                    <option value="adif-printer-196-utf8.yaml">Fixed Width (196 column UTF-8)</option>
+                                    <option th:each="config : ${printJobConfigs}" th:value="${config.filename}" th:text="${config.name}" th:selected="${config.filename} == ${parameters.get('printerConfig').getValue()}"></option>
                                 </select>
                             </div>
                         </div>
@@ -369,14 +356,17 @@
         <div class="panel panel-default">
             <div class="panel-heading">Errors</div>
             <div class="container">
-                <label for="error">Errors:</label><input type="text" class="form-control" id="error" name="error" th:value="${error}">
+                <input type="text" class="form-control" id="error" name="error" th:value="${error}">
             </div>
         </div>
 
+
+        <!-- *********************** BUTTONS ***************** -->
         <div class="container padding-bottom">
             <div class="row">
                 <div class="col">
-                    <input id="submit" type="submit" value="Process"> the ADIF file
+                    <input id="submit" class="btn btn-success" type="submit" value="Process">
+                    <a href="/upload?clear=true" class="btn btn-secondary" role="button" id="button-markdown-back">Clear Form</a>
                 </div>
                 <div class="col">
                     <div id="spinner" class="spinner-border" role="status">
@@ -391,6 +381,7 @@
                 </div>
             </div>
         </div>
+        <input hidden id="optionsVisible" name="optionsVisible" type="text" th:value="${parameters.get('optionsVisible').getValue()}"/>
     </form>
 
 </div>
@@ -404,10 +395,17 @@
     $(function () {
         $('#spinner').hide();
 
+        if ($('#optionsVisible').val() === 'on') {
+            $('#optionsCollapse').show();
+        }
+
         $('#form').submit(function () {
             $('#submit').prop('disabled', true);
             $('#submit').val("Processing");
             $('#spinner').show();
+            if($('#optionsPanelBody').is(':visible')) {
+                $('#optionsVisible').val("on");
+            }
             $("body").css("cursor", "progress");
             return;
         })

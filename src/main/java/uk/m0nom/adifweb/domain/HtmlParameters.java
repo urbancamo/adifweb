@@ -3,6 +3,7 @@ package uk.m0nom.adifweb.domain;
 import lombok.Getter;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import uk.m0nom.activity.ActivityDatabases;
+import uk.m0nom.adifweb.validation.BooleanValidator;
 import uk.m0nom.adifweb.validation.ValidationResult;
 import uk.m0nom.adifweb.validation.Validator;
 import uk.m0nom.adifweb.validation.Validators;
@@ -37,7 +38,7 @@ public class HtmlParameters {
         addParameter(new HtmlParameter(HtmlParameterType.COTA_REF, "", validators.getValidator(HtmlParameterType.COTA_REF)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.LOTA_REF, "", validators.getValidator(HtmlParameterType.LOTA_REF)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.ROTA_REF, "", validators.getValidator(HtmlParameterType.ROTA_REF)), parameters);
-        addParameter(new HtmlParameter(HtmlParameterType.STATION_SUBLABEL, "TRUE", validators.getValidator(HtmlParameterType.STATION_SUBLABEL)), parameters);
+        addParameter(new HtmlParameter(HtmlParameterType.STATION_SUBLABEL, BooleanValidator.TRUE, validators.getValidator(HtmlParameterType.STATION_SUBLABEL)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES, "", validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, KmlLocalActivities.DEFAULT_RADIUS, validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE, String.format("%.2f", Ionosphere.HF_ANTENNA_DEFAULT_TAKEOFF_ANGLE), validators.getValidator(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE)), parameters);
@@ -48,6 +49,7 @@ public class HtmlParameters {
         addParameter(new HtmlParameter(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, "", validators.getValidator(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.STRIP_COMMENT, "", validators.getValidator(HtmlParameterType.STRIP_COMMENT)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.PRINTER_CONFIG, "", validators.getValidator(HtmlParameterType.PRINTER_CONFIG)), parameters);
+        addParameter(new HtmlParameter(HtmlParameterType.OPTIONS_VISIBLE, "", validators.getValidator(HtmlParameterType.OPTIONS_VISIBLE)), parameters);
     }
 
     public void addParameter(HtmlParameter parameter, Map<String, HtmlParameter> parameters) {
@@ -77,6 +79,7 @@ public class HtmlParameters {
         addParameterFromRequest(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, request);
         addParameterFromRequest(HtmlParameterType.STRIP_COMMENT, request);
         addParameterFromRequest(HtmlParameterType.PRINTER_CONFIG, request);
+        addParameterFromRequest(HtmlParameterType.OPTIONS_VISIBLE, request);
     }
 
     private void addParameterFromRequest(HtmlParameterType type, StandardMultipartHttpServletRequest request) {

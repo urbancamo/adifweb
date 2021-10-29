@@ -2,6 +2,8 @@ package uk.m0nom.adifweb.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
+import uk.m0nom.adifweb.validation.BooleanValidator;
 import uk.m0nom.adifweb.validation.ValidationResult;
 import uk.m0nom.adifweb.validation.Validator;
 
@@ -27,5 +29,9 @@ public class HtmlParameter {
 
     public void validate() {
         validationResult = validator.isValid(value);
+    }
+
+    public boolean getValueAsBoolean() {
+        return StringUtils.equalsIgnoreCase(BooleanValidator.TRUE, value);
     }
 }
