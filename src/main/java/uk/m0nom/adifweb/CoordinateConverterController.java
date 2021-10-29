@@ -40,7 +40,7 @@ public class CoordinateConverterController {
 
 	public CoordinateConverterController(ApplicationConfiguration configuration) {
 		this.configuration = configuration;
-		this.parsers = new LocationParsers(configuration.getActivityDatabases());
+		this.parsers = new LocationParsers();
 		this.geocodingProvider = new NominatimGeocodingProvider();
 	}
 

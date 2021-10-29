@@ -20,7 +20,7 @@ public class HtmlParameter {
         this.type = type;
         this.key = type.getParameterName();
         if (value != null) {
-            this.value = value.trim().toUpperCase();
+            this.value = value.trim();
         }
         this.validator = validator;
     }

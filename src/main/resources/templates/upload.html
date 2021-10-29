@@ -56,7 +56,7 @@
                     <p>In most cases you only need to upload the ADIF (or SOTA CSV) file and click process.</p>
                 </div>
                 <div class="input-group mb-3">
-                    <input type="file" class="form-control" id="filename" name="filename"/>
+                    <input type="file" class="form-control" id="filename" name="filename" th:value="${parameters.get('filename').getValue()}"/>
                 </div>
                 <div class="input-group mb-3">
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -203,64 +203,26 @@
         <!-- *********************** LOCATION ***************** -->
         <div class="panel panel-default">
             <div class="panel-heading">Your Location</div>
-            <div class="container">
-                <div class="checkbox">
-                    <label><input type="checkbox" style="float:inherit;" id="locationOverrideCb" name="setCoords"/>
-                        override</label>
-                </div>
-            </div>
-            <div class="panel-body" id="locationOverridePanel">
+            <div class="panel-body" id="locationPanel">
                 <div class="container">
                     <p>If your activity doesn't have a location, your ADIF input file doesn't have your Maidenhead
                         location set, or you want to specify a more accurate location override it here.</p>
                 </div>
-                <div class="dropdown location" id="locationOverrideDropdownDiv">
-                    <button class="btn btn-secondary dropdown-toggle location" type="button" id="myLocationOverride"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                        My Location Override:
-                    </button>
-                    <ul class="dropdown-menu location" aria-labelledby="myLocationOverride"
-                        id="locationOverrideDropdown">
-                        <li><a class="dropdown-item location" href="#" id="locationOverrideByCoordinates">by
-                            coordinates</a></li>
-                        <li><a class="dropdown-item location" href="#" id="locationOverrideByGrid">by grid</a></li>
-                    </ul>
-                </div>
-                <div class="container">
-                    <div id="input-group locationOverrideCoordsDiv location">
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="location" for="latLong">Lat/Long</label>
-                            </div>
-                            <div class="col-4">
-                                <input class="location locationOverrideByCoords" type="text" id="latLong" name="latlong"
-                                       th:value="${parameters.get('latlong').getValue()}" value=""/>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:if="${parameters.get('latlong').getValidationResult().hasError()}"
-                                      th:text="${parameters.get('latlong').getValidationResult().getError()}"></span>
-                                <span class="text-success"
-                                      th:unless="${parameters.get('latlong').getValidationResult().hasError()}">(decimal comma-separated)</span>
-                            </div>
+                 <div class="container">
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="location" for="location">Location</label>
                         </div>
-                    </div>
-                    <div id="locationOverrideGridDiv location">
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="location" for="grid">Grid<br/></label>
-                            </div>
-                            <div class="col-4">
-                                <input class="location locationOverrideByGrid" type="text" id="grid" name="grid"
-                                       th:value="${parameters.get('grid').getValue()}" value=""/>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:if="${parameters.get('grid').getValidationResult().hasError()}"
-                                      th:text="${parameters.get('grid').getValidationResult().getError()}"></span>
-                                <span class="text-success"
-                                      th:unless="${parameters.get('grid').getValidationResult().hasError()}">(4/6/8/10 char)</span>
-                            </div>
+                        <div class="col-4">
+                            <input class="location locationPanel" type="text" id="location" name="location"
+                                   th:value="${parameters.get('location').getValue()}" value=""/>
+                        </div>
+                        <div class="col-4">
+                            <span class="text-danger"
+                                  th:if="${parameters.get('location').getValidationResult().hasError()}"
+                                  th:text="${parameters.get('location').getValidationResult().getError()}"></span>
+                            <span class="text-success"
+                                  th:unless="${parameters.get('location').getValidationResult().hasError()}">(any valid format)</span>
                         </div>
                     </div>
                 </div>
@@ -440,25 +402,7 @@
 
 <script th:inline="javascript">
     $(function () {
-        $('.location').prop('disabled', true);
         $('#spinner').hide();
-
-        $('#locationOverrideCb').on('change', function () {
-            $('.location').prop('disabled', !this.checked);
-            if (this.checked) {
-                $('.locationOverrideByCoords').prop('disabled', true);
-                $('.locationOverrideByGrid').prop('disabled', true);
-            }
-        });
-
-        $('#locationOverrideByCoordinates').on('click', function () {
-            $('.locationOverrideByCoords').prop('disabled', false);
-            $('.locationOverrideByGrid').prop('disabled', true);
-        })
-        $('#locationOverrideByGrid').on('click', function () {
-            $('.locationOverrideByCoords').prop('disabled', true);
-            $('.locationOverrideByGrid').prop('disabled', false);
-        })
 
         $('#form').submit(function () {
             $('#submit').prop('disabled', true);

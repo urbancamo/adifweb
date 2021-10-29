@@ -5,9 +5,7 @@ import lombok.Getter;
 @Getter
 public enum HtmlParameterType {
     FILENAME("filename"),
-    LATITUDE("latitude"),
-    LONGITUDE("longitude"),
-    LATLONG("latlong"),
+    LOCATION("location"),
     SOTA_REF("sotaRef"),
     WOTA_REF("wotaRef"),
     HEMA_REF("hemaRef"),
@@ -16,7 +14,6 @@ public enum HtmlParameterType {
     COTA_REF("cotaRef"),
     LOTA_REF("lotaRef"),
     ROTA_REF("rotaRef"),
-    GRID("grid"),
     ENCODING("encoding"),
     STATION_SUBLABEL("stationSubLabel"),
     LOCAL_ACTIVATION_SITES("localActivationSites"),

@@ -1,7 +1,6 @@
 package uk.m0nom.adifweb.domain;
 
 import lombok.Getter;
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import uk.m0nom.activity.ActivityDatabases;
 import uk.m0nom.adifweb.validation.ValidationResult;
@@ -29,8 +28,7 @@ public class HtmlParameters {
     public void reset() {
         addParameter(new HtmlParameter(HtmlParameterType.FILENAME, "", validators.getValidator(HtmlParameterType.FILENAME)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.ENCODING, "windows-1251", validators.getValidator(HtmlParameterType.ENCODING)), parameters);
-        addParameter(new HtmlParameter(HtmlParameterType.LATLONG, "", validators.getValidator(HtmlParameterType.LATLONG)), parameters);
-        addParameter(new HtmlParameter(HtmlParameterType.GRID, "", validators.getValidator(HtmlParameterType.GRID)), parameters);
+        addParameter(new HtmlParameter(HtmlParameterType.LOCATION, "", validators.getValidator(HtmlParameterType.LOCATION)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.SOTA_REF, "", validators.getValidator(HtmlParameterType.SOTA_REF)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.WOTA_REF, "", validators.getValidator(HtmlParameterType.WOTA_REF)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.HEMA_REF, "", validators.getValidator(HtmlParameterType.HEMA_REF)), parameters);
@@ -59,8 +57,7 @@ public class HtmlParameters {
 
     public void addParametersFromRequest(StandardMultipartHttpServletRequest request) {
         addParameterFromRequest(HtmlParameterType.ENCODING, request);
-        addParameterFromRequest(HtmlParameterType.LATLONG, request);
-        addParameterFromRequest(HtmlParameterType.GRID, request);
+        addParameterFromRequest(HtmlParameterType.LOCATION, request);
         addParameterFromRequest(HtmlParameterType.SOTA_REF, request);
         addParameterFromRequest(HtmlParameterType.WOTA_REF, request);
         addParameterFromRequest(HtmlParameterType.HEMA_REF, request);

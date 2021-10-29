@@ -5,7 +5,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.gavaghan.geodesy.GlobalCoordinates;
 import org.marsik.ham.adif.Adif3;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -30,7 +29,6 @@ import uk.m0nom.adifweb.domain.ControlInfo;
 import uk.m0nom.adifweb.domain.HtmlParameter;
 import uk.m0nom.adifweb.domain.HtmlParameterType;
 import uk.m0nom.adifweb.domain.HtmlParameters;
-import uk.m0nom.adifweb.util.LatLongSplitter;
 import uk.m0nom.contest.ContestResultsCalculator;
 import uk.m0nom.icons.IconResource;
 import uk.m0nom.kml.KmlWriter;
@@ -39,6 +37,7 @@ import uk.m0nom.qrz.QrzService;
 import uk.m0nom.qsofile.QsoFileReader;
 import uk.m0nom.qsofile.QsoFileWriter;
 
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -52,6 +51,8 @@ import java.util.logging.Logger;
 
 @Controller
 public class UploadController {
+
+	private static final String HTML_PARAMETERS = "HTML_PARAMETERS";
 
 	@Value("${qrz.username}")
 	private String qrzUsername;
@@ -70,22 +71,24 @@ public class UploadController {
 
 	private final ApplicationConfiguration configuration;
 	private final ResourceLoader resourceLoader;
-	private HtmlParameters parameters;
 
 	public UploadController(ApplicationConfiguration configuration, ResourceLoader resourceLoader) {
 		this.configuration = configuration;
 		this.resourceLoader = resourceLoader;
-		this.parameters = null;
 	}
 
-	private void reset() {
-		parameters = new HtmlParameters(configuration.getActivityDatabases());
-		parameters.reset();
+	private HtmlParameters setParametersFromSession(HttpSession session) {
+		HtmlParameters parameters = (HtmlParameters) session.getAttribute(HTML_PARAMETERS);
+		if (parameters == null) {
+			parameters = new HtmlParameters(configuration.getActivityDatabases());
+			parameters.reset();
+		}
+		return parameters;
 	}
 
 	@GetMapping("/upload")
-	public String displayUploadForm(Model model) {
-		reset();
+	public String displayUploadForm(Model model, HttpSession session) {
+		HtmlParameters parameters = setParametersFromSession(session);
 		model.addAttribute("error", "");
 		model.addAttribute("upload", new ControlInfo());
 		model.addAttribute("parameters", parameters.getParameters());
@@ -96,10 +99,9 @@ public class UploadController {
 	}
 
 	@PostMapping("/upload")
-	public ModelAndView handleUpload(StandardMultipartHttpServletRequest request) throws Exception {
-		if (parameters == null) {
-			reset();
-		}
+	public ModelAndView handleUpload(StandardMultipartHttpServletRequest request, HttpSession session) throws Exception {
+		HtmlParameters parameters = setParametersFromSession(session);
+
 		var factory = new DiskFileItemFactory();
 		String tmpPath = System.getProperty("java.io.tmpdir");
 		if (!StringUtils.endsWith(tmpPath, File.separator)) {
@@ -120,6 +122,7 @@ public class UploadController {
 		parameters.put(fileParam.getType().getParameterName(), fileParam);
 
 		parameters.validate();
+		session.setAttribute(HTML_PARAMETERS, parameters);
 
 		if (!parameters.isAllValid()) {
 			ModelAndView backToUpload = new ModelAndView("upload");
@@ -129,7 +132,7 @@ public class UploadController {
 			map.put("parameters", parameters);
 			return backToUpload;
 		} else {
-			TransformControl control = createTransformControlFromParameters();
+			TransformControl control = createTransformControlFromParameters(parameters);
 
 			InputStream uploadedStream = file.getInputStream();
 			long timestamp = new Date().getTime();
@@ -173,6 +176,7 @@ public class UploadController {
 		}
 		return rtn;
 	}
+
 	private String getValidationErrorsString(HtmlParameters parametersToValidate) {
 		StringBuilder sb = new StringBuilder();
 
@@ -185,7 +189,7 @@ public class UploadController {
 		return sb.toString();
 	}
 
-	private TransformControl createTransformControlFromParameters() {
+	private TransformControl createTransformControlFromParameters(HtmlParameters parameters) {
 		TransformControl control = new TransformControl();
 		control.setMarkdown(true);
 		control.setGenerateKml(true);
@@ -198,7 +202,6 @@ public class UploadController {
 			}
 		}
 
-		control.setMyGrid(parameters.get(HtmlParameterType.GRID.getParameterName()).getValue());
 		control.setSatelliteName(parameters.get(HtmlParameterType.SATELLITE_NAME.getParameterName()).getValue());
 		control.setSatelliteMode(parameters.get(HtmlParameterType.SATELLITE_MODE.getParameterName()).getValue());
 		control.setSatelliteBand(parameters.get(HtmlParameterType.SATELLITE_BAND.getParameterName()).getValue());
@@ -207,14 +210,7 @@ public class UploadController {
 
 		control.setContestResults(parameters.get(HtmlParameterType.CONTEST_RESULTS.getParameterName()).getValue() != null);
 
-		//control.setMyLatitude(parametersToValidate.get(LATITUDE_PARAMETER).getValue());
-		//control.setMyLongitude(parametersToValidate.get(LONGITUDE_PARAMETER).getValue());
-
-		GlobalCoordinates coordinates = LatLongSplitter.split(parameters.get(HtmlParameterType.LATLONG.getParameterName()).getValue());
-		if (coordinates != null) {
-			control.setMyLatitude(String.format("%f", coordinates.getLatitude()));
-			control.setMyLongitude(String.format("%f", coordinates.getLongitude()));
-		}
+		control.setLocation(parameters.get(HtmlParameterType.LOCATION.getParameterName()).getValue());
 		control.setEncoding(parameters.get(HtmlParameterType.ENCODING.getParameterName()).getValue());
 
 		control.setKmlContactWidth(3);
@@ -246,7 +242,7 @@ public class UploadController {
 		control.setQrzUsername(qrzUsername);
 		control.setQrzPassword(qrzPassword);
 		control.setUseQrzDotCom(StringUtils.isNotEmpty(qrzUsername) && StringUtils.isNotEmpty(qrzPassword));
-		control.setPrintConfigFile(parameters.get(HtmlParameterType.PRINTER_CONFIG.getParameterName()).getValue().toLowerCase());
+		control.setPrintConfigFile(parameters.get(HtmlParameterType.PRINTER_CONFIG.getParameterName()).getValue());
 
 		return control;
 	}
