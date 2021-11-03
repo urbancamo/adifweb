@@ -12,7 +12,6 @@ public class LatLongValidator implements Validator {
             return ValidationResult.EMPTY;
         }
 
-        boolean valid = false;
         String[] latlong = StringUtils.split(value, ",");
         if (latlong.length == 2) {
             ValidationResult latResult = new LatitudeValidator().isValid(latlong[0].trim());

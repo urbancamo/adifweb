@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <title>Coordinate Converter</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        div.panel {
+            background-color: lightblue;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        div.panel-heading {
+            font-weight: bold;
+        }
+
+        div.row {
+            padding: 2px;
+        }
+
+        div.padding-bottom {
+            padding-bottom: 30px;
+        }
+
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <div class="container">
+        <h1>Coordinate Converter</h1>
+    </div>
+    <form id="form" action="#" th:action="@{/coord}"  method="post">
+        <div class="panel panel-default">
+            <div class="panel-heading">Convert Coordinates</div>
+            <div class="panel-body" id="locationPanel">
+                <div class="container">
+                    <span>Paste any of the following in the location box below:</span>
+                    <ul>
+                        <li>Latitude and Longitude, eg: 54.3709 -2.9099 or 54° 22.260' N, 3° 5.403' W</li>
+                        <li>Maidenhead Locator (4/6/8/10 character), eg: IO84NI</li>
+                        <li>Activity Reference in the SOTA/WOTA/LOTA/POTA/ROTA/COTA/WWFF programmes eg: G/LD-050</li>
+                        <li>An OSGB36 British National Grid Reference, 4 or 5 digit, eg: SD 40891 97674</li>
+                        <li>An OSGB36 British National Grid Easting/Northing, eg: E 332222, N 527763</li>
+                        <li>A street address for geocoding</li>
+                    </ul>
+                    <span>All the formats shown in the results can be used as a location format to convert.</span>
+                </div>
+                <div class="container">
+                    <div class="form-group mb-3" >
+                        <label for="location" class="form-label" style="font-weight:bold;">Location to find:</label>
+                        <input class="form-control" type="text" id="location" name="location" th:value="${location}" value=""/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Info</div>
+            <div class="panel-body" id="infoPanel">
+                <div class="container">
+                    <div class="form-group mb-3" >
+                        <input class="form-control" type="text" id="info" name="info" th:value="${info}" value=""/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-body" id="resultPanel">
+                <div class="panel-heading">Results</div>
+                <div class="row">
+                    <div class="col-8">
+                        <textarea rows = "18" cols="28" th:text="${results}" form="form" ></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- *********************** ERRORS ***************** -->
+        <div class="panel panel-default" id="errorPanel">
+            <div class="panel-heading">Errors</div>
+            <div class="container">
+                <input type="text" class="form-control" id="errors" name="errors" th:value="${errors}">
+            </div>
+        </div>
+
+        <div class="container padding-bottom">
+            <div class="row">
+                <div class="col">
+                    <input id="submit" type="submit" value="Convert">
+                </div>
+                <div class="col">
+                    <input id="googleMaps" type="button" value="Google Maps">
+                </div>
+                <div class="col">
+                    <input id="osm" type="button" value="Open Street Map">
+                </div>
+                <div class="col">
+                    <div id="spinner" class="spinner-border" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+                <div class="col-auto" style="font-family:monospace; text-align: right">
+                    <span th:text="${pom_version}">x.x-SNAPSHOT</span>
+                    <span> built </span>
+                    <span th:text="${build_timestamp}">yyyy-MM-dd HH:mm</span>
+                    <span> UTC</span>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script th:inline="javascript">
+    $(function () {
+        $('#spinner').hide();
+        $('#errorPanel').hide();
+        $('#googleMaps').hide();
+        $('#osm').hide();
+
+        const haveLoc = /*[[${haveLocation}]]*/ 'false';
+        if (haveLoc === 'true') {
+            $('#googleMaps').show();
+            $('#googleMaps').click(function(){
+                const lat =  /*[[${latitude}]]*/ null;
+                const long = /*[[${longitude}]]*/ null;
+                const url = "https://maps.google.com/maps?z=12&t=k&q=loc:" + lat + "+" + long;
+                window.open(url);
+                return false;
+            });
+
+            $('#osm').show();
+            $('#osm').click(function(){
+                const lat =  /*[[${latitude}]]*/ null;
+                const long = /*[[${longitude}]]*/ null;
+                const url = "https://www.openstreetmap.org/#map=16/" + lat + "/" + long;
+                window.open(url);
+                return false;
+            });
+        }
+
+        $('#form').submit(function () {
+            $('#submit').prop('disabled', true);
+            $('#submit').val("Converting");
+            $('#spinner').show();
+            $("body").css("cursor", "progress");
+            return;
+        })
+
+    });
+</script>
+
+</body>

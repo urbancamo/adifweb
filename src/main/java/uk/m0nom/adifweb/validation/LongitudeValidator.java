@@ -14,9 +14,8 @@ public class LongitudeValidator implements Validator {
             return ValidationResult.SUCCESS;
         }
 
-        boolean valid = false;
         try {
-            Double d = Double.parseDouble(value);
+            double d = Double.parseDouble(value);
             if (d < -180.0) {
                 return new ValidationResult(UNDER_RANGE);
             } else if (d > 180.0) {

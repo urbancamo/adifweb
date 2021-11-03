@@ -11,10 +11,9 @@ public class EncodingValidator implements Validator {
     @Override
     public ValidationResult isValid(String value)
     {
-        if (StringUtils.isEmpty(value)) {
-        } else {
+        if (!StringUtils.isEmpty(value)) {
             try {
-                Charset charset = Charset.forName(value);
+                Charset.forName(value);
             } catch (UnsupportedCharsetException e) {
                 return new ValidationResult(BAD_CHARSET);
             }

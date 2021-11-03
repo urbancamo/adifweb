@@ -30,15 +30,12 @@
         .mb-3 {
             margin-bottom: 1rem!important;
         }
-        a.btn {
-            background: whitesmoke;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="container">
-        	<h1>ADIF Transformer Results</h1>
+        	<h1>ADIF Processor Results</h1>
         </div>
 
         <div class="panel panel-default">
@@ -49,8 +46,12 @@
                         <input class="form-control" type="text" id="error" name="error" th:value="${error}" value=""/>
                     </div>
                     <div class="form-group mb-3" >
-                        <label for="callsigns" class="form-label">Callsigns without Location</label>
-                        <input class="form-control" type="text" id="callsigns" name="callsigns" th:value="${callsignsWithoutLocation}" value=""/>
+                        <label for="callsignsWithoutLocation" class="form-label">Contacts without a location</label>
+                        <input class="form-control" type="text" id="callsignsWithoutLocation" name="callsignsWithoutLocation" th:value="${callsignsWithoutLocation}" value=""/>
+                    </div>
+                    <div class="form-group mb-3" >
+                        <label for="callsignsWithDubiousLocation" class="form-label">Contacts with a dubious location</label>
+                        <input class="form-control" type="text" id="callsignsWithDubiousLocation" name="callsignsWithDubiousLocation" th:value="${callsignsWithDubiousLocation}" value=""/>
                     </div>
 
                     <label for="kmlFile" class="form-label">ADI File</label>
@@ -65,16 +66,17 @@
                         <a href="#" th:href="@{/download(filename=${kmlFile})}" class="btn btn-outline-secondary" role="button" id="button-kml-download">Download</a>
                     </div>
 
-                    <label for="markdownFile" class="form-label">Markdown File</label>
+                    <label for="formattedQsoFile" class="form-label">Formatted QSO File</label>
                     <div class="input-group mb-3" >
-                        <input class="form-control" type="text" id="markdownFile" name="markdownFile" th:value="${markdownFile}" value="" placeholder="Markdown File" aria-label="Markdown File" aria-describedby="button-markdown-download"/>
-                        <a href="#" th:href="@{/download(filename=${markdownFile})}" class="btn btn-outline-secondary" role="button" id="button-markdown-download">Download</a>
+                        <input class="form-control" type="text" id="formattedQsoFile" name="formattedQsoFile" th:value="${formattedQsoFile}" value="" placeholder="Markdown File" aria-label="Markdown File" aria-describedby="button-markdown-download"/>
+                        <a href="#" th:href="@{/download(filename=${formattedQsoFile})}" class="btn btn-outline-secondary" role="button" id="button-markdown-download">Download</a>
                     </div>
                 </div>
             </div>
         </div>
         <div class="container">
-            <a href="/upload"  class="btn btn-outline-secondary" role="button" id="button-markdown-back">Back...</a>
+            <a href="/upload"  class="btn btn-primary" role="button" id="button-markdown-back">Back...</a>
+            <a href="/upload?clear=true" class="btn btn-secondary" role="button" id="button-markdown-new">New...</a>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
