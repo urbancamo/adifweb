@@ -36,7 +36,6 @@ import uk.m0nom.qsofile.QsoFileReader;
 import uk.m0nom.qsofile.QsoFileWriter;
 
 import javax.servlet.http.HttpSession;
-import java.awt.*;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -65,7 +64,9 @@ public class UploadController {
 	@Value("${build.version}")
 	private String pomVersion;
 
-	private PrintJobConfigs printJobConfigs;
+	private final PrintJobConfigs printJobConfigs;
+
+	private final Adif3SchemaElements adif3SchemaElements;
 
 	private static final Logger logger = Logger.getLogger(UploadController.class.getName());
 
@@ -76,6 +77,7 @@ public class UploadController {
 		this.configuration = configuration;
 		this.resourceLoader = resourceLoader;
 		this.printJobConfigs = new PrintJobConfigs(resourceLoader);
+		this.adif3SchemaElements = new Adif3SchemaElements(resourceLoader);
 	}
 
 	private HtmlParameters setParametersFromSession(HttpSession session) {
@@ -92,7 +94,7 @@ public class UploadController {
 
 	@GetMapping("/upload")
 	public String displayUploadForm(Model model, HttpSession session, @RequestParam(required=false) Boolean clear) {
-		HtmlParameters parameters = null;
+		HtmlParameters parameters;
 		if (clear != null) {
 			parameters = setParametersFromSession(null);
 		} else {
@@ -146,7 +148,7 @@ public class UploadController {
 			return backToUpload;
 		} else {
 			TransformControl control = createTransformControlFromParameters(parameters);
-
+			control.setAdif3ElementSet(adif3SchemaElements.getElements());
 			InputStream uploadedStream = file.getInputStream();
 			long timestamp = new Date().getTime();
 
