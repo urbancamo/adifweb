@@ -14,6 +14,7 @@ public enum HtmlParameterType {
     COTA_REF("cotaRef"),
     LOTA_REF("lotaRef"),
     ROTA_REF("rotaRef"),
+    IOTA_REF("iotaRef"),
     ENCODING("encoding"),
     STATION_SUBLABEL("stationSubLabel"),
     LOCAL_ACTIVATION_SITES("localActivationSites"),
