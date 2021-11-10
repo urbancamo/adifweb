@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import uk.m0nom.activity.Activity;
-import uk.m0nom.activity.ActivityDatabases;
 import uk.m0nom.coords.GlobalCoordinatesWithSourceAccuracy;
 import uk.m0nom.coords.LocationParserResult;
 import uk.m0nom.coords.LocationParsers;
@@ -19,7 +18,6 @@ import uk.m0nom.geocoding.NominatimGeocodingProvider;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 

@@ -52,6 +52,6 @@ public class DownloadController {
 			}
 		};
 		logger.info(String.format("steaming response %s", stream));
-		return new ResponseEntity(stream, HttpStatus.OK);
+		return new ResponseEntity<>(stream, HttpStatus.OK);
 	}
 }

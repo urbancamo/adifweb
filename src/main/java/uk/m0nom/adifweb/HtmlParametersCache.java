@@ -9,7 +9,7 @@ import java.util.Map;
 public class HtmlParametersCache {
     private final static int MAXSIZE = 1000;
 
-    private static HashMap<String, HtmlParameters> parametersCache = new LinkedHashMap<>() {
+    private static final HashMap<String, HtmlParameters> parametersCache = new LinkedHashMap<>() {
         @Override
         protected boolean removeEldestEntry(Map.Entry<String, HtmlParameters> eldest) {
             return this.size() > MAXSIZE;
