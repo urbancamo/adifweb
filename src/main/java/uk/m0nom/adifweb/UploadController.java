@@ -356,7 +356,7 @@ public class UploadController {
 						logger.severe(String.format("Error creating QSO log %s, check permissions?", markdown));
 					}
 				} catch (UnmappableCharacterException uce) {
-					logger.severe(String.format("Unmappable character in input file, consider a UTF-8 format log file instead"));
+					logger.severe("Unmappable character in input file, consider a UTF-8 format log file instead");
 				} catch (IOException ioe) {
 					logger.severe(String.format("Error writing QSO log %s: %s", markdown, ioe.getMessage()));
 				} finally {
