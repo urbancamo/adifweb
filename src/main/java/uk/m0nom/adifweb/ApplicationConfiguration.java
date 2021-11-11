@@ -13,7 +13,6 @@ import uk.m0nom.adif3.Adif3FileReader;
 import uk.m0nom.adif3.Adif3FileWriter;
 import uk.m0nom.adif3.Adif3Transformer;
 import uk.m0nom.adif3.print.Adif3PrintFormatter;
-import uk.m0nom.adifweb.domain.PrintJobConfigs;
 import uk.m0nom.kml.KmlWriter;
 import uk.m0nom.qsofile.QsoFileReader;
 import uk.m0nom.qsofile.QsoFileWriter;
@@ -29,24 +28,19 @@ import java.util.logging.Logger;
 public class ApplicationConfiguration implements ApplicationListener<ApplicationReadyEvent> {
     private static final Logger logger = Logger.getLogger(ApplicationConfiguration.class.getName());
 
-    private Adif3Transformer transformer;
+    private Adif3Transformer transformer = new Adif3Transformer();
     private QsoFileReader reader;
-    private QsoFileWriter writer;
+    private QsoFileWriter writer = new Adif3FileWriter();
     private KmlWriter kmlWriter;
-    private Satellites satellites;
-    private ActivityDatabases activityDatabases;
-    private Adif3PrintFormatter formatter;
+    private Satellites satellites = new Satellites();
+    private ActivityDatabases activityDatabases = new ActivityDatabases();
+    private Adif3PrintFormatter formatter = new Adif3PrintFormatter();
 
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         logger.info("ApplicationStartupListener#onApplicationEvent()");
-        transformer = new Adif3Transformer();
-        writer = new Adif3FileWriter();
-        activityDatabases = new ActivityDatabases();
-        formatter = new Adif3PrintFormatter();
         activityDatabases.loadData();
-        satellites = new Satellites();
         logger.info("Initialising complete, ready to process requests...");
     }
 
