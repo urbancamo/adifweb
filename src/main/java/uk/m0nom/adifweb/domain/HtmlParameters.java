@@ -42,7 +42,7 @@ public class HtmlParameters {
         addParameter(new HtmlParameter(HtmlParameterType.STATION_SUBLABEL, BooleanValidator.TRUE, validators.getValidator(HtmlParameterType.STATION_SUBLABEL)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES, "", validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, KmlLocalActivities.DEFAULT_RADIUS, validators.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS)), parameters);
-        addParameter(new HtmlParameter(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE, String.format("%.2f", Ionosphere.HF_ANTENNA_DEFAULT_TAKEOFF_ANGLE), validators.getValidator(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE)), parameters);
+        addParameter(new HtmlParameter(HtmlParameterType.ANTENNA, "Vertical", validators.getValidator(HtmlParameterType.ANTENNA)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.CONTEST_RESULTS, "", validators.getValidator(HtmlParameterType.CONTEST_RESULTS)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.SATELLITE_NAME, "", validators.getValidator(HtmlParameterType.SATELLITE_NAME)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.SATELLITE_MODE, "", validators.getValidator(HtmlParameterType.SATELLITE_MODE)), parameters);
@@ -76,7 +76,7 @@ public class HtmlParameters {
         addParameterFromRequest(HtmlParameterType.STATION_SUBLABEL, request);
         addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES, request);
         addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, request);
-        addParameterFromRequest(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE, request);
+        addParameterFromRequest(HtmlParameterType.ANTENNA, request);
         addParameterFromRequest(HtmlParameterType.CONTEST_RESULTS, request);
         addParameterFromRequest(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, request);
         addParameterFromRequest(HtmlParameterType.STRIP_COMMENT, request);

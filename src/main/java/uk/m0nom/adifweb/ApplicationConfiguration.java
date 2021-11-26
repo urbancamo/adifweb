@@ -13,6 +13,7 @@ import uk.m0nom.adif3.Adif3FileReader;
 import uk.m0nom.adif3.Adif3FileWriter;
 import uk.m0nom.adif3.Adif3Transformer;
 import uk.m0nom.adif3.print.Adif3PrintFormatter;
+import uk.m0nom.antenna.Antennas;
 import uk.m0nom.dxcc.DxccEntities;
 import uk.m0nom.dxcc.DxccJsonReader;
 import uk.m0nom.kml.KmlWriter;
@@ -35,6 +36,7 @@ public class ApplicationConfiguration implements ApplicationListener<Application
     private QsoFileWriter writer = new Adif3FileWriter();
     private KmlWriter kmlWriter;
     private Satellites satellites = new Satellites();
+    private Antennas antennas = new Antennas();
     private ActivityDatabases activityDatabases = new ActivityDatabases();
     private DxccEntities dxccEntities = null;
     private Adif3PrintFormatter formatter = new Adif3PrintFormatter();

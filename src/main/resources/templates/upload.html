@@ -284,20 +284,27 @@
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-input" type="number"
-                                   th:value="${parameters.get('hfAntennaTakeoffAngle').getValue()}" value="6.00"
-                                   id="hfAntennaTakeoffAngle" name="hfAntennaTakeoffAngle">
-                            <label class="form-label" for="hfAntennaTakeoffAngle">
-                                HF Antenna Takeoff Angle (degrees)
-                            </label>
-                        </div>
-                        <div class="form-check">
                             <input class="form-check-input" type="checkbox"
                                    th:checked="${parameters.get('contestResults').getValueAsBoolean()}"
                                    id="contestResultsLabel" name="contestResults">
                             <label class="form-check-label" for="contestResultsLabel">
                                 Include Contest Results in ADIF file
                             </label>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="" for="antenna">Antenna Type</label>
+                            </div>
+                            <div class="col-4">
+                                <select class="form-select" id="antenna" name="antenna">
+                                    <option th:each="antenna : ${antennas}" th:value="${antenna}" th:text="${antenna}" th:selected="${antenna} == ${parameters.get('antenna').getValue()}"></option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-danger"
+                                      th:text="${parameters.get('antenna').getValidationResult().getError()}"></span>
+                            </div>
                         </div>
 
                         <div class="row">

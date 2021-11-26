@@ -107,6 +107,7 @@ public class UploadController {
 		model.addAttribute("build_timestamp", buildTimestamp);
 		model.addAttribute("pom_version", pomVersion);
 		model.addAttribute("satellites", configuration.getSatellites().getSatelliteNames());
+		model.addAttribute("antennas", configuration.getAntennas().getAntennaNames());
 		model.addAttribute("printJobConfigs", printJobConfigs.getConfigs());
 
 		return "upload";
@@ -145,6 +146,7 @@ public class UploadController {
 			map.put("validationErrorMessages", getValidationErrorsString(parameters));
 			map.put("parameters", parameters);
 			map.put("satellites", configuration.getSatellites().getSatelliteNames());
+			map.put("antennas", configuration.getAntennas().getAntennaNames());
 			map.put("printJobConfigs", printJobConfigs.getConfigs());
 			return backToUpload;
 		} else {
@@ -167,6 +169,7 @@ public class UploadController {
 				map.put("error", transformResults.getError());
 				map.put("parameters", parameters);
 				map.put("satellites", configuration.getSatellites().getSatelliteNames());
+				map.put("antennas", configuration.getAntennas().getAntennaNames());
 				map.put("printJobConfigs", printJobConfigs.getConfigs());
 				return backToUpload;
 			}
@@ -258,7 +261,7 @@ public class UploadController {
 		control.setKmlShowStationSubLabel(null != parameters.get(HtmlParameterType.STATION_SUBLABEL.getParameterName()).getValue());
 		control.setKmlShowLocalActivationSites(parameters.get(HtmlParameterType.LOCAL_ACTIVATION_SITES.getParameterName()).getValue() != null);
 		control.setKmlLocalActivationSitesRadius(Double.valueOf(parameters.get(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS.getParameterName()).getValue()));
-		control.setHfAntennaTakeoffAngle(Double.valueOf(parameters.get(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE.getParameterName()).getValue()));
+		control.setAntenna(configuration.getAntennas().getAntenna(parameters.get(HtmlParameterType.ANTENNA.getParameterName()).getValue()));
 
 		control.setQrzUsername(qrzUsername);
 		control.setQrzPassword(qrzPassword);

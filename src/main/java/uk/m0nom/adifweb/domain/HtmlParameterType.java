@@ -19,7 +19,7 @@ public enum HtmlParameterType {
     STATION_SUBLABEL("stationSubLabel"),
     LOCAL_ACTIVATION_SITES("localActivationSites"),
     LOCAL_ACTIVATION_SITES_RADIUS("localActivationSitesRadius"),
-    ANTENNA_TAKEOFF_ANGLE("hfAntennaTakeoffAngle"),
+    ANTENNA("antenna"),
     CONTEST_RESULTS("contestResults"),
     SATELLITE_NAME("satName"),
     SATELLITE_MODE("satMode"),
