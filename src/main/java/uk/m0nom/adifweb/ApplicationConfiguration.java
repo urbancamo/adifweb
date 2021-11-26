@@ -13,6 +13,8 @@ import uk.m0nom.adif3.Adif3FileReader;
 import uk.m0nom.adif3.Adif3FileWriter;
 import uk.m0nom.adif3.Adif3Transformer;
 import uk.m0nom.adif3.print.Adif3PrintFormatter;
+import uk.m0nom.dxcc.DxccEntities;
+import uk.m0nom.dxcc.DxccJsonReader;
 import uk.m0nom.kml.KmlWriter;
 import uk.m0nom.qsofile.QsoFileReader;
 import uk.m0nom.qsofile.QsoFileWriter;
@@ -34,6 +36,7 @@ public class ApplicationConfiguration implements ApplicationListener<Application
     private KmlWriter kmlWriter;
     private Satellites satellites = new Satellites();
     private ActivityDatabases activityDatabases = new ActivityDatabases();
+    private DxccEntities dxccEntities = null;
     private Adif3PrintFormatter formatter = new Adif3PrintFormatter();
 
 
@@ -41,6 +44,7 @@ public class ApplicationConfiguration implements ApplicationListener<Application
     public void onApplicationEvent(ApplicationReadyEvent event) {
         logger.info("ApplicationStartupListener#onApplicationEvent()");
         activityDatabases.loadData();
+        dxccEntities = new DxccJsonReader().read();
         logger.info("Initialising complete, ready to process requests...");
     }
 

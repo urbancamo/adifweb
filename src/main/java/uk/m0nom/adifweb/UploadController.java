@@ -150,6 +150,8 @@ public class UploadController {
 		} else {
 			TransformControl control = createTransformControlFromParameters(parameters);
 			control.setAdif3ElementSet(adif3SchemaElements.getElements());
+			control.setDxccEntities(configuration.getDxccEntities());
+
 			InputStream uploadedStream = file.getInputStream();
 			long timestamp = new Date().getTime();
 
