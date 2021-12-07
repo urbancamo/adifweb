@@ -144,7 +144,7 @@
             $('#osm').click(function(){
                 const lat =  /*[[${latitude}]]*/ null;
                 const long = /*[[${longitude}]]*/ null;
-                const url = "https://www.openstreetmap.org/#map=16/" + lat + "/" + long;
+                const url = "https://www.openstreetmap.org/?mlat=" + lat + "&mlon=" + long + "#map=16/" + lat + "/" + long;
                 window.open(url);
                 return false;
             });
