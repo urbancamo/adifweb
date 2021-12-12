@@ -38,6 +38,7 @@ import uk.m0nom.qsofile.QsoFileWriter;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.UnmappableCharacterException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.StandardOpenOption;
@@ -106,6 +107,7 @@ public class UploadController {
 		model.addAttribute("build_timestamp", buildTimestamp);
 		model.addAttribute("pom_version", pomVersion);
 		model.addAttribute("satellites", configuration.getSatellites().getSatelliteNames());
+		model.addAttribute("antennas", configuration.getAntennas().getAntennaNames());
 		model.addAttribute("printJobConfigs", printJobConfigs.getConfigs());
 
 		return "upload";
@@ -144,11 +146,14 @@ public class UploadController {
 			map.put("validationErrorMessages", getValidationErrorsString(parameters));
 			map.put("parameters", parameters);
 			map.put("satellites", configuration.getSatellites().getSatelliteNames());
+			map.put("antennas", configuration.getAntennas().getAntennaNames());
 			map.put("printJobConfigs", printJobConfigs.getConfigs());
 			return backToUpload;
 		} else {
 			TransformControl control = createTransformControlFromParameters(parameters);
 			control.setAdif3ElementSet(adif3SchemaElements.getElements());
+			control.setDxccEntities(configuration.getDxccEntities());
+
 			InputStream uploadedStream = file.getInputStream();
 			long timestamp = new Date().getTime();
 
@@ -164,6 +169,7 @@ public class UploadController {
 				map.put("error", transformResults.getError());
 				map.put("parameters", parameters);
 				map.put("satellites", configuration.getSatellites().getSatelliteNames());
+				map.put("antennas", configuration.getAntennas().getAntennaNames());
 				map.put("printJobConfigs", printJobConfigs.getConfigs());
 				return backToUpload;
 			}
@@ -249,12 +255,13 @@ public class UploadController {
 		control.setIcon(ActivityType.COTA.getActivityName(), IconResource.COTA_DEFAULT_ICON_URL);
 		control.setIcon(ActivityType.LOTA.getActivityName(), IconResource.LOTA_DEFAULT_ICON_URL);
 		control.setIcon(ActivityType.ROTA.getActivityName(), IconResource.ROTA_DEFAULT_ICON_URL);
+		control.setIcon(ActivityType.IOTA.getActivityName(), IconResource.IOTA_DEFAULT_ICON_URL);
 
 		control.setIcon(IconResource.CW_ICON_NAME, IconResource.CW_DEFAULT_ICON_URL);
 		control.setKmlShowStationSubLabel(null != parameters.get(HtmlParameterType.STATION_SUBLABEL.getParameterName()).getValue());
 		control.setKmlShowLocalActivationSites(parameters.get(HtmlParameterType.LOCAL_ACTIVATION_SITES.getParameterName()).getValue() != null);
 		control.setKmlLocalActivationSitesRadius(Double.valueOf(parameters.get(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS.getParameterName()).getValue()));
-		control.setHfAntennaTakeoffAngle(Double.valueOf(parameters.get(HtmlParameterType.ANTENNA_TAKEOFF_ANGLE.getParameterName()).getValue()));
+		control.setAntenna(configuration.getAntennas().getAntenna(parameters.get(HtmlParameterType.ANTENNA.getParameterName()).getValue()));
 
 		control.setQrzUsername(qrzUsername);
 		control.setQrzPassword(qrzPassword);
@@ -322,7 +329,7 @@ public class UploadController {
 				// Contest Calculations
 				log.getHeader().setPreamble(new ContestResultsCalculator(summits).calculateResults(log));
 			}
-			logger.info(String.format("Writing output file %s with encoding %s", out, control.getEncoding()));
+			logger.info(String.format("Writing QSO log file %s with encoding %s", out, control.getEncoding()));
 			writer.write(out, control.getEncoding(), log);
 
 			if (control.isMarkdown()) {
@@ -338,11 +345,11 @@ public class UploadController {
 					File formattedQsoFile = new File(markdown);
 					if (formattedQsoFile.exists()) {
 						if (!formattedQsoFile.delete()) {
-							logger.severe(String.format("Error deleting Markdown file %s, check permissions?", markdown));
+							logger.severe(String.format("Error deleting QSO log file %s, check permissions?", markdown));
 						}
 					}
 					if (formattedQsoFile.createNewFile()) {
-						logger.info(String.format("Writing printer job to: %s", markdown));
+						logger.info(String.format("Writing QSO log to: %s", markdown));
 						StringBuilder sb = formatter.format(log);
 						markdownWriter = Files.newBufferedWriter(formattedQsoFile.toPath(), Charset.forName(formatter.getPrintJobConfig().getOutEncoding()), StandardOpenOption.WRITE);
 						markdownWriter.write(sb.toString());
@@ -351,10 +358,12 @@ public class UploadController {
 						results.setKmlFile(FilenameUtils.getName(kml));
 						results.setFormattedQsoFile(FilenameUtils.getName(markdown));
 					} else {
-						logger.severe(String.format("Error creating Markdown file %s, check permissions?", markdown));
+						logger.severe(String.format("Error creating QSO log %s, check permissions?", markdown));
 					}
+				} catch (UnmappableCharacterException uce) {
+					logger.severe("Unmappable character in input file, consider a UTF-8 format log file instead");
 				} catch (IOException ioe) {
-					logger.severe(String.format("Error writing Markdown file %s: %s", markdown, ioe.getMessage()));
+					logger.severe(String.format("Error writing QSO log %s: %s", markdown, ioe.getMessage()));
 				} finally {
 					if (markdownWriter != null) {
 						markdownWriter.close();

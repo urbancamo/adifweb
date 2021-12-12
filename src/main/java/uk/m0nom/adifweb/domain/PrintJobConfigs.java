@@ -19,9 +19,8 @@ public class PrintJobConfigs {
         // This is the order that the config files will appear in the options list
         this.resourceLoader = resourceLoader;
         addConfig("adif-printer-sota-md.yaml");
-        addConfig("adif-printer.yaml");
-        addConfig("adif-printer-132.yaml");
-        addConfig("adif-printer-132-markdown.yaml");
+        addConfig("adif-printer-132-utf8.yaml");
+        addConfig("adif-printer-132-md.yaml");
         addConfig("adif-printer-132-ukac.yaml");
         addConfig("adif-printer-158.yaml");
         addConfig("adif-printer-158-utf8.yaml");

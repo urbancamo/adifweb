@@ -76,7 +76,7 @@
                 <div class="panel-heading">Results</div>
                 <div class="row">
                     <div class="col-8">
-                        <textarea rows = "18" cols="28" th:text="${results}" form="form" ></textarea>
+                        <textarea rows = "19" cols="28" th:text="${results}" form="form" ></textarea>
                     </div>
                 </div>
             </div>
@@ -144,7 +144,7 @@
             $('#osm').click(function(){
                 const lat =  /*[[${latitude}]]*/ null;
                 const long = /*[[${longitude}]]*/ null;
-                const url = "https://www.openstreetmap.org/#map=16/" + lat + "/" + long;
+                const url = "https://www.openstreetmap.org/?mlat=" + lat + "&mlon=" + long + "#map=16/" + lat + "/" + long;
                 window.open(url);
                 return false;
             });

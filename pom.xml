@@ -12,8 +12,9 @@
 
 	<groupId>uk.m0nom</groupId>
 	<artifactId>adifweb</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<name>adifweb</name>
+	<url>https://github.com/urbancamo/adifweb</url>
 	<description>Web Interface for the ADIF Transformer</description>
 
 	<properties>
@@ -25,6 +26,30 @@
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<version>${project.version}</version>
 	</properties>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Mark Wickens</name>
+			<email>mark@wickensonline.co.uk</email>
+			<organization>uk.m0nom</organization>
+			<organizationUrl>https://github.com/urbancamo</organizationUrl>
+		</developer>
+	</developers>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<build>
 		<resources>
@@ -39,7 +64,7 @@
 		<dependency>
 			<groupId>uk.m0nom</groupId>
 			<artifactId>adif-processor</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>1.0.1</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
 		<dependency>
@@ -69,4 +94,71 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-</project>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.7</version>
+						<extensions>true</extensions>
+						<configuration>
+							<serverId>ossrh</serverId>
+							<nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>3.2.1</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>3.2.0</version>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.5</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+
+	<scm>
+		<connection>scm:git:git://github.com/urbancamo/adifweb</connection>
+		<developerConnection>scm:git:git://github.com/urbancamo</developerConnection>
+		<url>https://github.com/urbancamo/adifweb</url>
+	</scm></project>
