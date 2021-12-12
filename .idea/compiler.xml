@@ -8,7 +8,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="adifweb" />
-        <module name="adif" />
         <module name="adif-processor" />
       </profile>
     </annotationProcessing>
