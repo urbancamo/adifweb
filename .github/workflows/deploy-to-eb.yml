@@ -41,7 +41,7 @@ jobs:
         run: mvn -B verify spring-boot:repackage
 
       - name: Version deployment archive
-        run: mv target/adifweb.jar target/adifweb-${{ github.sha }}.jar
+        run: mv -v target/adifweb.jar target/adifweb-${{ github.sha }}.jar
 
   deploy:
     runs-on: ubuntu-latest
