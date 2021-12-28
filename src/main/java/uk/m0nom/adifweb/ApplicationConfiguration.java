@@ -14,6 +14,7 @@ import uk.m0nom.adif3.Adif3FileWriter;
 import uk.m0nom.adif3.Adif3Transformer;
 import uk.m0nom.adif3.print.Adif3PrintFormatter;
 import uk.m0nom.antenna.Antennas;
+import uk.m0nom.aws.AwsS3Utils;
 import uk.m0nom.dxcc.DxccEntities;
 import uk.m0nom.dxcc.DxccJsonReader;
 import uk.m0nom.kml.KmlWriter;
@@ -41,13 +42,40 @@ public class ApplicationConfiguration implements ApplicationListener<Application
     private DxccEntities dxccEntities = null;
     private Adif3PrintFormatter formatter = new Adif3PrintFormatter();
 
+    private String qrzUsername;
+    private String qrzPassword;
+    private boolean aws = false;
+
+    private AwsS3Utils awsS3Utils;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         logger.info("ApplicationStartupListener#onApplicationEvent()");
+
         activityDatabases.loadData();
         dxccEntities = new DxccJsonReader().read();
+
+        qrzUsername = setFromEnv("QRZ_USERNAME");
+        qrzPassword = setFromEnv("QRZ_PASSWORD");
+        String awsStr = setFromEnv("AWS");
+
+        String awsAccessKey = setFromEnv("AWS_ACCESS_KEY");
+        String awsSecretKey = setFromEnv("AWS_SECRET_KEY");
+
+        setAws("true".equalsIgnoreCase(awsStr));
+        if (isAws()) {
+            awsS3Utils = new AwsS3Utils(awsAccessKey, awsSecretKey);
+        }
+
         logger.info("Initialising complete, ready to process requests...");
+    }
+
+    private String setFromEnv(String envVar) {
+        String value = System.getenv(envVar);
+        if (StringUtils.isNotEmpty(value)) {
+            logger.info(String.format("%s set from environment", envVar));
+        }
+        return value;
     }
 
     public QsoFileReader getReader(String inputFile) {
