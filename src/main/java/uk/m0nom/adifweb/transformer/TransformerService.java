@@ -89,7 +89,7 @@ public class TransformerService {
             Qsos qsos;
 
             try {
-                qsos = transformer.transform(log, control);
+                qsos = transformer.transform(log, control, results);
             } catch (UnsupportedOperationException e) {
                 return new TransformResults(e.getMessage());
             }
