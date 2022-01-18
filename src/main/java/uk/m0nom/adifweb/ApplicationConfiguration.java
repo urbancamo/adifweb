@@ -20,7 +20,7 @@ import uk.m0nom.dxcc.DxccJsonReader;
 import uk.m0nom.kml.KmlWriter;
 import uk.m0nom.qsofile.QsoFileReader;
 import uk.m0nom.qsofile.QsoFileWriter;
-import uk.m0nom.satellite.Satellites;
+import uk.m0nom.satellite.ApSatellites;
 import uk.m0nom.sotacsv.SotaCsvFileReader;
 
 import java.util.logging.Logger;
@@ -36,7 +36,7 @@ public class ApplicationConfiguration implements ApplicationListener<Application
     private QsoFileReader reader;
     private QsoFileWriter writer = new Adif3FileWriter();
     private KmlWriter kmlWriter;
-    private Satellites satellites = new Satellites();
+    private ApSatellites apSatellites = new ApSatellites();
     private Antennas antennas = new Antennas();
     private ActivityDatabases activityDatabases = new ActivityDatabases();
     private DxccEntities dxccEntities = null;

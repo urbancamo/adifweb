@@ -7,7 +7,6 @@ import uk.m0nom.adifweb.validation.BooleanValidator;
 import uk.m0nom.adifweb.validation.ValidationResult;
 import uk.m0nom.adifweb.validation.Validator;
 import uk.m0nom.adifweb.validation.Validators;
-import uk.m0nom.comms.Ionosphere;
 import uk.m0nom.kml.activity.KmlLocalActivities;
 
 import java.util.Collection;
