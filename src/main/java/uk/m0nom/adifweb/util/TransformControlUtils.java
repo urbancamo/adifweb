@@ -37,6 +37,8 @@ public class TransformControlUtils {
         control.setKmlContactColourByBand(false);
         control.setKmlContactShadow(true);
         control.setKmlS2sContactLineStyle("brick_red:50:2");
+        control.setKmlSatelliteTrackLineStyle("brick_red:50:2");
+
         control.setKmlContactLineStyle("baby_blue:50:2");
         control.setIcon(IconResource.FIXED_ICON_NAME, IconResource.FIXED_DEFAULT_ICON_URL);
         control.setIcon(IconResource.PORTABLE_ICON_NAME, IconResource.PORTABLE_DEFAULT_ICON_URL);
@@ -54,6 +56,9 @@ public class TransformControlUtils {
         control.setIcon(ActivityType.IOTA.getActivityName(), IconResource.IOTA_DEFAULT_ICON_URL);
 
         control.setIcon(IconResource.CW_ICON_NAME, IconResource.CW_DEFAULT_ICON_URL);
+
+        control.setIcon(IconResource.SATELLITE_ICON_NAME, IconResource.SATELLITE_DEFAULT_ICON_URL);
+
         control.setKmlShowStationSubLabel(null != parameters.get(HtmlParameterType.STATION_SUBLABEL.getParameterName()).getValue());
         control.setKmlShowLocalActivationSites(parameters.get(HtmlParameterType.LOCAL_ACTIVATION_SITES.getParameterName()).getValue() != null);
         control.setKmlLocalActivationSitesRadius(Double.valueOf(parameters.get(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS.getParameterName()).getValue()));
