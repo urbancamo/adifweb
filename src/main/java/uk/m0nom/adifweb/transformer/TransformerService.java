@@ -94,7 +94,6 @@ public class TransformerService {
                 return new TransformResults(e.getMessage());
             }
             if (control.getGenerateKml()) {
-
                 kmlWriter.write(kml, originalFilename, summits, qsos, results);
                 if (StringUtils.isNotEmpty(results.getError())) {
                     kml = "";

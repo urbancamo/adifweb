@@ -150,7 +150,7 @@ public class UploadController {
 			TransformResults transformResults = transformerService.runTransformer(control, resourceLoader,
 					tmpPath, inputPath, FilenameUtils.getBaseName(file.getOriginalFilename()));
 
-			if (transformResults.isErrors()) {
+			if (transformResults.hasErrors()) {
 				ModelAndView backToUpload = new ModelAndView("upload");
 				ModelMap map = backToUpload.getModelMap();
 				map.put("error", transformResults.getError());
