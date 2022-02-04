@@ -4,8 +4,6 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.marsik.ham.adif.Adif3;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -18,30 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import uk.m0nom.activity.ActivityDatabases;
-import uk.m0nom.activity.ActivityType;
-import uk.m0nom.adif3.Adif3Transformer;
-import uk.m0nom.adif3.UnsupportedHeaderException;
-import uk.m0nom.adif3.contacts.Qsos;
 import uk.m0nom.adif3.control.TransformControl;
-import uk.m0nom.adif3.print.Adif3PrintFormatter;
 import uk.m0nom.adif3.transform.TransformResults;
 import uk.m0nom.adifweb.domain.*;
-import uk.m0nom.contest.ContestResultsCalculator;
-import uk.m0nom.icons.IconResource;
-import uk.m0nom.kml.KmlWriter;
-import uk.m0nom.qrz.CachingQrzXmlService;
-import uk.m0nom.qrz.QrzService;
-import uk.m0nom.qsofile.QsoFileReader;
-import uk.m0nom.qsofile.QsoFileWriter;
+import uk.m0nom.adifweb.transformer.TransformerService;
+import uk.m0nom.adifweb.util.TransformControlUtils;
 
 import javax.servlet.http.HttpSession;
 import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.charset.UnmappableCharacterException;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,11 +35,7 @@ public class UploadController {
 
 	private static final String HTML_PARAMETERS = "HTML_PARAMETERS";
 
-	@Value("${qrz.username}")
-	private String qrzUsername;
-
-	@Value("${qrz.password}")
-	private String qrzPassword;
+	private static final Logger logger = Logger.getLogger(UploadController.class.getName());
 
 	@Value("${build.timestamp}")
 	private String buildTimestamp;
@@ -69,16 +47,23 @@ public class UploadController {
 
 	private final Adif3SchemaElements adif3SchemaElements;
 
-	private static final Logger logger = Logger.getLogger(UploadController.class.getName());
-
 	private final ApplicationConfiguration configuration;
 	private final ResourceLoader resourceLoader;
+
+	private final TransformerService transformerService;
 
 	public UploadController(ApplicationConfiguration configuration, ResourceLoader resourceLoader) {
 		this.configuration = configuration;
 		this.resourceLoader = resourceLoader;
 		this.printJobConfigs = new PrintJobConfigs(resourceLoader);
 		this.adif3SchemaElements = new Adif3SchemaElements(resourceLoader);
+
+		String adifProcessingConfigFilename = "classpath:config/adif-processor.yaml";
+		Resource adifProcessorConfig = resourceLoader.getResource(adifProcessingConfigFilename);
+		logger.info(String.format("Configuring transformer using: %s", adifProcessingConfigFilename));
+
+
+		this.transformerService = new TransformerService(configuration, adifProcessorConfig);
 	}
 
 	private HtmlParameters setParametersFromSession(HttpSession session) {
@@ -106,7 +91,7 @@ public class UploadController {
 		model.addAttribute("parameters", parameters.getParameters());
 		model.addAttribute("build_timestamp", buildTimestamp);
 		model.addAttribute("pom_version", pomVersion);
-		model.addAttribute("satellites", configuration.getSatellites().getSatelliteNames());
+		model.addAttribute("satellites", configuration.getApSatellites().getSatelliteNames());
 		model.addAttribute("antennas", configuration.getAntennas().getAntennaNames());
 		model.addAttribute("printJobConfigs", printJobConfigs.getConfigs());
 
@@ -145,12 +130,12 @@ public class UploadController {
 			map.put("validationErrors", "true");
 			map.put("validationErrorMessages", getValidationErrorsString(parameters));
 			map.put("parameters", parameters);
-			map.put("satellites", configuration.getSatellites().getSatelliteNames());
+			map.put("satellites", configuration.getApSatellites().getSatelliteNames());
 			map.put("antennas", configuration.getAntennas().getAntennaNames());
 			map.put("printJobConfigs", printJobConfigs.getConfigs());
 			return backToUpload;
 		} else {
-			TransformControl control = createTransformControlFromParameters(parameters);
+			TransformControl control = TransformControlUtils.createTransformControlFromParameters(configuration, parameters);
 			control.setAdif3ElementSet(adif3SchemaElements.getElements());
 			control.setDxccEntities(configuration.getDxccEntities());
 
@@ -161,14 +146,16 @@ public class UploadController {
 			OutputStream out = new FileOutputStream(inputPath);
 
 			IOUtils.copy(uploadedStream, out);
-			TransformResults transformResults = runTransformer(control, tmpPath, inputPath, FilenameUtils.getBaseName(file.getOriginalFilename()));
 
-			if (transformResults.isErrors()) {
+			TransformResults transformResults = transformerService.runTransformer(control, resourceLoader,
+					tmpPath, inputPath, FilenameUtils.getBaseName(file.getOriginalFilename()));
+
+			if (transformResults.hasErrors()) {
 				ModelAndView backToUpload = new ModelAndView("upload");
 				ModelMap map = backToUpload.getModelMap();
 				map.put("error", transformResults.getError());
 				map.put("parameters", parameters);
-				map.put("satellites", configuration.getSatellites().getSatelliteNames());
+				map.put("satellites", configuration.getApSatellites().getSatelliteNames());
 				map.put("antennas", configuration.getAntennas().getAntennaNames());
 				map.put("printJobConfigs", printJobConfigs.getConfigs());
 				return backToUpload;
@@ -212,174 +199,4 @@ public class UploadController {
 		return sb.toString();
 	}
 
-	private TransformControl createTransformControlFromParameters(HtmlParameters parameters) {
-		TransformControl control = new TransformControl();
-		control.setMarkdown(true);
-		control.setGenerateKml(true);
-
-		control.setKmlS2s(true);
-		for (ActivityType activity : ActivityType.values()) {
-			String ref = String.format("%sRef", activity.getActivityName().toLowerCase());
-			if (parameters.get(ref) != null) {
-				control.setActivityRef(activity, parameters.get(ref).getValue());
-			}
-		}
-
-		control.setSatelliteName(parameters.get(HtmlParameterType.SATELLITE_NAME.getParameterName()).getValue());
-		control.setSatelliteMode(parameters.get(HtmlParameterType.SATELLITE_MODE.getParameterName()).getValue());
-		control.setSatelliteBand(parameters.get(HtmlParameterType.SATELLITE_BAND.getParameterName()).getValue());
-		control.setSotaMicrowaveAwardComment(parameters.get(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT.getParameterName()).getValue() != null);
-		control.setStripComment(parameters.get(HtmlParameterType.STRIP_COMMENT.getParameterName()).getValue() != null);
-
-		control.setContestResults(parameters.get(HtmlParameterType.CONTEST_RESULTS.getParameterName()).getValue() != null);
-
-		control.setLocation(parameters.get(HtmlParameterType.LOCATION.getParameterName()).getValue());
-		control.setEncoding(parameters.get(HtmlParameterType.ENCODING.getParameterName()).getValue());
-
-		control.setKmlContactWidth(3);
-		control.setKmlContactTransparency(20);
-		control.setKmlContactColourByBand(false);
-		control.setKmlContactShadow(true);
-		control.setKmlS2sContactLineStyle("brick_red:50:2");
-		control.setKmlContactLineStyle("baby_blue:50:2");
-		control.setIcon(IconResource.FIXED_ICON_NAME, IconResource.FIXED_DEFAULT_ICON_URL);
-		control.setIcon(IconResource.PORTABLE_ICON_NAME, IconResource.PORTABLE_DEFAULT_ICON_URL);
-		control.setIcon(IconResource.MOBILE_ICON_NAME, IconResource.MOBILE_DEFAULT_ICON_URL);
-		control.setIcon(IconResource.MARITIME_MOBILE_ICON_NAME, IconResource.MARITIME_DEFAULT_ICON_URL);
-
-		control.setIcon(ActivityType.POTA.getActivityName(), IconResource.POTA_DEFAULT_ICON_URL);
-		control.setIcon(ActivityType.SOTA.getActivityName(), IconResource.SOTA_DEFAULT_ICON_URL);
-		control.setIcon(ActivityType.HEMA.getActivityName(), IconResource.HEMA_DEFAULT_ICON_URL);
-		control.setIcon(ActivityType.WOTA.getActivityName(), IconResource.HEMA_DEFAULT_ICON_URL);
-		control.setIcon(ActivityType.WWFF.getActivityName(), IconResource.WWFF_DEFAULT_ICON_URL);
-		control.setIcon(ActivityType.COTA.getActivityName(), IconResource.COTA_DEFAULT_ICON_URL);
-		control.setIcon(ActivityType.LOTA.getActivityName(), IconResource.LOTA_DEFAULT_ICON_URL);
-		control.setIcon(ActivityType.ROTA.getActivityName(), IconResource.ROTA_DEFAULT_ICON_URL);
-		control.setIcon(ActivityType.IOTA.getActivityName(), IconResource.IOTA_DEFAULT_ICON_URL);
-
-		control.setIcon(IconResource.CW_ICON_NAME, IconResource.CW_DEFAULT_ICON_URL);
-		control.setKmlShowStationSubLabel(null != parameters.get(HtmlParameterType.STATION_SUBLABEL.getParameterName()).getValue());
-		control.setKmlShowLocalActivationSites(parameters.get(HtmlParameterType.LOCAL_ACTIVATION_SITES.getParameterName()).getValue() != null);
-		control.setKmlLocalActivationSitesRadius(Double.valueOf(parameters.get(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS.getParameterName()).getValue()));
-		control.setAntenna(configuration.getAntennas().getAntenna(parameters.get(HtmlParameterType.ANTENNA.getParameterName()).getValue()));
-
-		control.setQrzUsername(qrzUsername);
-		control.setQrzPassword(qrzPassword);
-		control.setUseQrzDotCom(StringUtils.isNotEmpty(qrzUsername) && StringUtils.isNotEmpty(qrzPassword));
-		control.setPrintConfigFile(parameters.get(HtmlParameterType.PRINTER_CONFIG.getParameterName()).getValue());
-
-		return control;
-	}
-
-	private TransformResults runTransformer(TransformControl control, String tmpPath, String inPath, String originalFilename) {
-		TransformResults results = new TransformResults();
-		QrzService qrzService = new CachingQrzXmlService(control.getQrzUsername(), control.getQrzPassword());
-		KmlWriter kmlWriter = new KmlWriter(control);
-
-		Adif3Transformer transformer = configuration.getTransformer();
-		ActivityDatabases summits = configuration.getActivityDatabases();
-		QsoFileReader reader = configuration.getReader(inPath);
-		QsoFileWriter writer = configuration.getWriter();
-
-		Adif3PrintFormatter formatter = configuration.getFormatter();
-
-		String inBasename = FilenameUtils.getBaseName(inPath);
-		String out = String.format("%s%s.%s", tmpPath, inBasename, "adi");
-		String kml = String.format("%s%s.%s", tmpPath, inBasename, "kml");
-
-		logger.info(String.format("Running from: %s", new File(".").getAbsolutePath()));
-		try {
-			if (control.getUseQrzDotCom()) {
-				qrzService.enable();
-				if (!qrzService.getSessionKey()) {
-					logger.warning("Could not connect to QRZ.COM, disabling lookups and continuing...");
-					qrzService.disable();
-				}
-			}
-			String adifProcessingConfigFilename = "classpath:config/adif-processor.yaml";
-			Resource adifProcessorConfig = resourceLoader.getResource(adifProcessingConfigFilename);
-			logger.info(String.format("Configuring transformer using: %s", adifProcessingConfigFilename));
-
-			transformer.configure(adifProcessorConfig.getInputStream(), summits, qrzService);
-
-			logger.info(String.format("Reading input file %s with encoding %s", inPath, control.getEncoding()));
-			Adif3 log;
-			try {
-				log = reader.read(inPath, control.getEncoding(), false);
-			} catch (Exception e) {
-				String error = String.format("Error processing ADI file, caught exception:\n\t'%s'", e.getMessage());
-				logger.severe(error);
-				return new TransformResults(error);
-			}
-			Qsos qsos;
-
-			try {
-				qsos = transformer.transform(log, control);
-			} catch (UnsupportedOperationException e) {
-				return new TransformResults(e.getMessage());
-			}
-			if (control.getGenerateKml()) {
-
-				kmlWriter.write(kml, originalFilename, summits, qsos, results);
-				if (StringUtils.isNotEmpty(results.getError())) {
-					kml = "";
-				}
-			}
-			if (control.isContestResults()) {
-				// Contest Calculations
-				log.getHeader().setPreamble(new ContestResultsCalculator(summits).calculateResults(log));
-			}
-			logger.info(String.format("Writing QSO log file %s with encoding %s", out, control.getEncoding()));
-			writer.write(out, control.getEncoding(), log);
-
-			if (control.isMarkdown()) {
-				String adifPrinterConfigFilename = String.format("classpath:config/%s", control.getPrintConfigFile());
-				Resource adifPrinterConfig = resourceLoader.getResource(adifPrinterConfigFilename);
-				logger.info(String.format("Configuring print job using: %s", adifPrinterConfigFilename));
-
-				formatter.getPrintJobConfig().configure(adifPrinterConfigFilename, adifPrinterConfig.getInputStream());
-				String markdown = String.format("%s%s.%s", tmpPath, inBasename, formatter.getPrintJobConfig().getFilenameExtension());
-				BufferedWriter markdownWriter = null;
-
-				try {
-					File formattedQsoFile = new File(markdown);
-					if (formattedQsoFile.exists()) {
-						if (!formattedQsoFile.delete()) {
-							logger.severe(String.format("Error deleting QSO log file %s, check permissions?", markdown));
-						}
-					}
-					if (formattedQsoFile.createNewFile()) {
-						logger.info(String.format("Writing QSO log to: %s", markdown));
-						StringBuilder sb = formatter.format(log);
-						markdownWriter = Files.newBufferedWriter(formattedQsoFile.toPath(), Charset.forName(formatter.getPrintJobConfig().getOutEncoding()), StandardOpenOption.WRITE);
-						markdownWriter.write(sb.toString());
-
-						results.setAdiFile(FilenameUtils.getName(out));
-						results.setKmlFile(FilenameUtils.getName(kml));
-						results.setFormattedQsoFile(FilenameUtils.getName(markdown));
-					} else {
-						logger.severe(String.format("Error creating QSO log %s, check permissions?", markdown));
-					}
-				} catch (UnmappableCharacterException uce) {
-					logger.severe("Unmappable character in input file, consider a UTF-8 format log file instead");
-				} catch (IOException ioe) {
-					logger.severe(String.format("Error writing QSO log %s: %s", markdown, ioe.getMessage()));
-				} finally {
-					if (markdownWriter != null) {
-						markdownWriter.close();
-					}
-				}
-			}
-		} catch (NoSuchFileException nfe) {
-			logger.severe(String.format("Could not open input file: %s", control.getPathname()));
-		} catch (UnsupportedHeaderException ushe) {
-			logger.severe(String.format("Unknown header for file: %s", inPath));
-			logger.severe(ExceptionUtils.getStackTrace(ushe));
-		} catch (IOException e) {
-			logger.severe(String.format("Caught exception %s processing file: %s", e.getMessage(), inPath));
-			logger.severe(ExceptionUtils.getStackTrace(e));
-		}
-		logger.info("Processing complete...");
-		return results;
-	}
 }

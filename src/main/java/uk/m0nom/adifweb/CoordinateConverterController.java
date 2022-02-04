@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import uk.m0nom.activity.Activity;
-import uk.m0nom.coords.GlobalCoordinatesWithSourceAccuracy;
+import uk.m0nom.coords.GlobalCoords3D;
 import uk.m0nom.coords.LocationParserResult;
 import uk.m0nom.coords.LocationParsers;
 import uk.m0nom.coords.LocationSource;
@@ -61,7 +61,7 @@ public class CoordinateConverterController {
 		String errors = "";
 		String info = "";
 
-		GlobalCoordinatesWithSourceAccuracy coordinates = null;
+		GlobalCoords3D coordinates = null;
 		LocationParserResult result = parsers.parseStringForCoordinates(LocationSource.UNDEFINED, locationToCheck);
 		if (result != null) {
 			coordinates = result.getCoords();
