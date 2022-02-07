@@ -33,6 +33,9 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.StandardOpenOption;
 import java.util.logging.Logger;
 
+/**
+ * Runs the ADIF transformer to process the ADIF input file
+ */
 public class TransformerService {
     private static final Logger logger = Logger.getLogger(TransformerService.class.getName());
     private final ApplicationConfiguration configuration;
