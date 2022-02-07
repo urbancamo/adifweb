@@ -29,7 +29,7 @@ public enum HtmlParameterType {
     PRINTER_CONFIG("printerConfig"),
     OPTIONS_VISIBLE("optionsVisible");
 
-    private String parameterName;
+    private final String parameterName;
 
     HtmlParameterType(String parameterName) {
         this.parameterName = parameterName;

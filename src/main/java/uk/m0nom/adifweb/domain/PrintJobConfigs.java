@@ -5,13 +5,14 @@ import org.springframework.core.io.ResourceLoader;
 import uk.m0nom.adif3.print.PrintJobConfig;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class PrintJobConfigs {
     private static final Logger logger = Logger.getLogger(PrintJobConfigs.class.getName());
 
-    private List<PrintJobConfig> configs;
+    private final List<PrintJobConfig> configs;
     private final ResourceLoader resourceLoader;
 
     public PrintJobConfigs(ResourceLoader resourceLoader) {

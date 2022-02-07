@@ -1,7 +1,6 @@
 package uk.m0nom.adifweb.validation;
 
 import org.apache.commons.lang3.StringUtils;
-import uk.m0nom.antenna.Antenna;
 import uk.m0nom.antenna.Antennas;
 
 public class AntennaValidator implements Validator {

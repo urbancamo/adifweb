@@ -1,6 +1,5 @@
 package uk.m0nom.adifweb.transformer;
 
-import com.amazonaws.services.appconfig.model.Application;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -15,7 +14,6 @@ import uk.m0nom.adif3.control.TransformControl;
 import uk.m0nom.adif3.print.Adif3PrintFormatter;
 import uk.m0nom.adif3.transform.TransformResults;
 import uk.m0nom.adifweb.ApplicationConfiguration;
-import uk.m0nom.adifweb.UploadController;
 import uk.m0nom.contest.ContestResultsCalculator;
 import uk.m0nom.kml.KmlWriter;
 import uk.m0nom.qrz.CachingQrzXmlService;
