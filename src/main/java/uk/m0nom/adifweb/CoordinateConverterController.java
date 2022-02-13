@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import uk.m0nom.activity.Activity;
+import uk.m0nom.adifweb.domain.LocationSearchResult;
 import uk.m0nom.coords.GlobalCoords3D;
 import uk.m0nom.coords.LocationParserResult;
 import uk.m0nom.coords.LocationParsers;
@@ -15,6 +16,7 @@ import uk.m0nom.coords.LocationSource;
 import uk.m0nom.geocoding.GeocodingProvider;
 import uk.m0nom.geocoding.GeocodingResult;
 import uk.m0nom.geocoding.NominatimGeocodingProvider;
+import uk.m0nom.location.LocationService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,14 +34,10 @@ public class CoordinateConverterController {
 	@Value("${build.version}")
 	private String pomVersion;
 
-	private final LocationParsers parsers;
-	private final ApplicationConfiguration configuration;
-	private final GeocodingProvider geocodingProvider;
+	private final LocationService locationService;
 
 	public CoordinateConverterController(ApplicationConfiguration configuration) {
-		this.configuration = configuration;
-		this.parsers = new LocationParsers();
-		this.geocodingProvider = new NominatimGeocodingProvider();
+		this.locationService = new LocationService(configuration);
 	}
 
 	@GetMapping("/coord")
@@ -55,53 +53,22 @@ public class CoordinateConverterController {
 
 	@PostMapping("/coord")
 	public ModelAndView handleCoord(@RequestParam String location) {
-		String locationToCheck = location.trim();
-		logger.info(String.format("Processing location: %s", locationToCheck));
-		String resultCoords = "";
-		String errors = "";
-		String info = "";
-
-		GlobalCoords3D coordinates = null;
-		LocationParserResult result = parsers.parseStringForCoordinates(LocationSource.UNDEFINED, locationToCheck);
-		if (result != null) {
-			coordinates = result.getCoords();
-			logger.info(String.format("Location parsed successfully as %s: %s", result.getParser().getName(), coordinates));
-			info = String.format("Location parsed successfully as %s", result.getParser().getName());
-		} else {
-			// OK try and find an activity reference
-			Activity activity = configuration.getActivityDatabases().findActivity(locationToCheck.toUpperCase());
-			if (activity != null) {
-				coordinates = activity.getCoords();
-				if (coordinates == null) {
-					info = String.format("Activity reference match for %s location '%s' has no coordinates defined", activity.getType().getActivityDescription(), activity.getName());
-				} else {
-					info = String.format("Activity reference match for %s location '%s'", activity.getType().getActivityDescription(), activity.getName());
-				}
-			} else {
-				try {
-					// OK try and find an address
-					GeocodingResult geocodingResult = geocodingProvider.getLocationFromAddress(locationToCheck);
-					coordinates = geocodingResult.getCoordinates();
-					if (coordinates == null) {
-						info = geocodingResult.getError();
-					} else {
-						info = String.format("Geocoding result based on match of '%s'", geocodingResult.getMatchedOn());
-					}
-				} catch (Exception e) {
-					errors = "Problem using the geocoding provider";
-				}
-			}
-		}
+		logger.info(String.format("Servicing location request %s", location));
 
 		Map<String, Object> results = new HashMap<>();
+		results.put("location", location);
+
+		LocationSearchResult locationSearchResult = locationService.getLocation(location);
+		GlobalCoords3D coordinates = locationSearchResult.getCoordinates();
 		if (coordinates != null) {
 			StringBuilder sb = new StringBuilder();
-			List<String> formatted = parsers.format(coordinates);
-			for (String format: formatted) {
-				sb.append(format);
+			for (String match : locationSearchResult.getMatches()) {
+				sb.append(match);
 				sb.append("\n");
 			}
-			resultCoords = sb.toString();
+			results.put("results", sb.toString());
+			results.put("info", locationSearchResult.getInfo());
+			results.put("errors", locationSearchResult.getError());
 			results.put("latitude", String.format("%.6f", coordinates.getLatitude()));
 			results.put("longitude", String.format("%.6f", coordinates.getLongitude()));
 			results.put("haveLocation", "true");
@@ -109,10 +76,6 @@ public class CoordinateConverterController {
 			results.put("haveLocation", "false");
 		}
 
-		results.put("location", locationToCheck);
-		results.put("results", resultCoords);
-		results.put("info", info);
-		results.put("errors", errors);
 		results.put("build_timestamp", buildTimestamp);
 		results.put("pom_version", pomVersion);
 
