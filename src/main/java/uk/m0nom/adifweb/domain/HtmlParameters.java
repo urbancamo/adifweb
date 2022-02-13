@@ -30,6 +30,7 @@ public class HtmlParameters {
         addParameter(new HtmlParameter(HtmlParameterType.ENCODING, "windows-1251", validators.getValidator(HtmlParameterType.ENCODING)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.LOCATION, "", validators.getValidator(HtmlParameterType.LOCATION)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.SOTA_REF, "", validators.getValidator(HtmlParameterType.SOTA_REF)), parameters);
+        addParameter(new HtmlParameter(HtmlParameterType.GMA_REF, "", validators.getValidator(HtmlParameterType.GMA_REF)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.WOTA_REF, "", validators.getValidator(HtmlParameterType.WOTA_REF)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.HEMA_REF, "", validators.getValidator(HtmlParameterType.HEMA_REF)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.POTA_REF, "", validators.getValidator(HtmlParameterType.POTA_REF)), parameters);
@@ -61,6 +62,7 @@ public class HtmlParameters {
         addParameterFromRequest(HtmlParameterType.ENCODING, request);
         addParameterFromRequest(HtmlParameterType.LOCATION, request);
         addParameterFromRequest(HtmlParameterType.SOTA_REF, request);
+        addParameterFromRequest(HtmlParameterType.GMA_REF, request);
         addParameterFromRequest(HtmlParameterType.WOTA_REF, request);
         addParameterFromRequest(HtmlParameterType.HEMA_REF, request);
         addParameterFromRequest(HtmlParameterType.POTA_REF, request);

@@ -21,6 +21,7 @@ public class Validators {
         addValidator(HtmlParameterType.PRINTER_CONFIG, new PrinterConfigValidator());
         addValidator(HtmlParameterType.LOCATION, new LocationValidator());
         addValidator(HtmlParameterType.SOTA_REF, new ActivityValidator(databases, ActivityType.SOTA));
+        addValidator(HtmlParameterType.GMA_REF, new ActivityValidator(databases, ActivityType.GMA));
         addValidator(HtmlParameterType.HEMA_REF, new ActivityValidator(databases, ActivityType.HEMA));
         addValidator(HtmlParameterType.WOTA_REF, new ActivityValidator(databases, ActivityType.WOTA));
         addValidator(HtmlParameterType.POTA_REF, new ActivityValidator(databases, ActivityType.POTA));

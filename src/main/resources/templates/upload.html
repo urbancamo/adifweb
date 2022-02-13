@@ -205,6 +205,19 @@
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div class="col-4">
+                                <label class="" for="gmaRef">Global Mountain Activity <a href="https://www.cqgma.org/" class="infolink" target="_blank" rel="noopener noreferrer">🛈</a></label>
+                            </div>
+                            <div class="col-4">
+                                <input class="" type="text" id="gmaRef" name="gmaRef"
+                                       th:value="${parameters.get('gmaRef').getValue()}" value=""/>
+                            </div>
+                            <div class="col-4">
+                                <span class="text-danger"
+                                      th:text="${parameters.get('gmaRef').getValidationResult().getError()}"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
