@@ -30,6 +30,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+/**
+ * Displays and accepts the input from the main ADIF Processor HTML form
+ */
 @Controller
 public class UploadController {
 

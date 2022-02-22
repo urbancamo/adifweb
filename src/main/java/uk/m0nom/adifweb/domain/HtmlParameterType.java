@@ -7,6 +7,7 @@ public enum HtmlParameterType {
     FILENAME("filename"),
     LOCATION("location"),
     SOTA_REF("sotaRef"),
+    GMA_REF("gmaRef"),
     WOTA_REF("wotaRef"),
     HEMA_REF("hemaRef"),
     POTA_REF("potaRef"),
@@ -29,7 +30,7 @@ public enum HtmlParameterType {
     PRINTER_CONFIG("printerConfig"),
     OPTIONS_VISIBLE("optionsVisible");
 
-    private String parameterName;
+    private final String parameterName;
 
     HtmlParameterType(String parameterName) {
         this.parameterName = parameterName;
