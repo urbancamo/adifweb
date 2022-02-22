@@ -44,8 +44,8 @@ jobs:
         run: mv -v target/adifweb.jar target/adifweb-${{ github.sha }}.jar
 
       - name: Upload JAR
-          uses: actions/upload-artifact@v2
-          with:
+        uses: actions/upload-artifact@v2
+        with:
             name: adifweb-${{ github.sha }}.jar
             path: target/adifweb-${{ github.sha }}.jar
 
