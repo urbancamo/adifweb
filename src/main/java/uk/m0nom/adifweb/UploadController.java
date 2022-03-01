@@ -5,25 +5,24 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import uk.m0nom.adif3.control.TransformControl;
-import uk.m0nom.adif3.transform.TransformResults;
 import uk.m0nom.adifweb.domain.*;
 import uk.m0nom.adifweb.transformer.TransformerService;
 import uk.m0nom.adifweb.util.TransformControlUtils;
 
 import javax.servlet.http.HttpSession;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -61,8 +60,8 @@ public class UploadController {
 		this.printJobConfigs = new PrintJobConfigs(resourceLoader);
 		this.adif3SchemaElements = new Adif3SchemaElements(resourceLoader);
 
-		String adifProcessingConfigFilename = "classpath:config/adif-processor.yaml";
-		Resource adifProcessorConfig = resourceLoader.getResource(adifProcessingConfigFilename);
+		var adifProcessingConfigFilename = "classpath:config/adif-processor.yaml";
+		var adifProcessorConfig = resourceLoader.getResource(adifProcessingConfigFilename);
 		logger.info(String.format("Configuring transformer using: %s", adifProcessingConfigFilename));
 
 
@@ -102,11 +101,11 @@ public class UploadController {
 	}
 
 	@PostMapping("/upload")
-	public ModelAndView handleUpload(StandardMultipartHttpServletRequest request, HttpSession session) throws Exception {
-		HtmlParameters parameters = setParametersFromSession(session);
+	public ModelAndView handleUpload(StandardMultipartHttpServletRequest request, HttpSession session) {
+		var parameters = setParametersFromSession(session);
 
 		var factory = new DiskFileItemFactory();
-		String tmpPath = System.getProperty("java.io.tmpdir");
+		var tmpPath = System.getProperty("java.io.tmpdir");
 		if (!StringUtils.endsWith(tmpPath, File.separator)) {
 			tmpPath = tmpPath + File.separator;
 		}
@@ -114,13 +113,13 @@ public class UploadController {
 		factory.setSizeThreshold(DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD);
 		factory.setFileCleaningTracker(null);
 
-		MultipartFile file = request.getFile(HtmlParameterType.FILENAME.getParameterName());
+		MultipartFile uploadedFile = request.getFile(HtmlParameterType.FILENAME.getParameterName());
 
 		parameters.addParametersFromRequest(request);
 
-		assert file != null;
-		HtmlParameter fileParam = new HtmlParameter(HtmlParameterType.FILENAME,
-				file.getOriginalFilename(), parameters.getValidator(HtmlParameterType.FILENAME));
+		assert uploadedFile != null;
+		var fileParam = new HtmlParameter(HtmlParameterType.FILENAME,
+				uploadedFile.getOriginalFilename(), parameters.getValidator(HtmlParameterType.FILENAME));
 
 		parameters.put(fileParam.getType().getParameterName(), fileParam);
 
@@ -128,8 +127,8 @@ public class UploadController {
 		session.setAttribute(HTML_PARAMETERS, parameters);
 
 		if (!parameters.isAllValid()) {
-			ModelAndView backToUpload = new ModelAndView("upload");
-			ModelMap map = backToUpload.getModelMap();
+			var backToUpload = new ModelAndView("upload");
+			var map = backToUpload.getModelMap();
 			map.put("validationErrors", "true");
 			map.put("validationErrorMessages", getValidationErrorsString(parameters));
 			map.put("parameters", parameters);
@@ -138,24 +137,48 @@ public class UploadController {
 			map.put("printJobConfigs", printJobConfigs.getConfigs());
 			return backToUpload;
 		} else {
-			TransformControl control = TransformControlUtils.createTransformControlFromParameters(configuration, parameters);
+			var control = TransformControlUtils.createTransformControlFromParameters(configuration, parameters);
 			control.setAdif3ElementSet(adif3SchemaElements.getElements());
 			control.setDxccEntities(configuration.getDxccEntities());
 
-			InputStream uploadedStream = file.getInputStream();
-			long timestamp = new Date().getTime();
+			InputStream uploadedStream = null;
+			String inputPath = null;
+			String inputFilename = null;
+			String content = null;
+			try {
+				uploadedStream = uploadedFile.getInputStream();
+				var timestamp = new Date().getTime();
 
-			String inputPath = String.format("%s%d-%s", tmpPath, timestamp, file.getOriginalFilename());
-			OutputStream out = new FileOutputStream(inputPath);
+				inputFilename = String.format("%d-%s", timestamp, uploadedFile.getOriginalFilename());
+				inputPath = String.format("%s%s", tmpPath, inputFilename);
+				var out = new FileOutputStream(inputPath);
 
-			IOUtils.copy(uploadedStream, out);
+				content = IOUtils.toString(uploadedStream, control.getEncoding());
+				// Store the ADIF input file into the server temp directory
+				IOUtils.write(content, out, control.getEncoding());
+				logger.info(String.format("Wrote ADIF input file to: %s", inputPath));
+			} catch (IOException ioe1) {
+				logger.severe(ioe1.getMessage());
+			} finally {
+				try {
+					uploadedStream.close();
+				} catch (IOException ioe2) {
+					logger.severe(ioe2.getMessage());
+				}
+			}
 
-			TransformResults transformResults = transformerService.runTransformer(control, resourceLoader,
-					tmpPath, inputPath, FilenameUtils.getBaseName(file.getOriginalFilename()));
+			if (configuration.isAws()) {
+				// Archive the content into S3 storage
+				logger.info(String.format("Archiving %d characters into AWS S3 file %s", content.length(), inputFilename));
+				configuration.getAwsS3Utils().archiveInputFile(inputFilename, content);
+			}
+
+			var transformResults = transformerService.runTransformer(control, resourceLoader,
+					tmpPath, inputPath, FilenameUtils.getBaseName(uploadedFile.getOriginalFilename()));
 
 			if (transformResults.hasErrors()) {
-				ModelAndView backToUpload = new ModelAndView("upload");
-				ModelMap map = backToUpload.getModelMap();
+				var backToUpload = new ModelAndView("upload");
+				var map = backToUpload.getModelMap();
 				map.put("error", transformResults.getError());
 				map.put("parameters", parameters);
 				map.put("satellites", configuration.getApSatellites().getSatelliteNames());
@@ -179,11 +202,11 @@ public class UploadController {
 	}
 
 	private String buildCallsignList(Collection<String> callsigns) {
-		StringBuilder sb = new StringBuilder();
-		for (String callsign : callsigns) {
+		var sb = new StringBuilder();
+		for (var callsign : callsigns) {
 			sb.append(String.format("%s, ", callsign));
 		}
-		String rtn = "none";
+		var rtn = "none";
 		if (sb.length() > 0) {
 			rtn = sb.substring(0, sb.length()-2);
 		}
@@ -191,9 +214,9 @@ public class UploadController {
 	}
 
 	private String getValidationErrorsString(HtmlParameters parametersToValidate) {
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 
-		for (HtmlParameter parameter : parametersToValidate.values()) {
+		for (var parameter : parametersToValidate.values()) {
 			if (!parameter.getValidationResult().isValid()) {
 				sb.append(parameter.getValidationResult().getError());
 				sb.append(" ");
@@ -203,3 +226,4 @@ public class UploadController {
 	}
 
 }
+

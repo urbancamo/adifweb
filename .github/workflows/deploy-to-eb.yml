@@ -43,6 +43,12 @@ jobs:
       - name: Version deployment archive
         run: mv -v target/adifweb.jar target/adifweb-${{ github.sha }}.jar
 
+      - name: Upload JAR
+        uses: actions/upload-artifact@v2
+        with:
+            name: adifweb-${{ github.sha }}.jar
+            path: target/adifweb-${{ github.sha }}.jar
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -54,8 +60,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
           aws-region: "eu-west-2"
 
+      - name: Download JAR
+        #Download the artifact which was uploaded in the build's job
+        uses: actions/download-artifact@v2
+        with:
+          name: adifweb-${{ github.sha }}.jar
+
       - name: Upload package to S3 bucket
-        run: aws s3 cp target/adifweb-${{ github.sha }}.jar s3://adifweb-deploy/
+        run: aws s3 cp adifweb-${{ github.sha }}.jar s3://adifweb-deploy/
 
       - name: Create new ElasticBeanstalk Application Version
         run: |

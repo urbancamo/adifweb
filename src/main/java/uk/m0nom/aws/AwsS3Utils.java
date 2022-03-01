@@ -20,8 +20,8 @@ import java.util.logging.Logger;
 
 public class AwsS3Utils {
     private final AmazonS3 s3client;
-    private final static String ADIF_PROC_BUCKET = "adifProcessor";
-    private final static String INPUT_FILES_PATH = "inputFiles";
+    private final static String ADIF_PROC_BUCKET = "adif-processor";
+    private final static String INPUT_FILES_PATH = "input-files";
     private static final Logger logger = Logger.getLogger(AwsS3Utils.class.getName());
 
     public AwsS3Utils(String awsAccessKey, String awsSecretKey) {
