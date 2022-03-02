@@ -12,7 +12,7 @@
 
 	<groupId>uk.m0nom</groupId>
 	<artifactId>adifweb</artifactId>
-	<version>1.0.6</version>
+	<version>1.0.7-SNAPSHOT</version>
 	<name>adifweb</name>
 	<url>https://github.com/urbancamo/adifweb</url>
 	<description>Web Interface for the ADIF Transformer</description>
@@ -62,7 +62,7 @@
 		<repository>
 			<id>github-adif-processor</id>
 			<name>GitHub Urbancamo Apache Maven Packages</name>
-			<url>https://${GITHUB_USER_REF}:${GITHUB_TOKEN_REF}@maven.pkg.github.com/urbancamo/adif-processor</url>
+			<url>https://maven.pkg.github.com/urbancamo/adif-processor</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
@@ -76,7 +76,7 @@
 		<dependency>
 			<groupId>uk.m0nom</groupId>
 			<artifactId>adif-processor</artifactId>
-			<version>1.0.6</version>
+			<version>1.0.7-SNAPSHOT</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
 		<dependency>
