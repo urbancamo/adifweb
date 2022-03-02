@@ -62,7 +62,7 @@
 		<repository>
 			<id>github-adif-processor</id>
 			<name>GitHub Urbancamo Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/urbancamo/adif-processor</url>
+			<url>https://${GITHUB_USER_REF}:${GITHUB_TOKEN_REF}@maven.pkg.github.com/urbancamo/adif-processor</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
