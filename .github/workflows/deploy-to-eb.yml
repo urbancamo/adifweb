@@ -42,9 +42,15 @@ jobs:
           distribution: 'adopt'
           java-version: '11'
           java-package: jdk
+          server-id: github-adif-processor # value of repository/id field of the pom.xml
+          server-username: GITHUB_USER_REF  # env variable name for username
+          server-password: GITHUB_TOKEN_REF # env variable name for GitHub Personal Access Token
 
       - name: Build and test project
         run: mvn -B verify spring-boot:repackage
+        env:
+          GITHUB_USER_REF: ${{ secrets.GH_PACKAGE_REPO_USERNAME }}
+          GITHUB_TOKEN_REF: ${{ secrets.GH_PACKAGE_REPO_PASSWORD }}
 
       - name: Version deployment archive
         run: mv -v target/adifweb.jar target/adifweb-${{ github.sha }}.jar
