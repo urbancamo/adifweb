@@ -14,8 +14,14 @@ jobs:
           distribution: 'adopt'
           java-version: '11'
           java-package: jdk
+          server-id: github-adif-processor # value of repository/id field of the pom.xml
+          server-username: GITHUB_USER_REF  # env variable name for username
+          server-password: GITHUB_TOKEN_REF # env variable name for GitHub Personal Access Token
       - name: Compile the Project
         run: mvn -B compile
+        env:
+          GITHUB_USER_REF: ${{ secrets.GH_PACKAGE_REPO_USERNAME }}
+          GITHUB_TOKEN_REF: ${{ secrets.GH_PACKAGE_REPO_PASSWORD }}
 
   build:
     runs-on: ubuntu-latest
