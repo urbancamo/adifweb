@@ -13,7 +13,6 @@ import uk.m0nom.adif3.Adif3FileReader;
 import uk.m0nom.adif3.Adif3FileWriter;
 import uk.m0nom.adif3.Adif3Transformer;
 import uk.m0nom.adif3.print.Adif3PrintFormatter;
-import uk.m0nom.adifweb.file.AwsS3Utils;
 import uk.m0nom.antenna.Antennas;
 import uk.m0nom.dxcc.DxccEntities;
 import uk.m0nom.dxcc.DxccJsonReader;
@@ -44,9 +43,9 @@ public class ApplicationConfiguration implements ApplicationListener<Application
 
     private String qrzUsername;
     private String qrzPassword;
-    private boolean aws = false;
 
-    private AwsS3Utils awsS3Utils;
+    private String awsAccessKey;
+    private String awsSecretKey;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -57,15 +56,9 @@ public class ApplicationConfiguration implements ApplicationListener<Application
 
         qrzUsername = setFromEnv("QRZ_USERNAME");
         qrzPassword = setFromEnv("QRZ_PASSWORD");
-        String awsStr = setFromEnv("AWS");
 
-        String awsAccessKey = setFromEnv("AWS_ACCESS_KEY");
-        String awsSecretKey = setFromEnv("AWS_SECRET_KEY");
-
-        setAws("true".equalsIgnoreCase(awsStr));
-        if (isAws()) {
-            awsS3Utils = new AwsS3Utils(awsAccessKey, awsSecretKey);
-        }
+        awsAccessKey = setFromEnv("AWS_ACCESS_KEY");
+        awsSecretKey = setFromEnv("AWS_SECRET_KEY");
 
         logger.info("Initialising complete, ready to process requests...");
     }

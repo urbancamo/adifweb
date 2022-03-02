@@ -2,6 +2,7 @@ package uk.m0nom.adifweb.domain;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Service;
 import uk.m0nom.adif3.print.PrintJobConfig;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+@Service
 public class PrintJobConfigs {
     private static final Logger logger = Logger.getLogger(PrintJobConfigs.class.getName());
 
@@ -16,9 +18,9 @@ public class PrintJobConfigs {
     private final ResourceLoader resourceLoader;
 
     public PrintJobConfigs(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
         configs = new ArrayList<>(10);
         // This is the order that the config files will appear in the options list
-        this.resourceLoader = resourceLoader;
         addConfig("adif-printer-sota-md.yaml");
         addConfig("adif-printer-132-utf8.yaml");
         addConfig("adif-printer-132-md.yaml");

@@ -39,12 +39,14 @@ import java.util.logging.Logger;
 public class TransformerService {
     private static final Logger logger = Logger.getLogger(TransformerService.class.getName());
     private final ApplicationConfiguration configuration;
+    private final ResourceLoader resourceLoader;
 
-    public TransformerService(ApplicationConfiguration configuration) {
+    public TransformerService(ApplicationConfiguration configuration, ResourceLoader resourceLoader) {
         this.configuration = configuration;
+        this.resourceLoader = resourceLoader;
     }
 
-    public TransformResults runTransformer(TransformControl control, ResourceLoader resourceLoader,
+    public TransformResults runTransformer(TransformControl control,
                                            String tmpPath, String originalFilename) {
         TransformResults results = new TransformResults();
         QrzService qrzService = new CachingQrzXmlService(control.getQrzUsername(), control.getQrzPassword());
