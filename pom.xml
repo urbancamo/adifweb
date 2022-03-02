@@ -46,11 +46,19 @@
 
 	<distributionManagement>
 		<repository>
-			<id>github</id>
-			<name>GitHub urbancamo Apache Maven Packages</name>
-			<url>https://urbancamo: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@maven.pkg.github.com/urbancamo/adif-processor</url>
+			<id>github-adifweb</id>
+			<name>GitHub Urbancamo Apache Maven Packages</name>
+			<url>https://urbancamo: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@maven.pkg.github.com/urbancamo/adifweb</url>
 		</repository>
 	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>github-adif-processor</id>
+			<name>GitHub Urbancamo Apache Maven Packages</name>
+			<url>https://urbancamo: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@maven.pkg.github.com/urbancamo/*</url>
+		</repository>
+	</repositories>
 
 	<dependencies>
 		<dependency>
