@@ -16,8 +16,6 @@ jobs:
           java-package: jdk
       - name: Compile the Project
         run: mvn -B compile
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build:
     runs-on: ubuntu-latest
@@ -41,8 +39,6 @@ jobs:
 
       - name: Build and test project
         run: mvn -B verify spring-boot:repackage
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Version deployment archive
         run: mv -v target/adifweb.jar target/adifweb-${{ github.sha }}.jar
