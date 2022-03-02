@@ -136,9 +136,9 @@ public class UploadController {
 			fileService.storeInputFile(control, uploadedFile, tmpPath);
 			var transformResults = transformerService.runTransformer(control, resourceLoader,
 					tmpPath, uploadedFile.getOriginalFilename());
-			fileService.archiveFile(control, transformResults.getAdiFile(), tmpPath, control.getEncoding());
-			fileService.archiveFile(control, transformResults.getKmlFile(), tmpPath, control.getEncoding());
-			fileService.archiveFile(control, transformResults.getFormattedQsoFile(), tmpPath, configuration.getFormatter().getPrintJobConfig().getOutEncoding());
+			fileService.archiveFile(transformResults.getAdiFile(), tmpPath, control.getEncoding());
+			fileService.archiveFile(transformResults.getKmlFile(), tmpPath, control.getEncoding());
+			fileService.archiveFile(transformResults.getFormattedQsoFile(), tmpPath, configuration.getFormatter().getPrintJobConfig().getOutEncoding());
 
 			if (transformResults.hasErrors()) {
 				var backToUpload = new ModelAndView("upload");
