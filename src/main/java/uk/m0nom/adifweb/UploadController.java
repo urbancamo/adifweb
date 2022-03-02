@@ -1,8 +1,6 @@
 package uk.m0nom.adifweb;
 
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
@@ -15,16 +13,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import uk.m0nom.adifweb.domain.*;
+import uk.m0nom.adifweb.file.FileService;
 import uk.m0nom.adifweb.transformer.TransformerService;
 import uk.m0nom.adifweb.util.TransformControlUtils;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -53,19 +48,15 @@ public class UploadController {
 	private final ResourceLoader resourceLoader;
 
 	private final TransformerService transformerService;
+	private final FileService fileService;
 
-	public UploadController(ApplicationConfiguration configuration, ResourceLoader resourceLoader) {
+	public UploadController(ApplicationConfiguration configuration, TransformerService transformerService, ResourceLoader resourceLoader, FileService fileService) {
 		this.configuration = configuration;
 		this.resourceLoader = resourceLoader;
 		this.printJobConfigs = new PrintJobConfigs(resourceLoader);
 		this.adif3SchemaElements = new Adif3SchemaElements(resourceLoader);
-
-		var adifProcessingConfigFilename = "classpath:config/adif-processor.yaml";
-		var adifProcessorConfig = resourceLoader.getResource(adifProcessingConfigFilename);
-		logger.info(String.format("Configuring transformer using: %s", adifProcessingConfigFilename));
-
-
-		this.transformerService = new TransformerService(configuration, adifProcessorConfig);
+		this.fileService = fileService;
+		this.transformerService = transformerService;
 	}
 
 	private HtmlParameters setParametersFromSession(HttpSession session) {
@@ -141,40 +132,12 @@ public class UploadController {
 			control.setAdif3ElementSet(adif3SchemaElements.getElements());
 			control.setDxccEntities(configuration.getDxccEntities());
 
-			InputStream uploadedStream = null;
-			String inputPath = null;
-			String inputFilename = null;
-			String content = null;
-			try {
-				uploadedStream = uploadedFile.getInputStream();
-				var timestamp = new Date().getTime();
-
-				inputFilename = String.format("%d-%s", timestamp, uploadedFile.getOriginalFilename());
-				inputPath = String.format("%s%s", tmpPath, inputFilename);
-				var out = new FileOutputStream(inputPath);
-
-				content = IOUtils.toString(uploadedStream, control.getEncoding());
-				// Store the ADIF input file into the server temp directory
-				IOUtils.write(content, out, control.getEncoding());
-				logger.info(String.format("Wrote ADIF input file to: %s", inputPath));
-			} catch (IOException ioe1) {
-				logger.severe(ioe1.getMessage());
-			} finally {
-				try {
-					uploadedStream.close();
-				} catch (IOException ioe2) {
-					logger.severe(ioe2.getMessage());
-				}
-			}
-
-			if (configuration.isAws()) {
-				// Archive the content into S3 storage
-				logger.info(String.format("Archiving %d characters into AWS S3 file %s", content.length(), inputFilename));
-				configuration.getAwsS3Utils().archiveInputFile(inputFilename, content);
-			}
-
+			fileService.storeInputFile(control, uploadedFile, tmpPath);
 			var transformResults = transformerService.runTransformer(control, resourceLoader,
-					tmpPath, inputPath, FilenameUtils.getBaseName(uploadedFile.getOriginalFilename()));
+					tmpPath, uploadedFile.getOriginalFilename());
+			fileService.archiveFile(control, transformResults.getAdiFile(), tmpPath, control.getEncoding());
+			fileService.archiveFile(control, transformResults.getKmlFile(), tmpPath, control.getEncoding());
+			fileService.archiveFile(control, transformResults.getFormattedQsoFile(), tmpPath, configuration.getFormatter().getPrintJobConfig().getOutEncoding());
 
 			if (transformResults.hasErrors()) {
 				var backToUpload = new ModelAndView("upload");
