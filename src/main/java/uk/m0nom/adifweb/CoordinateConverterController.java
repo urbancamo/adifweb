@@ -7,19 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import uk.m0nom.activity.Activity;
 import uk.m0nom.adifweb.domain.LocationSearchResult;
+import uk.m0nom.adifweb.location.LocationService;
 import uk.m0nom.coords.GlobalCoords3D;
-import uk.m0nom.coords.LocationParserResult;
-import uk.m0nom.coords.LocationParsers;
-import uk.m0nom.coords.LocationSource;
-import uk.m0nom.geocoding.GeocodingProvider;
-import uk.m0nom.geocoding.GeocodingResult;
-import uk.m0nom.geocoding.NominatimGeocodingProvider;
-import uk.m0nom.location.LocationService;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -36,8 +28,8 @@ public class CoordinateConverterController {
 
 	private final LocationService locationService;
 
-	public CoordinateConverterController(ApplicationConfiguration configuration) {
-		this.locationService = new LocationService(configuration);
+	public CoordinateConverterController(ApplicationConfiguration configuration, LocationService locationService) {
+		this.locationService = locationService;
 	}
 
 	@GetMapping("/coord")

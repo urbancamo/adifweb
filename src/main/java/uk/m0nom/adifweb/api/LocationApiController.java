@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.m0nom.adifweb.ApplicationConfiguration;
 import uk.m0nom.adifweb.domain.LocationSearchResult;
-import uk.m0nom.location.LocationService;
+import uk.m0nom.adifweb.location.LocationService;
 
 import java.util.logging.Logger;
 

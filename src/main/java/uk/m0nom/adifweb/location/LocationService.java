@@ -1,4 +1,4 @@
-package uk.m0nom.location;
+package uk.m0nom.adifweb.location;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;

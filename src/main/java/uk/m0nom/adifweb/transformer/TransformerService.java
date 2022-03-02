@@ -6,6 +6,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.marsik.ham.adif.Adif3;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Service;
 import uk.m0nom.activity.ActivityDatabases;
 import uk.m0nom.adif3.Adif3Transformer;
 import uk.m0nom.adif3.UnsupportedHeaderException;
@@ -34,18 +35,17 @@ import java.util.logging.Logger;
 /**
  * Runs the ADIF transformer to process the ADIF input file
  */
+@Service
 public class TransformerService {
     private static final Logger logger = Logger.getLogger(TransformerService.class.getName());
     private final ApplicationConfiguration configuration;
-    private final Resource adifProcessorConfig;
 
-    public TransformerService(ApplicationConfiguration configuration, Resource adifProcessorConfig) {
+    public TransformerService(ApplicationConfiguration configuration) {
         this.configuration = configuration;
-        this.adifProcessorConfig = adifProcessorConfig;
     }
 
     public TransformResults runTransformer(TransformControl control, ResourceLoader resourceLoader,
-                                           String tmpPath, String inPath, String originalFilename) {
+                                           String tmpPath, String originalFilename) {
         TransformResults results = new TransformResults();
         QrzService qrzService = new CachingQrzXmlService(control.getQrzUsername(), control.getQrzPassword());
         KmlWriter kmlWriter = new KmlWriter(control);
@@ -54,17 +54,21 @@ public class TransformerService {
         Resource adifPrinterConfig = resourceLoader.getResource(adifPrinterConfigFilename);
         logger.info(String.format("Configuring print job using: %s", adifPrinterConfigFilename));
 
+        var adifProcessingConfigFilename = "classpath:config/adif-processor.yaml";
+        var adifProcessorConfig = resourceLoader.getResource(adifProcessingConfigFilename);
+        logger.info(String.format("Configuring transformer using: %s", adifProcessingConfigFilename));
 
         Adif3Transformer transformer = configuration.getTransformer();
         ActivityDatabases summits = configuration.getActivityDatabases();
-        QsoFileReader reader = configuration.getReader(inPath);
+        String inBasename = FilenameUtils.getBaseName(originalFilename);
+        String in = String.format("%s%d-in-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, "adi");
+        QsoFileReader reader = configuration.getReader(in);
         QsoFileWriter writer = configuration.getWriter();
 
         Adif3PrintFormatter formatter = configuration.getFormatter();
 
-        String inBasename = FilenameUtils.getBaseName(inPath);
-        String out = String.format("%s%s.%s", tmpPath, inBasename, "adi");
-        String kml = String.format("%s%s.%s", tmpPath, inBasename, "kml");
+        String out = String.format("%s%d-out-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, "adi");
+        String kml = String.format("%s%d-out-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, "kml");
 
         logger.info(String.format("Running from: %s", new File(".").getAbsolutePath()));
         try {
@@ -78,10 +82,10 @@ public class TransformerService {
 
             transformer.configure(adifProcessorConfig.getInputStream(), summits, qrzService);
 
-            logger.info(String.format("Reading input file %s with encoding %s", inPath, control.getEncoding()));
+            logger.info(String.format("Reading input file %s with encoding %s", in, control.getEncoding()));
             Adif3 log;
             try {
-                log = reader.read(inPath, control.getEncoding(), false);
+                log = reader.read(in, control.getEncoding(), false);
             } catch (Exception e) {
                 String error = String.format("Error processing ADI file, caught exception:\n\t'%s'", e.getMessage());
                 logger.severe(error);
@@ -109,7 +113,7 @@ public class TransformerService {
 
             if (control.isMarkdown()) {
                 formatter.getPrintJobConfig().configure(adifPrinterConfigFilename, adifPrinterConfig.getInputStream());
-                String markdown = String.format("%s%s.%s", tmpPath, inBasename, formatter.getPrintJobConfig().getFilenameExtension());
+                String markdown = String.format("%s%d-out-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, formatter.getPrintJobConfig().getFilenameExtension());
                 BufferedWriter markdownWriter = null;
 
                 try {
@@ -144,10 +148,10 @@ public class TransformerService {
         } catch (NoSuchFileException nfe) {
             logger.severe(String.format("Could not open input file: %s", control.getPathname()));
         } catch (UnsupportedHeaderException ushe) {
-            logger.severe(String.format("Unknown header for file: %s", inPath));
+            logger.severe(String.format("Unknown header for file: %s", in));
             logger.severe(ExceptionUtils.getStackTrace(ushe));
         } catch (IOException e) {
-            logger.severe(String.format("Caught exception %s processing file: %s", e.getMessage(), inPath));
+            logger.severe(String.format("Caught exception %s processing file: %s", e.getMessage(), in));
             logger.severe(ExceptionUtils.getStackTrace(e));
         }
         logger.info("Processing complete...");
