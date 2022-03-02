@@ -59,30 +59,9 @@ public class HtmlParameters {
     }
 
     public void addParametersFromRequest(StandardMultipartHttpServletRequest request) {
-        addParameterFromRequest(HtmlParameterType.ENCODING, request);
-        addParameterFromRequest(HtmlParameterType.LOCATION, request);
-        addParameterFromRequest(HtmlParameterType.SOTA_REF, request);
-        addParameterFromRequest(HtmlParameterType.GMA_REF, request);
-        addParameterFromRequest(HtmlParameterType.WOTA_REF, request);
-        addParameterFromRequest(HtmlParameterType.HEMA_REF, request);
-        addParameterFromRequest(HtmlParameterType.POTA_REF, request);
-        addParameterFromRequest(HtmlParameterType.WWFF_REF, request);
-        addParameterFromRequest(HtmlParameterType.COTA_REF, request);
-        addParameterFromRequest(HtmlParameterType.LOTA_REF, request);
-        addParameterFromRequest(HtmlParameterType.ROTA_REF, request);
-        addParameterFromRequest(HtmlParameterType.IOTA_REF, request);
-        addParameterFromRequest(HtmlParameterType.SATELLITE_NAME, request);
-        addParameterFromRequest(HtmlParameterType.SATELLITE_MODE, request);
-        addParameterFromRequest(HtmlParameterType.SATELLITE_BAND, request);
-        addParameterFromRequest(HtmlParameterType.STATION_SUBLABEL, request);
-        addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES, request);
-        addParameterFromRequest(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, request);
-        addParameterFromRequest(HtmlParameterType.ANTENNA, request);
-        addParameterFromRequest(HtmlParameterType.CONTEST_RESULTS, request);
-        addParameterFromRequest(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, request);
-        addParameterFromRequest(HtmlParameterType.STRIP_COMMENT, request);
-        addParameterFromRequest(HtmlParameterType.PRINTER_CONFIG, request);
-        addParameterFromRequest(HtmlParameterType.OPTIONS_VISIBLE, request);
+        for (HtmlParameter parameter : parameters.values()) {
+            addParameterFromRequest(parameter.getType(), request);
+        }
     }
 
     private void addParameterFromRequest(HtmlParameterType type, StandardMultipartHttpServletRequest request) {
