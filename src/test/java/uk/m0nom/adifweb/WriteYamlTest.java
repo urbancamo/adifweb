@@ -9,7 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 public class WriteYamlTest {
 
@@ -24,7 +25,7 @@ public class WriteYamlTest {
             FileUtils.write(new File("./target/TransformControl.yml"), yaml, StandardCharsets.UTF_8);
             yaml = FileUtils.readFileToString(new File("./target/TransformControl.yml"), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            fail();
+            throw new Error("fail!");
         }
 
         TransformControl primaryCopy = yamlProcessor.loadAs(yaml, TransformControl.class);
