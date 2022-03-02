@@ -64,7 +64,7 @@ public class FileService {
         for (HtmlParameter parameter : parameters.values()) {
             sb.append(String.format("%s: %s\n", parameter.getKey(), parameter.getValue()));
         }
-        String file = String.format("%d-in-%s", control.getRunTimestamp(), "parameters");
+        String file = String.format("%d-in-%s.%s", control.getRunTimestamp(), "parameters", "txt");
         archiveData(file, sb.toString());
     }
 
@@ -75,7 +75,7 @@ public class FileService {
         }
     }
 
-    public void archiveFile(TransformControl control, String filename, String tmpPath, String encoding) {
+    public void archiveFile(String filename, String tmpPath, String encoding) {
         String content;
         FileInputStream out = null;
         if (configuration.isAws()) {
