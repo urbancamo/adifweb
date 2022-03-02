@@ -4,7 +4,6 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uk.m0nom.adif3.control.TransformControl;
-import uk.m0nom.adifweb.ApplicationConfiguration;
 import uk.m0nom.adifweb.domain.HtmlParameter;
 import uk.m0nom.adifweb.domain.HtmlParameters;
 
@@ -18,14 +17,14 @@ import java.util.logging.Logger;
 public class FileService {
     private static final Logger logger = Logger.getLogger(FileService.class.getName());
 
-    private final ApplicationConfiguration configuration;
+    private final AwsS3Utils awsS3Utils;
 
-    public FileService(ApplicationConfiguration configuration) {
-        this.configuration = configuration;
+    public FileService(AwsS3Utils awsS3Utils) {
+        this.awsS3Utils = awsS3Utils;
     }
 
     public void storeInputFile(TransformControl control, MultipartFile uploadedFile, String tmpPath) {
-        String inputPath = null;
+        String inputPath;
         String inputFilename = null;
         String content = null;
         InputStream uploadedStream = null;
@@ -51,11 +50,11 @@ public class FileService {
             }
         }
 
-        if (configuration.isAws()) {
+        if (awsS3Utils.isConfigured()) {
             // Archive the content into S3 storage
             assert content != null;
             logger.info(String.format("Archiving %d characters into AWS S3 file %s", content.length(), inputFilename));
-            configuration.getAwsS3Utils().archiveFile(inputFilename, content);
+            awsS3Utils.archiveFile(inputFilename, content);
         }
     }
 
@@ -69,16 +68,14 @@ public class FileService {
     }
 
     public void archiveData(String filename, String content) {
-        if (configuration.isAws()) {
-            // Read content of file
-            configuration.getAwsS3Utils().archiveFile(filename, content);
-        }
+        // Read content of file
+        awsS3Utils.archiveFile(filename, content);
     }
 
     public void archiveFile(String filename, String tmpPath, String encoding) {
         String content;
         FileInputStream out = null;
-        if (configuration.isAws()) {
+        if (awsS3Utils.isConfigured()) {
             // Read content of file
             var filePath = String.format("%s%s", tmpPath, filename);
             try {
@@ -87,7 +84,7 @@ public class FileService {
 
                 // Archive the content into S3 storage
                 logger.info(String.format("Archiving output file %s", filename));
-                configuration.getAwsS3Utils().archiveFile(filename, content);
+                awsS3Utils.archiveFile(filename, content);
             } catch (Exception e) {
                 logger.severe(e.getMessage());
             } finally {

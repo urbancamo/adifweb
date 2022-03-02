@@ -28,7 +28,7 @@ public class CoordinateConverterController {
 
 	private final LocationService locationService;
 
-	public CoordinateConverterController(ApplicationConfiguration configuration, LocationService locationService) {
+	public CoordinateConverterController(LocationService locationService) {
 		this.locationService = locationService;
 	}
 
