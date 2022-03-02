@@ -48,7 +48,7 @@
 		<repository>
 			<id>github</id>
 			<name>GitHub urbancamo Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/urbancamo/adifweb</url>
+			<url>https://urbancamo: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@maven.pkg.github.com/urbancamo/adif-processor</url>
 		</repository>
 	</distributionManagement>
 
@@ -175,4 +175,6 @@
 		<connection>scm:git:git://github.com/urbancamo/adifweb</connection>
 		<developerConnection>scm:git:git://github.com/urbancamo</developerConnection>
 		<url>https://github.com/urbancamo/adifweb</url>
-	</scm></project>
+	</scm>
+
+</project>
