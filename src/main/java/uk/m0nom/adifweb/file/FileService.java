@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uk.m0nom.adif3.control.TransformControl;
 import uk.m0nom.adifweb.ApplicationConfiguration;
+import uk.m0nom.adifweb.domain.HtmlParameter;
+import uk.m0nom.adifweb.domain.HtmlParameters;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -54,6 +56,22 @@ public class FileService {
             assert content != null;
             logger.info(String.format("Archiving %d characters into AWS S3 file %s", content.length(), inputFilename));
             configuration.getAwsS3Utils().archiveFile(inputFilename, content);
+        }
+    }
+
+    public void archiveParameters(TransformControl control,  HtmlParameters parameters) {
+        var sb = new StringBuilder();
+        for (HtmlParameter parameter : parameters.values()) {
+            sb.append(String.format("%s: %s\n", parameter.getKey(), parameter.getValue()));
+        }
+        String file = String.format("%d-in-%s", control.getRunTimestamp(), "parameters");
+        archiveData(file, sb.toString());
+    }
+
+    public void archiveData(String filename, String content) {
+        if (configuration.isAws()) {
+            // Read content of file
+            configuration.getAwsS3Utils().archiveFile(filename, content);
         }
     }
 
