@@ -132,6 +132,7 @@ public class UploadController {
 			control.setAdif3ElementSet(adif3SchemaElements.getElements());
 			control.setDxccEntities(configuration.getDxccEntities());
 
+			fileService.archiveParameters(control, parameters);
 			fileService.storeInputFile(control, uploadedFile, tmpPath);
 			var transformResults = transformerService.runTransformer(control, resourceLoader,
 					tmpPath, uploadedFile.getOriginalFilename());
