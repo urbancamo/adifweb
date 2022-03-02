@@ -17,8 +17,6 @@ jobs:
 
       - name: Compile the Project
         run: mvn -B compile --file pom.xml
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PACKAGE_REPO_PASSWORD }}
 
   build:
     runs-on: ubuntu-latest
@@ -42,8 +40,6 @@ jobs:
 
       - name: Build and test project
         run: mvn -B verify spring-boot:repackage
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PACKAGE_REPO_PASSWORD }}
 
       - name: Version deployment archive
         run: mv -v target/adifweb.jar target/adifweb-${{ github.sha }}.jar
