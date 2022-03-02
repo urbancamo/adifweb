@@ -18,7 +18,7 @@ jobs:
           server-username: GITHUB_USER_REF  # env variable name for username
           server-password: GITHUB_TOKEN_REF # env variable name for GitHub Personal Access Token
       - name: Compile the Project
-        run: mvn -B compile
+        run: mvn -B compile --file pom.xml
         env:
           GITHUB_USER_REF: ${{ secrets.GH_PACKAGE_REPO_USERNAME }}
           GITHUB_TOKEN_REF: ${{ secrets.GH_PACKAGE_REPO_PASSWORD }}
