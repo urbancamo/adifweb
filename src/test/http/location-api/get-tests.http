@@ -1,79 +1,83 @@
 ### Lat/Long
-GET http://localhost:5000/location-api/getLocation?location=54%C2%B0%2026'%2060.000%22N%203%C2%B0%205'%200.000%22W
+GET http://localhost:5000/api/location?code=54%C2%B0%2026'%2060.000%22N%203%C2%B0%205'%200.000%22W
 Accept: application/json
 
 ### SOTA Summit
-GET http://localhost:5000/location-api/getLocation?location=G/LD-050
+GET http://localhost:5000/api/location?code=G/LD-050
 Accept: application/json
 
 ### Lat/Long
-GET http://localhost:5000/location-api/getLocation?location=54.450000%20-3.083333
+GET http://localhost:5000/api/location?code=54.450000%20-3.083333
 Accept: application/json
 
 ### Lat/Long
-GET http://localhost:5000/location-api/getLocation?location=54.450000%2C%20-3.083333
+GET http://localhost:5000/api/location?code=54.450000%2C%20-3.083333
 Accept: application/json
 
 ### Lat/Long
-GET http://localhost:5000/location-api/getLocation?location=54.450000%20N%203.083333%20W
+GET http://localhost:5000/api/location?code=54.450000%20N%203.083333%20W
 Accept: application/json
 
 ### Lat/Long
-GET http://localhost:5000/location-api/getLocation?location=54.450000%20N%2C%203.083333%20W
+GET http://localhost:5000/api/location?code=54.450000%20N%2C%203.083333%20W
 Accept: application/json
 
 ### Lat/Long
-GET http://localhost:5000/location-api/getLocation?location=54%C2%B0%2027.000'%2C%20-3%C2%B0%205.000'
+GET http://localhost:5000/api/location?code=54%C2%B0%2027.000'%2C%20-3%C2%B0%205.000'
 Accept: application/json
 
 ### Lat/Long
-GET http://localhost:5000/location-api/getLocation?location=54%C2%B0%2027.000'%20N%2C%203%C2%B0%205.000'%20W
+GET http://localhost:5000/api/location?code=54%C2%B0%2027.000'%20N%2C%203%C2%B0%205.000'%20W
 Accept: application/json
 
 ### Lat/Long
-GET http://localhost:5000/location-api/getLocation?location=54%C2%B0%2026'%2060%22%2C%20-3%C2%B0%205'%200%22
+GET http://localhost:5000/api/location?code=54%C2%B0%2026'%2060%22%2C%20-3%C2%B0%205'%200%22
 Accept: application/json
 
 ### Lat/Long
-GET http://localhost:5000/location-api/getLocation?location=54%C2%B0%2026'%2060%22%20N%2C%203%C2%B0%205'%200%22%20W
+GET http://localhost:5000/api/location?code=54%C2%B0%2026'%2060%22%20N%2C%203%C2%B0%205'%200%22%20W
 Accept: application/json
 
 ### Lat/Long
-GET http://localhost:5000/location-api/getLocation?location=54%C2%B0%2026'%2060.000%22N%203%C2%B0%205'%200.000%22W
+GET http://localhost:5000/api/location?code=54%C2%B0%2026'%2060.000%22N%203%C2%B0%205'%200.000%22W
 Accept: application/json
 
 ### Lat/Long
-GET http://localhost:5000/location-api/getLocation?location=54%C2%B0%2026'%20N%2C%203%C2%B0%205'%20W%0A
+GET http://localhost:5000/api/location?code=54%C2%B0%2026'%20N%2C%203%C2%B0%205'%20W%0A
 Accept: application/json
 
 ### Maidenhead
-GET http://localhost:5000/location-api/getLocation?location=IO84KK97XX
+GET http://localhost:5000/api/location?code=IO84KK97XX
 Accept: application/json
 
 ### Maidenhead
-GET http://localhost:5000/location-api/getLocation?location=IO84KK97
+GET http://localhost:5000/api/location?code=IO84KK97
 Accept: application/json
 
 ### Maidenhead
-GET http://localhost:5000/location-api/getLocation?location=IO84KK
+GET http://localhost:5000/api/location?code=IO84KK
 Accept: application/json
 
 ### Maidenhead
-GET http://localhost:5000/location-api/getLocation?location=IO84
+GET http://localhost:5000/api/location?code=IO84
 Accept: application/json
 
 ### OS GRID
-GET http://localhost:5000/location-api/getLocation?location=E%20329764%20N%20506623
+GET http://localhost:5000/api/location?code=E%20329764%20N%20506623
 Accept: application/json
 
 ### OS GRID
-GET http://localhost:5000/location-api/getLocation?location=NY%2029764%2006622
+GET http://localhost:5000/api/location?code=NY%2029764%2006622
 Accept: application/json
 
 ### OS GRID
-GET http://localhost:5000/location-api/getLocation?location=NY%202976%200662
+GET http://localhost:5000/api/location?code=NY%202976%200662
 Accept: application/json
 
 ### OS GRID
-GET http://localhost:5000/location-api/getLocation?location=NY%20297%20406
+GET http://localhost:5000/api/location?code=NY%20297%20406
+Accept: application/json
+
+### BAD
+GET http://localhost:5000/api/location?code=BADLOCATIONREQUEST
 Accept: application/json
