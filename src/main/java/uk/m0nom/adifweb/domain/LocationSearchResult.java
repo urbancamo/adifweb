@@ -17,4 +17,8 @@ public class LocationSearchResult {
     private String info = "";
     private String error = "";
     private Collection<String> matches;
+
+    public boolean hasMatches() {
+        return matches != null;
+    }
 }

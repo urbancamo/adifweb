@@ -1,0 +1,33 @@
+{
+  "coordinates": {
+    "locationInfo": {
+      "accuracy": "LAT_LONG",
+      "source": "ACTIVITY"
+    },
+    "altitude": null,
+    "latitude": 54.28836000000001,
+    "longitude": -2.937909999999988
+  },
+  "info": "Activity reference match for Summits on the Air location 'Gummer's How'",
+  "error": "",
+  "matches": [
+    "54.288360 -2.937910",
+    "54.288360, -2.937910",
+    "54.288360 N 2.937910 W",
+    "54.288360 N, 2.937910 W",
+    "54° 17.302', -2° 56.275'",
+    "54° 17.302' N, 2° 56.275' W",
+    "54° 17' 18\", -2° 56' 16\"",
+    "54° 17' 18\" N, 2° 56' 16\" W",
+    "54° 17' 18.096\"N 2° 56' 16.476\"W",
+    "54° 17' N, 2° 56' W",
+    "IO84MG79KE",
+    "IO84MG79",
+    "IO84MG",
+    "IO84",
+    "E 338953 N 488504",
+    "SD 38952 88504",
+    "SD 3895 8850",
+    "SD 389 288"
+  ]
+}
