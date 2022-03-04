@@ -16,19 +16,25 @@ import uk.m0nom.adif3.transform.TransformResults;
 import uk.m0nom.adifweb.domain.*;
 import uk.m0nom.adifweb.file.FileService;
 import uk.m0nom.adifweb.transformer.TransformerService;
+import uk.m0nom.adifweb.util.CustomFileLogHandler;
+import uk.m0nom.adifweb.util.LoggerSetup;
 import uk.m0nom.adifweb.util.TransformControlUtils;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Displays and accepts the input from the main ADIF Processor HTML form
  */
 @Controller
 public class UploadController {
+	private static final Logger logger = Logger.getLogger(UploadController.class.getName());
 
 	private static final String HTML_PARAMETERS = "HTML_PARAMETERS";
 
@@ -47,6 +53,8 @@ public class UploadController {
 	private final TransformerService transformerService;
 	private final FileService fileService;
 
+	private String tmpPath;
+
 	public UploadController(ApplicationConfiguration configuration, TransformerService transformerService,
 							PrintJobConfigs printJobConfigs, Adif3SchemaElementsService adif3SchemaElementsService,
 							FileService fileService) {
@@ -55,6 +63,11 @@ public class UploadController {
 		this.adif3SchemaElementsService = adif3SchemaElementsService;
 		this.fileService = fileService;
 		this.transformerService = transformerService;
+
+		tmpPath = System.getProperty("java.io.tmpdir");
+		if (!StringUtils.endsWith(tmpPath, File.separator)) {
+			tmpPath = tmpPath + File.separator;
+		}
 	}
 
 	private HtmlParameters setParametersFromSession(HttpSession session) {
@@ -93,58 +106,69 @@ public class UploadController {
 
 	@PostMapping("/upload")
 	public ModelAndView handleUpload(StandardMultipartHttpServletRequest request, HttpSession session) {
-		var parameters = setParametersFromSession(session);
+		CustomFileLogHandler customFileLogHandler = null;
+		ModelAndView rtn;
+		try {
+			long runTimestamp = new Date().getTime();
+			customFileLogHandler = LoggerSetup.setupNewLogFile(runTimestamp);
 
-		var factory = new DiskFileItemFactory();
-		var tmpPath = System.getProperty("java.io.tmpdir");
-		if (!StringUtils.endsWith(tmpPath, File.separator)) {
-			tmpPath = tmpPath + File.separator;
-		}
-		factory.setRepository(new File(tmpPath));
-		factory.setSizeThreshold(DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD);
-		factory.setFileCleaningTracker(null);
+			var parameters = setParametersFromSession(session);
 
-		MultipartFile uploadedFile = request.getFile(HtmlParameterType.FILENAME.getParameterName());
+			var factory = new DiskFileItemFactory();
+			factory.setRepository(new File(tmpPath));
+			factory.setSizeThreshold(DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD);
+			factory.setFileCleaningTracker(null);
 
-		parameters.addParametersFromRequest(request);
+			MultipartFile uploadedFile = request.getFile(HtmlParameterType.FILENAME.getParameterName());
 
-		assert uploadedFile != null;
-		var fileParam = new HtmlParameter(HtmlParameterType.FILENAME,
-				uploadedFile.getOriginalFilename(), parameters.getValidator(HtmlParameterType.FILENAME));
+			parameters.addParametersFromRequest(request);
 
-		parameters.put(fileParam.getType().getParameterName(), fileParam);
+			assert uploadedFile != null;
+			var fileParam = new HtmlParameter(HtmlParameterType.FILENAME, uploadedFile.getOriginalFilename(), parameters.getValidator(HtmlParameterType.FILENAME));
 
-		parameters.validate();
-		session.setAttribute(HTML_PARAMETERS, parameters);
+			parameters.put(fileParam.getType().getParameterName(), fileParam);
 
-		if (!parameters.isAllValid()) {
-			var backToUpload = new ModelAndView("upload");
-			addBasicErrorElementsIntoMap(backToUpload.getModelMap(), parameters)
-					.addAttribute("validationErrors", "true")
-					.addAttribute("validationErrorMessages", getValidationErrorsString(parameters));
-			return backToUpload;
-		} else {
-			var control = TransformControlUtils.createTransformControlFromParameters(configuration, parameters);
-			control.setAdif3ElementSet(adif3SchemaElementsService.getElements());
-			control.setDxccEntities(configuration.getDxccEntities());
+			parameters.validate();
+			session.setAttribute(HTML_PARAMETERS, parameters);
 
-			fileService.archiveParameters(control, parameters);
-			fileService.storeInputFile(control, uploadedFile, tmpPath);
-			var transformResults = transformerService.runTransformer(control,
-					tmpPath, uploadedFile.getOriginalFilename());
-			fileService.archiveFile(transformResults.getAdiFile(), tmpPath, control.getEncoding());
-			fileService.archiveFile(transformResults.getKmlFile(), tmpPath, control.getEncoding());
-			fileService.archiveFile(transformResults.getFormattedQsoFile(), tmpPath, configuration.getFormatter().getPrintJobConfig().getOutEncoding());
-
-			if (transformResults.hasErrors()) {
+			if (!parameters.isAllValid()) {
 				var backToUpload = new ModelAndView("upload");
-				addBasicErrorElementsIntoMap(backToUpload.getModelMap(), parameters)
-						.addAttribute("error", transformResults.getError());
-				return backToUpload;
-			}
+				addBasicErrorElementsIntoMap(backToUpload.getModelMap(), parameters).addAttribute("validationErrors", "true").addAttribute("validationErrorMessages", getValidationErrorsString(parameters));
+				rtn = backToUpload;
+			} else {
+				var control = TransformControlUtils.createTransformControlFromParameters(configuration, parameters);
+				control.setRunTimestamp(runTimestamp);
 
-			return new ModelAndView("results", createTransformResults(transformResults, parameters));
+				control.setAdif3ElementSet(adif3SchemaElementsService.getElements());
+				control.setDxccEntities(configuration.getDxccEntities());
+
+				fileService.archiveParameters(control, parameters);
+				fileService.storeInputFile(control, uploadedFile, tmpPath);
+				var transformResults = transformerService.runTransformer(control, tmpPath, uploadedFile.getOriginalFilename());
+				fileService.archiveFile(transformResults.getAdiFile(), tmpPath, control.getEncoding());
+				fileService.archiveFile(transformResults.getKmlFile(), tmpPath, control.getEncoding());
+				fileService.archiveFile(transformResults.getFormattedQsoFile(), tmpPath, configuration.getFormatter().getPrintJobConfig().getOutEncoding());
+
+				if (customFileLogHandler != null) {
+					String logFile = customFileLogHandler.getLogFile();
+					customFileLogHandler.closeAndDetach();
+					fileService.archiveFile(logFile, tmpPath, StandardCharsets.UTF_8.name());
+				}
+
+				if (transformResults.hasErrors()) {
+					var backToUpload = new ModelAndView("upload");
+					addBasicErrorElementsIntoMap(backToUpload.getModelMap(), parameters).addAttribute("error", transformResults.getError());
+					rtn = backToUpload;
+				} else {
+					rtn = new ModelAndView("results", createTransformResults(transformResults, parameters));
+				}
+			}
+		} finally {
+			if (customFileLogHandler != null) {
+				customFileLogHandler.closeAndDetach();
+			}
 		}
+		return rtn;
 	}
 
 	private Map<String, Object> createTransformResults(TransformResults transformResults, HtmlParameters parameters) {
