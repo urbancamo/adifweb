@@ -24,7 +24,6 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -109,7 +108,7 @@ public class UploadController {
 		CustomFileLogHandler customFileLogHandler = null;
 		ModelAndView rtn;
 		try {
-			long runTimestamp = new Date().getTime();
+			long runTimestamp = java.time.Instant.now().toEpochMilli();
 			customFileLogHandler = LoggerSetup.setupNewLogFile(runTimestamp);
 
 			var parameters = setParametersFromSession(session);
