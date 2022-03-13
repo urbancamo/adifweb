@@ -23,7 +23,6 @@ import uk.m0nom.adifweb.util.TransformControlUtils;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -132,7 +131,7 @@ public class UploadController {
 
 			if (!parameters.isAllValid()) {
 				var backToUpload = new ModelAndView("upload");
-				addBasicErrorElementsIntoMap(backToUpload.getModelMap(), parameters).addAttribute("validationErrors", "true").addAttribute("validationErrorMessages", getValidationErrorsString(parameters));
+				addBasicErrorElementsIntoMap(backToUpload.getModelMap(), parameters);
 				rtn = backToUpload;
 			} else {
 				var control = TransformControlUtils.createTransformControlFromParameters(configuration, parameters);
@@ -159,7 +158,7 @@ public class UploadController {
 					addBasicErrorElementsIntoMap(backToUpload.getModelMap(), parameters).addAttribute("error", transformResults.getError());
 					rtn = backToUpload;
 				} else {
-					rtn = new ModelAndView("results", createTransformResults(transformResults, parameters));
+					rtn = new ModelAndView("results", createTransformResults(transformResults));
 				}
 			}
 		} finally {
@@ -170,16 +169,15 @@ public class UploadController {
 		return rtn;
 	}
 
-	private Map<String, Object> createTransformResults(TransformResults transformResults, HtmlParameters parameters) {
+	private Map<String, Object> createTransformResults(TransformResults transformResults) {
 		Map<String, Object> results = new HashMap<>();
 		results.put("adiFile", transformResults.getAdiFile());
 		results.put("kmlFile", transformResults.getKmlFile());
 		results.put("formattedQsoFile", transformResults.getFormattedQsoFile());
 		results.put("error", StringUtils.defaultIfEmpty(transformResults.getError(), "none"));
-		results.put("validationErrors", getValidationErrorsString(parameters));
 
-		results.put("callsignsWithoutLocation", buildCallsignList(transformResults.getContactsWithoutLocation()));
-		results.put("callsignsWithDubiousLocation", buildCallsignList(transformResults.getContactsWithDubiousLocation()));
+		results.put("callsignsWithoutLocation", String.join(",", transformResults.getContactsWithoutLocation()));
+		results.put("callsignsWithDubiousLocation", String.join(",", transformResults.getContactsWithDubiousLocation()));
 		return results;
 	}
 
@@ -190,30 +188,5 @@ public class UploadController {
 		map.put("printJobConfigs", printJobConfigs.getConfigs());
 		return map;
 	}
-
-	private String buildCallsignList(Collection<String> callsigns) {
-		var sb = new StringBuilder();
-		for (var callsign : callsigns) {
-			sb.append(String.format("%s, ", callsign));
-		}
-		var rtn = "none";
-		if (sb.length() > 0) {
-			rtn = sb.substring(0, sb.length()-2);
-		}
-		return rtn;
-	}
-
-	private String getValidationErrorsString(HtmlParameters parametersToValidate) {
-		var sb = new StringBuilder();
-
-		for (var parameter : parametersToValidate.values()) {
-			if (!parameter.getValidationResult().isValid()) {
-				sb.append(parameter.getValidationResult().getError());
-				sb.append(" ");
-			}
-		}
-		return sb.toString();
-	}
-
 }
 

@@ -59,9 +59,7 @@ public class HtmlParameters {
     }
 
     public void addParametersFromRequest(StandardMultipartHttpServletRequest request) {
-        for (HtmlParameter parameter : parameters.values()) {
-            addParameterFromRequest(parameter.getType(), request);
-        }
+        parameters.values().forEach(p -> addParameterFromRequest(p.getType(), request));
     }
 
     private void addParameterFromRequest(HtmlParameterType type, StandardMultipartHttpServletRequest request) {
@@ -71,10 +69,7 @@ public class HtmlParameters {
     }
 
     public void validate() {
-        Collection<HtmlParameter> toValidate = parameters.values();
-        for (HtmlParameter parameter : toValidate) {
-            parameter.validate();
-        }
+        parameters.values().forEach(HtmlParameter::validate);
     }
 
     public void put(String parameterName, HtmlParameter param) {

@@ -77,9 +77,7 @@ public class LocationService {
         Collection<String> resultCoords = new ArrayList<>();
         if (coordinates != null) {
             List<String> formatted = parsers.format(coordinates);
-            for (String format: formatted) {
-                resultCoords.add(format);
-            }
+            resultCoords.addAll(formatted);
             locationSearchResult.setMatches(resultCoords);
         }
 
