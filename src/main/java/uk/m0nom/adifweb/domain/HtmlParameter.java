@@ -7,8 +7,6 @@ import uk.m0nom.adifweb.validation.BooleanValidator;
 import uk.m0nom.adifweb.validation.ValidationResult;
 import uk.m0nom.adifweb.validation.Validator;
 
-import java.util.Map;
-
 @Getter
 @Setter
 public class HtmlParameter {
@@ -26,6 +24,8 @@ public class HtmlParameter {
         }
         this.validator = validator;
     }
+
+    public boolean isValid() { return validationResult.isValid(); }
 
     public void validate() {
         validationResult = validator.isValid(value);
