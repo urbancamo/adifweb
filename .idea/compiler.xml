@@ -12,7 +12,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="17">
-      <module name="adif-processor" target="17" />
+      <module name="adif-processor" target="11" />
       <module name="adifweb" target="11" />
     </bytecodeTargetLevel>
   </component>

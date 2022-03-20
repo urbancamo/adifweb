@@ -19,9 +19,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>17</java.version>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <java.version>11</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
         <timestamp>${maven.build.timestamp}</timestamp>
         <version>${project.version}</version>
@@ -127,6 +127,25 @@
             <version>3.0.1</version>
         </dependency>
 
+        <!-- JAXB v3.0.2 reference implementation (curiously with com.sun coordinates) -->
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.2</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/jakarta.activation/jakarta.activation-api -->
         <dependency>
             <groupId>jakarta.activation</groupId>
@@ -224,6 +243,10 @@
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.0</version>
+                    <configuration>
+                        <source>17</source>
+                        <target>17</target>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -257,6 +280,7 @@
                     <target>11</target>
                 </configuration>
             </plugin>
+
             <!--<plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-assembly-plugin</artifactId>
