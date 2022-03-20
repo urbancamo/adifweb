@@ -49,7 +49,7 @@ public class TransformControlUtils {
         control.setIcon(ActivityType.SOTA.getActivityName(), IconResource.SOTA_DEFAULT_ICON_URL);
         control.setIcon(ActivityType.GMA.getActivityName(), IconResource.GMA_DEFAULT_ICON_URL);
         control.setIcon(ActivityType.HEMA.getActivityName(), IconResource.HEMA_DEFAULT_ICON_URL);
-        control.setIcon(ActivityType.WOTA.getActivityName(), IconResource.HEMA_DEFAULT_ICON_URL);
+        control.setIcon(ActivityType.WOTA.getActivityName(), IconResource.WOTA_DEFAULT_ICON_URL);
         control.setIcon(ActivityType.WWFF.getActivityName(), IconResource.WWFF_DEFAULT_ICON_URL);
         control.setIcon(ActivityType.COTA.getActivityName(), IconResource.COTA_DEFAULT_ICON_URL);
         control.setIcon(ActivityType.LOTA.getActivityName(), IconResource.LOTA_DEFAULT_ICON_URL);
