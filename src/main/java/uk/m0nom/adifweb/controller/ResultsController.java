@@ -1,4 +1,4 @@
-package uk.m0nom.adifweb;
+package uk.m0nom.adifweb.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

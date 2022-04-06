@@ -1,7 +1,7 @@
 package uk.m0nom.adifweb.validation;
 
 import org.apache.commons.lang3.StringUtils;
-import uk.m0nom.satellite.ApSatellites;
+import uk.m0nom.adifproc.satellite.ApSatellites;
 
 public class SatelliteNameValidator implements Validator {
     public final static String UNSUPPORTED_SATELLITE = "Unsupported Satellite";

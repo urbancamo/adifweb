@@ -2,16 +2,16 @@ package uk.m0nom.adifweb.location;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
-import uk.m0nom.activity.Activity;
+import uk.m0nom.adifproc.activity.Activity;
 import uk.m0nom.adifweb.ApplicationConfiguration;
+import uk.m0nom.adifproc.coords.GlobalCoords3D;
+import uk.m0nom.adifproc.coords.LocationParserResult;
+import uk.m0nom.adifproc.coords.LocationParsingService;
+import uk.m0nom.adifproc.coords.LocationSource;
 import uk.m0nom.adifweb.domain.LocationSearchResult;
-import uk.m0nom.coords.GlobalCoords3D;
-import uk.m0nom.coords.LocationParserResult;
-import uk.m0nom.coords.LocationParsers;
-import uk.m0nom.coords.LocationSource;
-import uk.m0nom.geocoding.GeocodingProvider;
-import uk.m0nom.geocoding.GeocodingResult;
-import uk.m0nom.geocoding.NominatimGeocodingProvider;
+import uk.m0nom.adifproc.geocoding.GeocodingProvider;
+import uk.m0nom.adifproc.geocoding.GeocodingResult;
+import uk.m0nom.adifproc.geocoding.NominatimGeocodingProvider;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,15 +22,15 @@ import java.util.logging.Logger;
 public class LocationService {
     private static final Logger logger = Logger.getLogger(LocationService.class.getName());
 
-    private final LocationParsers parsers;
+    private final LocationParsingService locationParsingService;
     private final ApplicationConfiguration configuration;
     private final GeocodingProvider geocodingProvider;
 
 
-    public LocationService(ApplicationConfiguration configuration) {
+    public LocationService(ApplicationConfiguration configuration, LocationParsingService locationParsingService, NominatimGeocodingProvider geocodingProvider) {
         this.configuration = configuration;
-        this.parsers = new LocationParsers();
-        this.geocodingProvider = new NominatimGeocodingProvider();
+        this.locationParsingService = locationParsingService;
+        this.geocodingProvider = geocodingProvider;
     }
 
 
@@ -41,7 +41,7 @@ public class LocationService {
         String info = "";
 
         GlobalCoords3D coordinates = null;
-        LocationParserResult result = parsers.parseStringForCoordinates(LocationSource.UNDEFINED, locationToCheck);
+        LocationParserResult result = locationParsingService.parseStringForCoordinates(LocationSource.UNDEFINED, locationToCheck);
         if (result != null) {
             coordinates = result.getCoords();
             logger.info(String.format("Location parsed successfully as %s: %s", result.getParser().getName(), coordinates));
@@ -76,7 +76,7 @@ public class LocationService {
         locationSearchResult.setCoordinates(coordinates);
         Collection<String> resultCoords = new ArrayList<>();
         if (coordinates != null) {
-            List<String> formatted = parsers.format(coordinates);
+            List<String> formatted = locationParsingService.format(coordinates);
             resultCoords.addAll(formatted);
             locationSearchResult.setMatches(resultCoords);
         }

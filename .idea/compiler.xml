@@ -19,6 +19,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="adif-processor" options="-parameters" />
       <module name="adifweb" options="-parameters" />
     </option>
   </component>
