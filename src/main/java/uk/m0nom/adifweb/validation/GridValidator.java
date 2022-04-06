@@ -1,8 +1,8 @@
 package uk.m0nom.adifweb.validation;
 
 import org.apache.commons.lang3.StringUtils;
-import uk.m0nom.coords.LocationSource;
-import uk.m0nom.maidenheadlocator.MaidenheadLocatorConversion;
+import uk.m0nom.adifproc.coords.LocationSource;
+import uk.m0nom.adifproc.maidenheadlocator.MaidenheadLocatorConversion;
 
 public class GridValidator implements Validator {
     public final static String INVALID_GRID = "Invalid Grid, accepts 4/6/8/10 char refs";

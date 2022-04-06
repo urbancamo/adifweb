@@ -3,18 +3,18 @@ package uk.m0nom.adifweb.validation;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import uk.m0nom.activity.ActivityDatabases;
-import uk.m0nom.activity.ActivityType;
+import uk.m0nom.adifproc.activity.ActivityDatabaseService;
+import uk.m0nom.adifproc.activity.ActivityType;
 
 @Getter
 @Setter
 public class ActivityValidator implements Validator {
     private String invalidActivityReferenceMessage = "Invalid %s reference";
 
-    private ActivityDatabases databases;
+    private ActivityDatabaseService databases;
     private ActivityType activityType;
 
-    public ActivityValidator(ActivityDatabases databases, ActivityType activityType) {
+    public ActivityValidator(ActivityDatabaseService databases, ActivityType activityType) {
         this.databases = databases;
         this.activityType = activityType;
     }

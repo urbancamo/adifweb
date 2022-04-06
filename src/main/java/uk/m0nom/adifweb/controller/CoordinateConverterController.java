@@ -1,4 +1,4 @@
-package uk.m0nom.adifweb;
+package uk.m0nom.adifweb.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import uk.m0nom.adifweb.domain.LocationSearchResult;
 import uk.m0nom.adifweb.location.LocationService;
-import uk.m0nom.coords.GlobalCoords3D;
+import uk.m0nom.adifproc.coords.GlobalCoords3D;
 
 import java.util.HashMap;
 import java.util.Map;

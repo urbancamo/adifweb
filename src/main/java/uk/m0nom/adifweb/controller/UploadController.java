@@ -1,4 +1,4 @@
-package uk.m0nom.adifweb;
+package uk.m0nom.adifweb.controller;
 
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.lang3.StringUtils;
@@ -12,13 +12,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import uk.m0nom.adif3.transform.TransformResults;
+import uk.m0nom.adifproc.adif3.transform.TransformResults;
+import uk.m0nom.adifweb.ApplicationConfiguration;
 import uk.m0nom.adifweb.domain.*;
 import uk.m0nom.adifweb.file.FileService;
 import uk.m0nom.adifweb.transformer.TransformerService;
 import uk.m0nom.adifweb.util.CustomFileLogHandler;
 import uk.m0nom.adifweb.util.LoggerSetup;
 import uk.m0nom.adifweb.util.TransformControlUtils;
+import uk.m0nom.adifweb.validation.ValidatorService;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
@@ -50,17 +52,19 @@ public class UploadController {
 
 	private final TransformerService transformerService;
 	private final FileService fileService;
+	private final ValidatorService validatorService;
 
 	private String tmpPath;
 
 	public UploadController(ApplicationConfiguration configuration, TransformerService transformerService,
 							PrintJobConfigs printJobConfigs, Adif3SchemaElementsService adif3SchemaElementsService,
-							FileService fileService) {
+							FileService fileService, ValidatorService validatorService) {
 		this.configuration = configuration;
 		this.printJobConfigs = printJobConfigs;
 		this.adif3SchemaElementsService = adif3SchemaElementsService;
 		this.fileService = fileService;
 		this.transformerService = transformerService;
+		this.validatorService = validatorService;
 
 		tmpPath = System.getProperty("java.io.tmpdir");
 		if (!StringUtils.endsWith(tmpPath, File.separator)) {
@@ -74,7 +78,7 @@ public class UploadController {
 			parameters = (HtmlParameters) session.getAttribute(HTML_PARAMETERS);
 		}
 		if (parameters == null) {
-			parameters = new HtmlParameters(configuration.getActivityDatabases());
+			parameters = new HtmlParameters(validatorService);
 			parameters.reset();
 		}
 		return parameters;
@@ -96,7 +100,7 @@ public class UploadController {
 
 		model.addAttribute("parameters", parameters.getParameters());
 		model.addAttribute("satellites", configuration.getApSatellites().getSatelliteNames());
-		model.addAttribute("antennas", configuration.getAntennas().getAntennaNames());
+		model.addAttribute("antennas", configuration.getAntennaService().getAntennaNames());
 		model.addAttribute("printJobConfigs", printJobConfigs.getConfigs());
 
 		return "upload";
@@ -184,7 +188,7 @@ public class UploadController {
 	private ModelMap addBasicErrorElementsIntoMap(ModelMap map, HtmlParameters parameters) {
 		map.put("parameters", parameters);
 		map.put("satellites", configuration.getApSatellites().getSatelliteNames());
-		map.put("antennas", configuration.getAntennas().getAntennaNames());
+		map.put("antennas", configuration.getAntennaService().getAntennaNames());
 		map.put("printJobConfigs", printJobConfigs.getConfigs());
 		return map;
 	}

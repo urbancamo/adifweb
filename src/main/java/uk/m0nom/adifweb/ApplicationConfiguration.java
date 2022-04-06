@@ -4,42 +4,45 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-import uk.m0nom.activity.ActivityDatabases;
-import uk.m0nom.adif3.Adif3FileReader;
-import uk.m0nom.adif3.Adif3FileWriter;
-import uk.m0nom.adif3.Adif3Transformer;
-import uk.m0nom.adif3.print.Adif3PrintFormatter;
-import uk.m0nom.antenna.Antennas;
-import uk.m0nom.dxcc.DxccEntities;
-import uk.m0nom.dxcc.DxccJsonReader;
-import uk.m0nom.kml.KmlWriter;
-import uk.m0nom.qsofile.QsoFileReader;
-import uk.m0nom.qsofile.QsoFileWriter;
-import uk.m0nom.satellite.ApSatellites;
-import uk.m0nom.sotacsv.SotaCsvFileReader;
+import uk.m0nom.adifproc.activity.ActivityDatabaseService;
+import uk.m0nom.adifproc.adif3.Adif3Transformer;
+import uk.m0nom.adifproc.adif3.io.Adif3FileReader;
+import uk.m0nom.adifproc.adif3.io.Adif3FileWriter;
+import uk.m0nom.adifproc.adif3.print.Adif3PrintFormatter;
+import uk.m0nom.adifproc.antenna.AntennaService;
+import uk.m0nom.adifproc.dxcc.DxccEntities;
+import uk.m0nom.adifproc.dxcc.DxccJsonReader;
+import uk.m0nom.adifproc.kml.KmlWriter;
+import uk.m0nom.adifproc.qsofile.QsoFileReader;
+import uk.m0nom.adifproc.qsofile.QsoFileWriter;
+import uk.m0nom.adifproc.satellite.ApSatellites;
+import uk.m0nom.adifproc.sotacsv.SotaCsvFileReader;
 
 import java.util.logging.Logger;
 
-@Component
+@Configuration
+@ComponentScan({"uk.m0nom.adifproc","uk.m0nom.adifweb"})
 @Order(0)
 @Getter
 @Setter
 public class ApplicationConfiguration implements ApplicationListener<ApplicationReadyEvent> {
     private static final Logger logger = Logger.getLogger(ApplicationConfiguration.class.getName());
 
-    private Adif3Transformer transformer = new Adif3Transformer();
+    private Adif3Transformer transformer;
     private QsoFileReader reader;
-    private QsoFileWriter writer = new Adif3FileWriter();
+    private QsoFileWriter writer;
     private KmlWriter kmlWriter;
-    private ApSatellites apSatellites = new ApSatellites();
-    private Antennas antennas = new Antennas();
-    private ActivityDatabases activityDatabases = new ActivityDatabases();
+    private ApSatellites apSatellites;
+    private AntennaService antennaService;
+    private ActivityDatabaseService activityDatabases;
     private DxccEntities dxccEntities = null;
-    private Adif3PrintFormatter formatter = new Adif3PrintFormatter();
+    private Adif3PrintFormatter formatter;
 
     private String qrzUsername;
     private String qrzPassword;
@@ -47,8 +50,22 @@ public class ApplicationConfiguration implements ApplicationListener<Application
     private String awsAccessKey;
     private String awsSecretKey;
 
+    public ApplicationConfiguration(Adif3Transformer transformer,
+                                    Adif3FileWriter writer,
+                                    ApSatellites apSatellites,
+                                    AntennaService antennaService,
+                                    ActivityDatabaseService activityDatabases,
+                                    Adif3PrintFormatter formatter) {
+        this.transformer = transformer;
+        this.writer = writer;
+        this.apSatellites = apSatellites;
+        this.antennaService = antennaService;
+        this.activityDatabases = activityDatabases;
+        this.formatter = formatter;
+    }
+
     @Override
-    public void onApplicationEvent(ApplicationReadyEvent event) {
+    public void onApplicationEvent(@NotNull ApplicationReadyEvent event) {
         logger.info("ApplicationStartupListener#onApplicationEvent()");
 
         activityDatabases.loadData();

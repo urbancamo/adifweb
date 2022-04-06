@@ -3,8 +3,8 @@ package uk.m0nom.adifweb.domain;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
-import uk.m0nom.adif3.xsdquery.Adif3Element;
-import uk.m0nom.adif3.xsdquery.Adif3SchemaLoader;
+import uk.m0nom.adifproc.adif3.xsdquery.Adif3Element;
+import uk.m0nom.adifproc.adif3.xsdquery.Adif3SchemaLoader;
 
 import java.io.IOException;
 import java.util.Set;

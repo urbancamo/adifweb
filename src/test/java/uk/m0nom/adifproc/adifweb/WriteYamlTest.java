@@ -1,9 +1,9 @@
-package uk.m0nom.adifweb;
+package uk.m0nom.adifproc.adifweb;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.Yaml;
-import uk.m0nom.adif3.control.TransformControl;
+import uk.m0nom.adifproc.adif3.control.TransformControl;
 
 import java.io.File;
 import java.io.IOException;
