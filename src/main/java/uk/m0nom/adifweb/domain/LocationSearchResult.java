@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uk.m0nom.coords.GlobalCoords3D;
+import uk.m0nom.adifproc.coords.GlobalCoords3D;
 
 import java.util.Collection;
 

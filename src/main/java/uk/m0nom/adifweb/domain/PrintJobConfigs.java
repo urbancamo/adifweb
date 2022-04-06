@@ -3,7 +3,7 @@ package uk.m0nom.adifweb.domain;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
-import uk.m0nom.adif3.print.PrintJobConfig;
+import uk.m0nom.adifproc.adif3.print.PrintJobConfig;
 
 import java.io.IOException;
 import java.util.ArrayList;

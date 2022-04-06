@@ -7,20 +7,19 @@ import org.marsik.ham.adif.Adif3;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
-import uk.m0nom.activity.ActivityDatabases;
-import uk.m0nom.adif3.Adif3Transformer;
-import uk.m0nom.adif3.UnsupportedHeaderException;
-import uk.m0nom.adif3.contacts.Qsos;
-import uk.m0nom.adif3.control.TransformControl;
-import uk.m0nom.adif3.print.Adif3PrintFormatter;
-import uk.m0nom.adif3.transform.TransformResults;
+import uk.m0nom.adifproc.activity.ActivityDatabaseService;
+import uk.m0nom.adifproc.adif3.Adif3Transformer;
+import uk.m0nom.adifproc.adif3.UnsupportedHeaderException;
+import uk.m0nom.adifproc.adif3.contacts.Qsos;
+import uk.m0nom.adifproc.adif3.control.TransformControl;
+import uk.m0nom.adifproc.adif3.print.Adif3PrintFormatter;
+import uk.m0nom.adifproc.adif3.transform.TransformResults;
 import uk.m0nom.adifweb.ApplicationConfiguration;
-import uk.m0nom.contest.ContestResultsCalculator;
-import uk.m0nom.kml.KmlWriter;
-import uk.m0nom.qrz.CachingQrzXmlService;
-import uk.m0nom.qrz.QrzService;
-import uk.m0nom.qsofile.QsoFileReader;
-import uk.m0nom.qsofile.QsoFileWriter;
+import uk.m0nom.adifproc.contest.ContestResultsCalculator;
+import uk.m0nom.adifproc.kml.KmlWriter;
+import uk.m0nom.adifproc.qsofile.QsoFileReader;
+import uk.m0nom.adifproc.qsofile.QsoFileWriter;
+import uk.m0nom.adifproc.qrz.CachingQrzXmlService;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -40,17 +39,23 @@ public class TransformerService {
     private static final Logger logger = Logger.getLogger(TransformerService.class.getName());
     private final ApplicationConfiguration configuration;
     private final ResourceLoader resourceLoader;
+    private final CachingQrzXmlService qrzService;
+    private final KmlWriter kmlWriter;
 
-    public TransformerService(ApplicationConfiguration configuration, ResourceLoader resourceLoader) {
+    public TransformerService(ApplicationConfiguration configuration,
+                              ResourceLoader resourceLoader,
+                              KmlWriter kmlWriter,
+                              CachingQrzXmlService qrzService) {
         this.configuration = configuration;
         this.resourceLoader = resourceLoader;
+        this.qrzService = qrzService;
+        this.kmlWriter = kmlWriter;
     }
 
     public TransformResults runTransformer(TransformControl control,
                                            String tmpPath, String originalFilename) {
         TransformResults results = new TransformResults();
-        QrzService qrzService = new CachingQrzXmlService(control.getQrzUsername(), control.getQrzPassword());
-        KmlWriter kmlWriter = new KmlWriter(control);
+        qrzService.setCredentials(control.getQrzUsername(), control.getQrzPassword());
 
         String adifPrinterConfigFilename = String.format("classpath:config/%s", control.getPrintConfigFile());
         Resource adifPrinterConfig = resourceLoader.getResource(adifPrinterConfigFilename);
@@ -61,7 +66,7 @@ public class TransformerService {
         logger.info(String.format("Configuring transformer using: %s", adifProcessingConfigFilename));
 
         Adif3Transformer transformer = configuration.getTransformer();
-        ActivityDatabases summits = configuration.getActivityDatabases();
+        ActivityDatabaseService summits = configuration.getActivityDatabases();
         String inBasename = FilenameUtils.getBaseName(originalFilename);
         String in = String.format("%s%d-in-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, "adi");
         QsoFileReader reader = configuration.getReader(in);
@@ -82,8 +87,6 @@ public class TransformerService {
                 }
             }
 
-            transformer.configure(adifProcessorConfig.getInputStream(), summits, qrzService);
-
             logger.info(String.format("Reading input file %s with encoding %s", in, control.getEncoding()));
             Adif3 log;
             try {
@@ -101,7 +104,7 @@ public class TransformerService {
                 return new TransformResults(e.getMessage());
             }
             if (control.getGenerateKml()) {
-                kmlWriter.write(kml, originalFilename, summits, qsos, results);
+                kmlWriter.write(control, kml, originalFilename, summits, qsos, results);
                 if (StringUtils.isNotEmpty(results.getError())) {
                     kml = "";
                 }

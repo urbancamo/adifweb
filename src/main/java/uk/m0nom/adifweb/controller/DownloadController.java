@@ -1,4 +1,4 @@
-package uk.m0nom.adifweb;
+package uk.m0nom.adifweb.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

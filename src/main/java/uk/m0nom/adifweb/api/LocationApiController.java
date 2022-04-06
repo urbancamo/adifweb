@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import uk.m0nom.adifweb.domain.LocationSearchResult;
 import uk.m0nom.adifweb.location.LocationService;
+import uk.m0nom.adifweb.domain.LocationSearchResult;
 
 import java.util.logging.Logger;
 
