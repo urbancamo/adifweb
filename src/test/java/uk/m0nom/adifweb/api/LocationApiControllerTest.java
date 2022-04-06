@@ -16,9 +16,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.m0nom.adifweb.domain.LocationSearchResult;
 import uk.m0nom.adifweb.location.LocationService;
-import uk.m0nom.coords.GlobalCoords3D;
-import uk.m0nom.coords.LocationAccuracy;
-import uk.m0nom.coords.LocationSource;
+import uk.m0nom.adifproc.coords.GlobalCoords3D;
+import uk.m0nom.adifproc.coords.LocationAccuracy;
+import uk.m0nom.adifproc.coords.LocationSource;
 
 import java.util.ArrayList;
 import java.util.Collection;

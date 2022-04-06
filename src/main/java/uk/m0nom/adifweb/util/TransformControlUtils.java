@@ -1,11 +1,11 @@
 package uk.m0nom.adifweb.util;
 
-import uk.m0nom.activity.ActivityType;
-import uk.m0nom.adif3.control.TransformControl;
+import uk.m0nom.adifproc.activity.ActivityType;
+import uk.m0nom.adifproc.adif3.control.TransformControl;
 import uk.m0nom.adifweb.ApplicationConfiguration;
 import uk.m0nom.adifweb.domain.HtmlParameterType;
 import uk.m0nom.adifweb.domain.HtmlParameters;
-import uk.m0nom.icons.IconResource;
+import uk.m0nom.adifproc.icons.IconResource;
 
 public class TransformControlUtils {
     public static TransformControl createTransformControlFromParameters(ApplicationConfiguration configuration, HtmlParameters parameters) {
@@ -64,7 +64,7 @@ public class TransformControlUtils {
         control.setKmlShowStationSubLabel(null != parameters.get(HtmlParameterType.STATION_SUBLABEL.getParameterName()).getValue());
         control.setKmlShowLocalActivationSites(parameters.get(HtmlParameterType.LOCAL_ACTIVATION_SITES.getParameterName()).getValue() != null);
         control.setKmlLocalActivationSitesRadius(Double.valueOf(parameters.get(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS.getParameterName()).getValue()));
-        control.setAntenna(configuration.getAntennas().getAntenna(parameters.get(HtmlParameterType.ANTENNA.getParameterName()).getValue()));
+        control.setAntenna(configuration.getAntennaService().getAntenna(parameters.get(HtmlParameterType.ANTENNA.getParameterName()).getValue()));
 
         control.setQrzUsername(configuration.getQrzUsername());
         control.setQrzPassword(configuration.getQrzPassword());
