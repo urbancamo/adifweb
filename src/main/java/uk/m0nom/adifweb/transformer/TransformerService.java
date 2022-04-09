@@ -14,12 +14,12 @@ import uk.m0nom.adifproc.adif3.contacts.Qsos;
 import uk.m0nom.adifproc.adif3.control.TransformControl;
 import uk.m0nom.adifproc.adif3.print.Adif3PrintFormatter;
 import uk.m0nom.adifproc.adif3.transform.TransformResults;
-import uk.m0nom.adifweb.ApplicationConfiguration;
 import uk.m0nom.adifproc.contest.ContestResultsCalculator;
 import uk.m0nom.adifproc.kml.KmlWriter;
+import uk.m0nom.adifproc.qrz.CachingQrzXmlService;
 import uk.m0nom.adifproc.qsofile.QsoFileReader;
 import uk.m0nom.adifproc.qsofile.QsoFileWriter;
-import uk.m0nom.adifproc.qrz.CachingQrzXmlService;
+import uk.m0nom.adifweb.ApplicationConfiguration;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -79,11 +79,10 @@ public class TransformerService {
 
         logger.info(String.format("Running from: %s", new File(".").getAbsolutePath()));
         try {
-            if (control.isQrzDotComEnabled()) {
-                qrzService.enable();
-                if (!qrzService.getSessionKey()) {
+            if (control.hasQrzCredentials()) {
+                if (!qrzService.refreshSessionKey()) {
                     logger.warning("Could not connect to QRZ.COM, disabling lookups and continuing...");
-                    qrzService.disable();
+                    results.setError("Could not obtain QRZ.COM session key, some stations may not have a location");
                 }
             }
 
