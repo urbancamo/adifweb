@@ -75,7 +75,7 @@ public class TransformerService {
 
         Adif3PrintFormatter formatter = configuration.getFormatter();
 
-        String out = String.format("%s%d-out-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, inExtension);
+        String out = String.format("%s%d-out-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, "adi");
         String kml = String.format("%s%d-out-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, "kml");
 
         logger.info(String.format("Running from: %s", new File(".").getAbsolutePath()));

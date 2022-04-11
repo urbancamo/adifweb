@@ -43,6 +43,8 @@ public class ApplicationConfiguration implements ApplicationListener<Application
     private ActivityDatabaseService activityDatabases;
     private DxccEntities dxccEntities = null;
     private Adif3PrintFormatter formatter;
+    private SotaCsvFileReader sotaCsvFileReader;
+    private Adif3FileReader adif3FileReader;
 
     private String qrzUsername;
     private String qrzPassword;
@@ -55,13 +57,17 @@ public class ApplicationConfiguration implements ApplicationListener<Application
                                     ApSatelliteService apSatelliteService,
                                     AntennaService antennaService,
                                     ActivityDatabaseService activityDatabases,
-                                    Adif3PrintFormatter formatter) {
+                                    Adif3PrintFormatter formatter,
+                                    SotaCsvFileReader sotaCsvFileReader,
+                                    Adif3FileReader adif3FileReader) {
         this.transformer = transformer;
         this.writer = writer;
         this.apSatelliteService = apSatelliteService;
         this.antennaService = antennaService;
         this.activityDatabases = activityDatabases;
         this.formatter = formatter;
+        this.sotaCsvFileReader = sotaCsvFileReader;
+        this.adif3FileReader = adif3FileReader;
     }
 
     @Override
@@ -91,8 +97,8 @@ public class ApplicationConfiguration implements ApplicationListener<Application
     public QsoFileReader getReader(String inputFile) {
         String extension = FilenameUtils.getExtension(inputFile).toLowerCase();
         if (StringUtils.equals(extension, "csv")) {
-            return new SotaCsvFileReader();
+            return sotaCsvFileReader;
         }
-        return new Adif3FileReader();
+        return adif3FileReader;
     }
 }
