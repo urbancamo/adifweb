@@ -35,393 +35,390 @@
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-</head>
+    <script src="https://kit.fontawesome.com/f5ec62c7d7.js" crossorigin="anonymous"></script>
 <body>
 <div class="container">
-    <div class="container">
-        <h1>ADIF Processor Control Form</h1>
+    <h1>ADIF Processor Control Form</h1>
+</div>
+<form id="form" action="#" th:action="@{/upload}" th:object="${upload}" enctype="multipart/form-data" method="post">
+
+    <!-- *********************** FILE ***************** -->
+    <div class="panel panel-default">
+        <div class="panel-heading">ADIF/SOTA CSV File
+        </div>
+        <div class="panel-body" id="filePanel">
+            <div class="container">
+                <p>In most cases you only need to upload the ADIF (or SOTA CSV) file and click process.</p>
+            </div>
+            <div class="input-group mb-3">
+                <input type="file" class="form-control" id="filename" name="filename" th:value="${parameters.get('filename').getValue()}"/>
+            </div>
+            <div class="input-group mb-3">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">Encoding
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item a-encoding" href="#">WINDOWS-1251</a></li>
+                    <li><a class="dropdown-item a-encoding" href="#">ISO-8859-1</a></li>
+                    <li><a class="dropdown-item a-encoding" href="#">UTF-8</a></li>
+                </ul>
+                <input type="text" class="form-control" aria-label="File Encoding" id="encoding" name="encoding"
+                       th:value="${parameters.get('encoding').getValue()}" value="windows-1251">
+            </div>
+        </div>
     </div>
-    <form id="form" action="#" th:action="@{/upload}" th:object="${upload}" enctype="multipart/form-data" method="post">
 
-        <!-- *********************** FILE ***************** -->
-        <div class="panel panel-default">
-            <div class="panel-heading">ADIF/SOTA CSV File
-            </div>
-            <div class="panel-body" id="filePanel">
-                <div class="container">
-                    <p>In most cases you only need to upload the ADIF (or SOTA CSV) file and click process.</p>
-                </div>
-                <div class="input-group mb-3">
-                    <input type="file" class="form-control" id="filename" name="filename" th:value="${parameters.get('filename').getValue()}"/>
-                </div>
-                <div class="input-group mb-3">
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">Encoding
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item a-encoding" href="#">WINDOWS-1251</a></li>
-                        <li><a class="dropdown-item a-encoding" href="#">ISO-8859-1</a></li>
-                        <li><a class="dropdown-item a-encoding" href="#">UTF-8</a></li>
-                    </ul>
-                    <input type="text" class="form-control" aria-label="File Encoding" id="encoding" name="encoding"
-                           th:value="${parameters.get('encoding').getValue()}" value="windows-1251">
-                </div>
-            </div>
+    <!-- *********************** ACTIVITY ***************** -->
+    <div class="panel panel-default">
+        <div class="panel-heading">Activity
         </div>
-
-        <!-- *********************** ACTIVITY ***************** -->
-        <div class="panel panel-default">
-            <div class="panel-heading">Activity
-            </div>
-            <div class="panel-body" id="activityPanel">
-                <div class="container">
-                    <div>
-                        <p>If your ADIF file doesn't have a MY_SOTA record, or a combined SIG/SIG_INFO record then
-                            specify one or more activity references here.</p>
-                        <p>If any activity has a location it will be determined automatically, with no need to specify a
-                            location override below.
-                        </p>
-                    </div>
-                    <div id="input-group activity">
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="" for="sotaRef">Summits on the Air <a href="https://www.sota.org.uk/" target="_blank" class="infolink" rel="noopener noreferrer">🛈</a></label>
-                            </div>
-                            <div class="col-4">
-                                <input class="" type="text" id="sotaRef" name="sotaRef"
-                                       th:value="${parameters.get('sotaRef').getValue()}" value=""/>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:text="${parameters.get('sotaRef').getValidationResult().getError()}"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="" for="wotaRef">Wainwrights on the Air <a href="https://www.wota.org.uk/" target="_blank" class="infolink" rel="noopener noreferrer">🛈</a></label>
-                            </div>
-                            <div class="col-4">
-                                <input class="" type="text" id="wotaRef" name="wotaRef"
-                                       th:value="${parameters.get('wotaRef').getValue()}" value=""/>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:text="${parameters.get('wotaRef').getValidationResult().getError()}"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="" for="hemaRef">HuMPs Excluding Marilyns Award <a href="http://hema.org.uk/" target="_blank" class="infolink" rel="noopener noreferrer">🛈</a></label>
-                            </div>
-                            <div class="col-4">
-                                <input class="" type="text" id="hemaRef" name="hemaRef"
-                                       th:value="${parameters.get('hemaRef').getValue()}" value=""/>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:text="${parameters.get('hemaRef').getValidationResult().getError()}"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="" for="potaRef">Parks on the Air <a href="https://parksontheair.com/" target="_blank" class="infolink" rel="noopener noreferrer">🛈</a></label>
-                            </div>
-                            <div class="col-4">
-                                <input class="" type="text" id="potaRef" name="potaRef"
-                                       th:value="${parameters.get('potaRef').getValue()}" value=""/>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:text="${parameters.get('potaRef').getValidationResult().getError()}"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="" for="wwffRef">World Wide Flora Fauna <a href="https://wwff.co/" target="_blank" class="infolink" rel="noopener noreferrer">🛈</a></label>
-                            </div>
-                            <div class="col-4">
-                                <input class="" type="text" id="wwffRef" name="wwffRef"
-                                       th:value="${parameters.get('wwffRef').getValue()}" value=""/>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:text="${parameters.get('wwffRef').getValidationResult().getError()}"></span>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="" for="cotaRef">World Castles Award <a href="http://www.wca.qrz.ru/ENG/main.html" class="infolink" target="_blank" rel="noopener noreferrer">🛈</a></label>
-                            </div>
-                            <div class="col-4">
-                                <input class="" type="text" id="cotaRef" name="cotaRef"
-                                       th:value="${parameters.get('cotaRef').getValue()}" value=""/>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:text="${parameters.get('cotaRef').getValidationResult().getError()}"></span>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="" for="lotaRef">International Lighthouse Lightship Weekend <a href="https://illw.net/" class="infolink" target="_blank" rel="noopener noreferrer">🛈</a></label>
-                            </div>
-                            <div class="col-4">
-                                <input class="" type="text" id="lotaRef" name="lotaRef"
-                                       th:value="${parameters.get('lotaRef').getValue()}" value=""/>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:text="${parameters.get('lotaRef').getValidationResult().getError()}"></span>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="" for="rotaRef">Railways on the Air <a href="https://rota.barac.org.uk/" class="infolink" target="_blank" rel="noopener noreferrer">🛈</a></label>
-                            </div>
-                            <div class="col-4">
-                                <input class="" type="text" id="rotaRef" name="rotaRef"
-                                       th:value="${parameters.get('rotaRef').getValue()}" value=""/>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:text="${parameters.get('rotaRef').getValidationResult().getError()}"></span>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="" for="iotaRef">Islands on the Air <a href="https://www.iota-world.org/" class="infolink" target="_blank" rel="noopener noreferrer">🛈</a></label>
-                            </div>
-                            <div class="col-4">
-                                <input class="" type="text" id="iotaRef" name="iotaRef"
-                                       th:value="${parameters.get('iotaRef').getValue()}" value=""/>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:text="${parameters.get('iotaRef').getValidationResult().getError()}"></span>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="" for="gmaRef">Global Mountain Activity <a href="https://www.cqgma.org/" class="infolink" target="_blank" rel="noopener noreferrer">🛈</a></label>
-                            </div>
-                            <div class="col-4">
-                                <input class="" type="text" id="gmaRef" name="gmaRef"
-                                       th:value="${parameters.get('gmaRef').getValue()}" value=""/>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:text="${parameters.get('gmaRef').getValidationResult().getError()}"></span>
-                            </div>
-                        </div>
-                    </div>
+        <div class="panel-body" id="activityPanel">
+            <div class="container">
+                <div>
+                    <p>If your ADIF file doesn't have a MY_SOTA record, or a combined SIG/SIG_INFO record then
+                        specify one or more activity references here.</p>
+                    <p>If any activity has a location it will be determined automatically, with no need to specify a
+                        location override below.
+                    </p>
                 </div>
-            </div>
-        </div>
-
-
-        <!-- *********************** LOCATION ***************** -->
-        <div class="panel panel-default">
-            <div class="panel-heading">Your Location</div>
-            <div class="panel-body" id="locationPanel">
-                <div class="container">
-                    <p>If your activity doesn't have a location, your ADIF input file doesn't have your Maidenhead
-                        location set, or you want to specify a more accurate location override it here.</p>
-                </div>
-                 <div class="container">
+                <div id="input-group activity">
                     <div class="row">
                         <div class="col-4">
-                            <label class="location" for="location">Location</label>
+                            <label class="" for="sotaRef">Summits on the Air <a href="https://www.sota.org.uk/" target="_blank" class="infolink" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
                         </div>
                         <div class="col-4">
-                            <input class="location locationPanel" type="text" id="location" name="location"
-                                   th:value="${parameters.get('location').getValue()}" value=""/>
+                            <input class="" type="text" id="sotaRef" name="sotaRef"
+                                   th:value="${parameters.get('sotaRef').getValue()}" value=""/>
+                        </div>
+                        <div class="col-md-auto">
+                            <span class="text-danger"
+                                  th:text="${parameters.get('sotaRef').getValidationResult().getError()}"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="" for="wotaRef">Wainwrights on the Air <a href="https://www.wota.org.uk/" target="_blank" class="infolink" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                        </div>
+                        <div class="col-4">
+                            <input class="" type="text" id="wotaRef" name="wotaRef"
+                                   th:value="${parameters.get('wotaRef').getValue()}" value=""/>
+                        </div>
+                        <div class="col-md-auto">
+                            <span class="text-danger"
+                                  th:text="${parameters.get('wotaRef').getValidationResult().getError()}"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="" for="hemaRef">HuMPs Excluding Marilyns Award <a href="http://hema.org.uk/" target="_blank" class="infolink" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                        </div>
+                        <div class="col-4">
+                            <input class="" type="text" id="hemaRef" name="hemaRef"
+                                   th:value="${parameters.get('hemaRef').getValue()}" value=""/>
+                        </div>
+                        <div class="col-md-auto">
+                            <span class="text-danger"
+                                  th:text="${parameters.get('hemaRef').getValidationResult().getError()}"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="" for="potaRef">Parks on the Air <a href="https://parksontheair.com/" target="_blank" class="infolink" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                        </div>
+                        <div class="col-4">
+                            <input class="" type="text" id="potaRef" name="potaRef"
+                                   th:value="${parameters.get('potaRef').getValue()}" value=""/>
+                        </div>
+                        <div class="col-md-auto">
+                            <span class="text-danger"
+                                  th:text="${parameters.get('potaRef').getValidationResult().getError()}"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="" for="wwffRef">World Wide Flora Fauna <a href="https://wwff.co/" target="_blank" class="infolink" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                        </div>
+                        <div class="col-4">
+                            <input class="" type="text" id="wwffRef" name="wwffRef"
+                                   th:value="${parameters.get('wwffRef').getValue()}" value=""/>
+                        </div>
+                        <div class="col-md-auto">
+                            <span class="text-danger"
+                                  th:text="${parameters.get('wwffRef').getValidationResult().getError()}"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="" for="cotaRef">World Castles Award <a href="http://www.wca.qrz.ru/ENG/main.html" class="infolink" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                        </div>
+                        <div class="col-4">
+                            <input class="" type="text" id="cotaRef" name="cotaRef"
+                                   th:value="${parameters.get('cotaRef').getValue()}" value=""/>
+                        </div>
+                        <div class="col-md-auto">
+                            <span class="text-danger"
+                                  th:text="${parameters.get('cotaRef').getValidationResult().getError()}"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="" for="lotaRef">International Lighthouse Lightship Weekend <a href="https://illw.net/" class="infolink" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                        </div>
+                        <div class="col-4">
+                            <input class="" type="text" id="lotaRef" name="lotaRef"
+                                   th:value="${parameters.get('lotaRef').getValue()}" value=""/>
+                        </div>
+                        <div class="col-md-auto">
+                            <span class="text-danger"
+                                  th:text="${parameters.get('lotaRef').getValidationResult().getError()}"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="" for="rotaRef">Railways on the Air <a href="https://rota.barac.org.uk/" class="infolink" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                        </div>
+                        <div class="col-4">
+                            <input class="" type="text" id="rotaRef" name="rotaRef"
+                                   th:value="${parameters.get('rotaRef').getValue()}" value=""/>
+                        </div>
+                        <div class="col-md-auto">
+                            <span class="text-danger"
+                                  th:text="${parameters.get('rotaRef').getValidationResult().getError()}"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="" for="iotaRef">Islands on the Air <a href="https://www.iota-world.org/" class="infolink" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                        </div>
+                        <div class="col-4">
+                            <input class="" type="text" id="iotaRef" name="iotaRef"
+                                   th:value="${parameters.get('iotaRef').getValue()}" value=""/>
+                        </div>
+                        <div class="col-md-auto">
+                            <span class="text-danger"
+                                  th:text="${parameters.get('iotaRef').getValidationResult().getError()}"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="" for="gmaRef">Global Mountain Activity <a href="https://www.cqgma.org/" class="infolink" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                        </div>
+                        <div class="col-4">
+                            <input class="" type="text" id="gmaRef" name="gmaRef"
+                                   th:value="${parameters.get('gmaRef').getValue()}" value=""/>
+                        </div>
+                        <div class="col-md-auto">
+                            <span class="text-danger"
+                                  th:text="${parameters.get('gmaRef').getValidationResult().getError()}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- *********************** LOCATION ***************** -->
+    <div class="panel panel-default">
+        <div class="panel-heading">Your Location</div>
+        <div class="panel-body" id="locationPanel">
+            <div class="container">
+                <p>If your activity doesn't have a location, your ADIF input file doesn't have your Maidenhead
+                    location set, or you want to specify a more accurate location override it here.</p>
+            </div>
+             <div class="container">
+                <div class="row">
+                    <div class="col-4">
+                        <label class="location" for="location">Location</label>
+                    </div>
+                    <div class="col-4">
+                        <input class="location locationPanel" type="text" id="location" name="location"
+                               th:value="${parameters.get('location').getValue()}" value=""/>
+                    </div>
+                    <div class="col-md-auto">
+                        <span class="text-danger"
+                              th:if="${parameters.get('location').getValidationResult().hasError()}"
+                              th:text="${parameters.get('location').getValidationResult().getError()}"></span>
+                        <span class="text-success"
+                              th:unless="${parameters.get('location').getValidationResult().hasError()}">(any valid format)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- *********************** OPTIONS ***************** -->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a data-bs-toggle="collapse" href="#optionsCollapse" aria-expanded="false"
+               aria-controls="optionsCollapse">
+                Options
+            </a>
+        </div>
+        <div class="collapse" id="optionsCollapse">
+            <div class="panel-body" id="optionsPanelBody">
+                <div class="container">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox"
+                               th:checked="${parameters.get('stationSubLabel').getValueAsBoolean()}"
+                               id="stationSubLabel" name="stationSubLabel">
+                        <label class="form-check-label" for="stationSubLabel">
+                            Station Sub-label (Band/Mode)
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox"
+                               th:checked="${parameters.get('localActivationSites').getValueAsBoolean()}"
+                               id="localActivationSites" name="localActivationSites">
+                        <label class="form-check-label" for="localActivationSites">
+                            Show Local Activation Sites
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-input" type="number"
+                               th:value="${parameters.get('localActivationSitesRadius').getValue()}" value="5000"
+                               id="localActivationSitesRadius" name="localActivationSitesRadius">
+                        <label class="form-label" for="localActivationSitesRadius">
+                            Local Activation Sites Radius (m)
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox"
+                               th:checked="${parameters.get('stripComment').getValueAsBoolean()}"
+                               id="stripComment" name="stripComment">
+                        <label class="form-check-label" for="stripComment">
+                            Strip processed fields from the ADIF comment
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox"
+                               th:checked="${parameters.get('contestResults').getValueAsBoolean()}"
+                               id="contestResultsLabel" name="contestResults">
+                        <label class="form-check-label" for="contestResultsLabel">
+                            Include Contest Results in ADIF file
+                        </label>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="" for="antenna">Antenna Type</label>
+                        </div>
+                        <div class="col-4">
+                            <select class="form-select" id="antenna" name="antenna">
+                                <option th:each="antenna : ${antennas}" th:value="${antenna}" th:text="${antenna}" th:selected="${antenna} == ${parameters.get('antenna').getValue()}"></option>
+                            </select>
                         </div>
                         <div class="col-4">
                             <span class="text-danger"
-                                  th:if="${parameters.get('location').getValidationResult().hasError()}"
-                                  th:text="${parameters.get('location').getValidationResult().getError()}"></span>
-                            <span class="text-success"
-                                  th:unless="${parameters.get('location').getValidationResult().hasError()}">(any valid format)</span>
+                                  th:text="${parameters.get('antenna').getValidationResult().getError()}"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="" for="satName">Satellite Name</label>
+                        </div>
+                        <div class="col-4">
+                            <select class="form-select" id="satName" name="satName">
+                                <option></option>
+                                <option th:each="satellite : ${satellites}" th:value="${satellite}" th:text="${satellite}" th:selected="${satellite} == ${parameters.get('satName').getValue()}"></option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <span class="text-danger"
+                                  th:text="${parameters.get('satName').getValidationResult().getError()}"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="" for="satMode">Satellite Mode</label>
+                        </div>
+                        <div class="col-4">
+                            <input class="" type="text" id="satMode" name="satMode"
+                                   th:value="${parameters.get('satMode').getValue()}" value=""/>
+                        </div>
+                        <div class="col-4">
+                            <span class="text-danger"
+                                  th:text="${parameters.get('satMode').getValidationResult().getError()}"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="" for="satBand">Satellite Band</label>
+                        </div>
+                        <div class="col-4">
+                            <input class="" type="text" id="satBand" name="satBand"
+                                   th:value="${parameters.get('satBand').getValue()}" value=""/>
+                        </div>
+                        <div class="col-4">
+                            <span class="text-danger"
+                                  th:text="${parameters.get('satBand').getValidationResult().getError()}"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox"
+                               th:checked="${parameters.get('sotaMicrowaveAwardComment').getValueAsBoolean()}"
+                               id="sotaMicrowaveAwardComment" name="sotaMicrowaveAwardComment">
+                        <label class="form-check-label" for="sotaMicrowaveAwardComment">
+                            Add SAT_NAME %QRA%MHL6% to comment field
+                        </label>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="" for="satBand">QSO Formatter Config</label>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select" id="printerConfig" name="printerConfig" aria-label="Printer Config">
+                                <option th:each="config : ${printJobConfigs}" th:value="${config.filename}" th:text="${config.name}" th:selected="${config.filename} == ${parameters.get('printerConfig').getValue()}"></option>
+                            </select>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- *********************** OPTIONS ***************** -->
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <a data-bs-toggle="collapse" href="#optionsCollapse" aria-expanded="false"
-                   aria-controls="optionsCollapse">
-                    Options
-                </a>
+    <!-- *********************** ERRORS ***************** -->
+    <div class="panel panel-default">
+        <div class="panel-heading">Errors</div>
+        <div class="container">
+            <input type="text" class="form-control" id="error" name="error" th:value="${error}">
+        </div>
+        <div class="container">
+            <span>Please contact <a href="mailto:mark@wickensonline.co.uk">mark@wickensonline.co.uk</a> if you are having issues.</span>
+        </div>
+    </div>
+
+    <!-- *********************** BUTTONS ***************** -->
+    <div class="container padding-bottom">
+        <div class="row">
+            <div class="col-md-auto">
+                <input id="submit" class="btn btn-success" type="submit" value="Process">
+                <a href="/upload?clear=true" class="btn btn-secondary" role="button" id="button-markdown-back">Clear Form</a>
             </div>
-            <div class="collapse" id="optionsCollapse">
-                <div class="panel-body" id="optionsPanelBody">
-                    <div class="container">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox"
-                                   th:checked="${parameters.get('stationSubLabel').getValueAsBoolean()}"
-                                   id="stationSubLabel" name="stationSubLabel">
-                            <label class="form-check-label" for="stationSubLabel">
-                                Station Sub-label (Band/Mode)
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox"
-                                   th:checked="${parameters.get('localActivationSites').getValueAsBoolean()}"
-                                   id="localActivationSites" name="localActivationSites">
-                            <label class="form-check-label" for="localActivationSites">
-                                Show Local Activation Sites
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-input" type="number"
-                                   th:value="${parameters.get('localActivationSitesRadius').getValue()}" value="5000"
-                                   id="localActivationSitesRadius" name="localActivationSitesRadius">
-                            <label class="form-label" for="localActivationSitesRadius">
-                                Local Activation Sites Radius (m)
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox"
-                                   th:checked="${parameters.get('stripComment').getValueAsBoolean()}"
-                                   id="stripComment" name="stripComment">
-                            <label class="form-check-label" for="stripComment">
-                                Strip processed fields from the ADIF comment
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox"
-                                   th:checked="${parameters.get('contestResults').getValueAsBoolean()}"
-                                   id="contestResultsLabel" name="contestResults">
-                            <label class="form-check-label" for="contestResultsLabel">
-                                Include Contest Results in ADIF file
-                            </label>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="" for="antenna">Antenna Type</label>
-                            </div>
-                            <div class="col-4">
-                                <select class="form-select" id="antenna" name="antenna">
-                                    <option th:each="antenna : ${antennas}" th:value="${antenna}" th:text="${antenna}" th:selected="${antenna} == ${parameters.get('antenna').getValue()}"></option>
-                                </select>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:text="${parameters.get('antenna').getValidationResult().getError()}"></span>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="" for="satName">Satellite Name</label>
-                            </div>
-                            <div class="col-4">
-                                <select class="form-select" id="satName" name="satName">
-                                    <option></option>
-                                    <option th:each="satellite : ${satellites}" th:value="${satellite}" th:text="${satellite}" th:selected="${satellite} == ${parameters.get('satName').getValue()}"></option>
-                                </select>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:text="${parameters.get('satName').getValidationResult().getError()}"></span>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="" for="satMode">Satellite Mode</label>
-                            </div>
-                            <div class="col-4">
-                                <input class="" type="text" id="satMode" name="satMode"
-                                       th:value="${parameters.get('satMode').getValue()}" value=""/>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:text="${parameters.get('satMode').getValidationResult().getError()}"></span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="" for="satBand">Satellite Band</label>
-                            </div>
-                            <div class="col-4">
-                                <input class="" type="text" id="satBand" name="satBand"
-                                       th:value="${parameters.get('satBand').getValue()}" value=""/>
-                            </div>
-                            <div class="col-4">
-                                <span class="text-danger"
-                                      th:text="${parameters.get('satBand').getValidationResult().getError()}"></span>
-                            </div>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox"
-                                   th:checked="${parameters.get('sotaMicrowaveAwardComment').getValueAsBoolean()}"
-                                   id="sotaMicrowaveAwardComment" name="sotaMicrowaveAwardComment">
-                            <label class="form-check-label" for="sotaMicrowaveAwardComment">
-                                Add SAT_NAME %QRA%MHL6% to comment field
-                            </label>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4">
-                                <label class="" for="satBand">QSO Formatter Config</label>
-                            </div>
-                            <div class="col-auto">
-                                <select class="form-select" id="printerConfig" name="printerConfig" aria-label="Printer Config">
-                                    <option th:each="config : ${printJobConfigs}" th:value="${config.filename}" th:text="${config.name}" th:selected="${config.filename} == ${parameters.get('printerConfig').getValue()}"></option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+            <div class="col">
+                <div id="spinner" class="spinner-border" role="status">
+                    <span class="sr-only"></span>
                 </div>
+            </div>
+            <div class="col-auto" style="font-family:monospace">
+                <span th:text="${pom_version}">x.x-SNAPSHOT</span>
+                <span> built </span>
+                <span th:text="${build_timestamp}">yyyy-MM-dd HH:mm</span>
+                <span> UTC</span>
             </div>
         </div>
-
-        <!-- *********************** ERRORS ***************** -->
-        <div class="panel panel-default">
-            <div class="panel-heading">Errors</div>
-            <div class="container">
-                <input type="text" class="form-control" id="error" name="error" th:value="${error}">
-            </div>
-            <div class="container">
-                <span>Please contact <a href="mailto:mark@wickensonline.co.uk">mark@wickensonline.co.uk</a> if you are having issues.</span>
-            </div>
-        </div>
-
-        <!-- *********************** BUTTONS ***************** -->
-        <div class="container padding-bottom">
-            <div class="row">
-                <div class="col">
-                    <input id="submit" class="btn btn-success" type="submit" value="Process">
-                    <a href="/upload?clear=true" class="btn btn-secondary" role="button" id="button-markdown-back">Clear Form</a>
-                </div>
-                <div class="col">
-                    <div id="spinner" class="spinner-border" role="status">
-                        <span class="sr-only"></span>
-                    </div>
-                </div>
-                <div class="col-auto" style="font-family:monospace">
-                    <span th:text="${pom_version}">x.x-SNAPSHOT</span>
-                    <span> built </span>
-                    <span th:text="${build_timestamp}">yyyy-MM-dd HH:mm</span>
-                    <span> UTC</span>
-                </div>
-            </div>
-        </div>
-        <input hidden id="optionsVisible" name="optionsVisible" type="text" th:value="${parameters.get('optionsVisible').getValue()}"/>
-    </form>
-
-</div>
+    </div>
+    <input hidden id="optionsVisible" name="optionsVisible" type="text" th:value="${parameters.get('optionsVisible').getValue()}"/>
+</form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
