@@ -68,13 +68,14 @@ public class TransformerService {
         Adif3Transformer transformer = configuration.getTransformer();
         ActivityDatabaseService summits = configuration.getActivityDatabases();
         String inBasename = FilenameUtils.getBaseName(originalFilename);
-        String in = String.format("%s%d-in-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, "adi");
+        String inExtension = FilenameUtils.getExtension(originalFilename);
+        String in = String.format("%s%d-in-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, inExtension);
         QsoFileReader reader = configuration.getReader(in);
         QsoFileWriter writer = configuration.getWriter();
 
         Adif3PrintFormatter formatter = configuration.getFormatter();
 
-        String out = String.format("%s%d-out-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, "adi");
+        String out = String.format("%s%d-out-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, inExtension);
         String kml = String.format("%s%d-out-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, "kml");
 
         logger.info(String.format("Running from: %s", new File(".").getAbsolutePath()));
@@ -91,7 +92,7 @@ public class TransformerService {
             try {
                 log = reader.read(in, control.getEncoding(), false);
             } catch (Exception e) {
-                String error = String.format("Error processing ADI file, caught exception:\n\t'%s'", e.getMessage());
+                String error = String.format("Error processing %s file, caught exception:\n\t'%s'", inExtension.toUpperCase(), e.getMessage());
                 logger.severe(error);
                 return new TransformResults(error);
             }

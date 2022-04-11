@@ -21,7 +21,7 @@ import uk.m0nom.adifproc.dxcc.DxccJsonReader;
 import uk.m0nom.adifproc.kml.KmlWriter;
 import uk.m0nom.adifproc.qsofile.QsoFileReader;
 import uk.m0nom.adifproc.qsofile.QsoFileWriter;
-import uk.m0nom.adifproc.satellite.ApSatellites;
+import uk.m0nom.adifproc.satellite.ApSatelliteService;
 import uk.m0nom.adifproc.sotacsv.SotaCsvFileReader;
 
 import java.util.logging.Logger;
@@ -38,7 +38,7 @@ public class ApplicationConfiguration implements ApplicationListener<Application
     private QsoFileReader reader;
     private QsoFileWriter writer;
     private KmlWriter kmlWriter;
-    private ApSatellites apSatellites;
+    private ApSatelliteService apSatelliteService;
     private AntennaService antennaService;
     private ActivityDatabaseService activityDatabases;
     private DxccEntities dxccEntities = null;
@@ -52,13 +52,13 @@ public class ApplicationConfiguration implements ApplicationListener<Application
 
     public ApplicationConfiguration(Adif3Transformer transformer,
                                     Adif3FileWriter writer,
-                                    ApSatellites apSatellites,
+                                    ApSatelliteService apSatelliteService,
                                     AntennaService antennaService,
                                     ActivityDatabaseService activityDatabases,
                                     Adif3PrintFormatter formatter) {
         this.transformer = transformer;
         this.writer = writer;
-        this.apSatellites = apSatellites;
+        this.apSatelliteService = apSatelliteService;
         this.antennaService = antennaService;
         this.activityDatabases = activityDatabases;
         this.formatter = formatter;

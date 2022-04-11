@@ -99,7 +99,7 @@ public class UploadController {
 		model.addAttribute("pom_version", pomVersion);
 
 		model.addAttribute("parameters", parameters.getParameters());
-		model.addAttribute("satellites", configuration.getApSatellites().getSatelliteNames());
+		model.addAttribute("satellites", configuration.getApSatelliteService().getSatelliteNames());
 		model.addAttribute("antennas", configuration.getAntennaService().getAntennaNames());
 		model.addAttribute("printJobConfigs", printJobConfigs.getConfigs());
 
@@ -187,7 +187,7 @@ public class UploadController {
 
 	private ModelMap addBasicErrorElementsIntoMap(ModelMap map, HtmlParameters parameters) {
 		map.put("parameters", parameters);
-		map.put("satellites", configuration.getApSatellites().getSatelliteNames());
+		map.put("satellites", configuration.getApSatelliteService().getSatelliteNames());
 		map.put("antennas", configuration.getAntennaService().getAntennaNames());
 		map.put("printJobConfigs", printJobConfigs.getConfigs());
 		return map;

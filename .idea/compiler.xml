@@ -11,7 +11,7 @@
         <module name="adif-processor" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="17">
+    <bytecodeTargetLevel target="11">
       <module name="adif-processor" target="11" />
       <module name="adifweb" target="11" />
       <module name="JavaAPIforKml" target="11" />
