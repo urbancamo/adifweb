@@ -21,7 +21,7 @@ import uk.m0nom.adifproc.dxcc.DxccJsonReader;
 import uk.m0nom.adifproc.kml.KmlWriter;
 import uk.m0nom.adifproc.qsofile.QsoFileReader;
 import uk.m0nom.adifproc.qsofile.QsoFileWriter;
-import uk.m0nom.adifproc.satellite.ApSatellites;
+import uk.m0nom.adifproc.satellite.ApSatelliteService;
 import uk.m0nom.adifproc.sotacsv.SotaCsvFileReader;
 
 import java.util.logging.Logger;
@@ -38,11 +38,13 @@ public class ApplicationConfiguration implements ApplicationListener<Application
     private QsoFileReader reader;
     private QsoFileWriter writer;
     private KmlWriter kmlWriter;
-    private ApSatellites apSatellites;
+    private ApSatelliteService apSatelliteService;
     private AntennaService antennaService;
     private ActivityDatabaseService activityDatabases;
     private DxccEntities dxccEntities = null;
     private Adif3PrintFormatter formatter;
+    private SotaCsvFileReader sotaCsvFileReader;
+    private Adif3FileReader adif3FileReader;
 
     private String qrzUsername;
     private String qrzPassword;
@@ -52,16 +54,20 @@ public class ApplicationConfiguration implements ApplicationListener<Application
 
     public ApplicationConfiguration(Adif3Transformer transformer,
                                     Adif3FileWriter writer,
-                                    ApSatellites apSatellites,
+                                    ApSatelliteService apSatelliteService,
                                     AntennaService antennaService,
                                     ActivityDatabaseService activityDatabases,
-                                    Adif3PrintFormatter formatter) {
+                                    Adif3PrintFormatter formatter,
+                                    SotaCsvFileReader sotaCsvFileReader,
+                                    Adif3FileReader adif3FileReader) {
         this.transformer = transformer;
         this.writer = writer;
-        this.apSatellites = apSatellites;
+        this.apSatelliteService = apSatelliteService;
         this.antennaService = antennaService;
         this.activityDatabases = activityDatabases;
         this.formatter = formatter;
+        this.sotaCsvFileReader = sotaCsvFileReader;
+        this.adif3FileReader = adif3FileReader;
     }
 
     @Override
@@ -91,8 +97,8 @@ public class ApplicationConfiguration implements ApplicationListener<Application
     public QsoFileReader getReader(String inputFile) {
         String extension = FilenameUtils.getExtension(inputFile).toLowerCase();
         if (StringUtils.equals(extension, "csv")) {
-            return new SotaCsvFileReader();
+            return sotaCsvFileReader;
         }
-        return new Adif3FileReader();
+        return adif3FileReader;
     }
 }

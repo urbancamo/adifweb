@@ -3,8 +3,9 @@ package uk.m0nom.adifweb.validation;
 import org.springframework.stereotype.Service;
 import uk.m0nom.adifproc.activity.ActivityDatabaseService;
 import uk.m0nom.adifproc.activity.ActivityType;
-import uk.m0nom.adifweb.domain.HtmlParameterType;
 import uk.m0nom.adifproc.coords.LocationParsingService;
+import uk.m0nom.adifproc.satellite.ApSatelliteService;
+import uk.m0nom.adifweb.domain.HtmlParameterType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +16,8 @@ public class ValidatorService {
     private final Map<HtmlParameterType, Validator> validators;
 
     public ValidatorService(ActivityDatabaseService activityDatabaseService,
-                            LocationParsingService locationParsingService) {
+                            LocationParsingService locationParsingService,
+                            ApSatelliteService apSatelliteService) {
         validators = new HashMap<>();
 
         addValidator(HtmlParameterType.ENCODING, new EncodingValidator());
@@ -37,7 +39,7 @@ public class ValidatorService {
         addValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, new DistanceValidator());
         addValidator(HtmlParameterType.ANTENNA, new AntennaValidator());
         addValidator(HtmlParameterType.CONTEST_RESULTS, new BooleanValidator());
-        addValidator(HtmlParameterType.SATELLITE_NAME, new SatelliteNameValidator());
+        addValidator(HtmlParameterType.SATELLITE_NAME, new SatelliteNameValidator(apSatelliteService));
         addValidator(HtmlParameterType.SATELLITE_MODE, new SatelliteModeValidator());
         addValidator(HtmlParameterType.SATELLITE_BAND, new SatelliteBandValidator());
         addValidator(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, new BooleanValidator());
