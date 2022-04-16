@@ -180,8 +180,10 @@ public class UploadController {
 		results.put("formattedQsoFile", transformResults.getFormattedQsoFile());
 		results.put("error", StringUtils.defaultIfEmpty(transformResults.getError(), "none"));
 
-		results.put("callsignsWithoutLocation", String.join(",", transformResults.getContactsWithoutLocation()));
-		results.put("callsignsWithDubiousLocation", String.join(",", transformResults.getContactsWithDubiousLocation()));
+		results.put("callsignsWithoutLocation", String.join(", ", transformResults.getContactsWithoutLocation()));
+		results.put("callsignsWithDubiousLocation", String.join(", ", transformResults.getContactsWithDubiousLocation()));
+		results.put("unknownSatellites", String.join(", ", transformResults.getUnknownSatellites()));
+		results.put("unknownSatellitePasses", String.join(", ", transformResults.getUnknownSatellitePasses()));
 		return results;
 	}
 

@@ -1,7 +1,6 @@
 package uk.m0nom.adifweb.transformer;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.marsik.ham.adif.Adif3;
 import org.springframework.core.io.Resource;
@@ -104,10 +103,7 @@ public class TransformerService {
                 return new TransformResults(e.getMessage());
             }
             if (control.getGenerateKml()) {
-                kmlWriter.write(control, kml, originalFilename, summits, qsos, results);
-                if (StringUtils.isNotEmpty(results.getError())) {
-                    kml = "";
-                }
+                kml = kmlWriter.write(control, kml, originalFilename, summits, qsos, results);
             }
             if (control.isContestResults()) {
                 // Contest Calculations
