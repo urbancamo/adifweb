@@ -89,8 +89,9 @@ public class FileService {
                 logger.severe(e.getMessage());
             } finally {
                 try {
-                    assert out != null;
-                    out.close();
+                    if (out != null) {
+                        out.close();
+                    }
                 } catch (IOException e) {
                     logger.severe(e.getMessage());
                 }
