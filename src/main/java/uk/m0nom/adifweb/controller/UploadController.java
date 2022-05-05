@@ -147,9 +147,15 @@ public class UploadController {
 				fileService.archiveParameters(control, parameters);
 				fileService.storeInputFile(control, uploadedFile, tmpPath);
 				var transformResults = transformerService.runTransformer(control, tmpPath, uploadedFile.getOriginalFilename());
-				fileService.archiveFile(transformResults.getAdiFile(), tmpPath, control.getEncoding());
-				fileService.archiveFile(transformResults.getKmlFile(), tmpPath, control.getEncoding());
-				fileService.archiveFile(transformResults.getFormattedQsoFile(), tmpPath, configuration.getFormatter().getPrintJobConfig().getOutEncoding());
+				if (transformResults.getAdiFile() != null) {
+					fileService.archiveFile(transformResults.getAdiFile(), tmpPath, control.getEncoding());
+				}
+				if (transformResults.getKmlFile() != null) {
+					fileService.archiveFile(transformResults.getKmlFile(), tmpPath, control.getEncoding());
+				}
+				if (transformResults.getFormattedQsoFile() != null) {
+					fileService.archiveFile(transformResults.getFormattedQsoFile(), tmpPath, configuration.getFormatter().getPrintJobConfig().getOutEncoding());
+				}
 
 				if (customFileLogHandler != null) {
 					String logFile = customFileLogHandler.getLogFile();
