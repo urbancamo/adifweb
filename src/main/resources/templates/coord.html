@@ -46,19 +46,21 @@
                         <li>Activity Reference in the SOTA/WOTA/LOTA/POTA/ROTA/COTA/WWFF programmes eg: G/LD-050</li>
                         <li>An OSGB36 British National Grid Reference, 4 or 5 digit, eg: SD 40891 97674</li>
                         <li>An OSGB36 British National Grid Easting/Northing, eg: E 332222, N 527763</li>
+                        <li>An Irish 5-Digit Grid Reference, eg: V 80388 84450</li>
                         <li>A street address for geocoding</li>
                     </ul>
                     <span>All the formats shown in the results can be used as a location format to convert.</span>
                 </div>
-                <div class="container">
-                    <div class="form-group mb-3" >
-                        <label for="location" class="form-label" style="font-weight:bold;">Location to find:</label>
-                        <input class="form-control" type="text" id="location" name="location" th:value="${location}" value=""/>
-                    </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <label for="location" class="form-label" style="font-weight:bold;">Location to find:</label>
+            <div class="container">
+                <div class="form-group mb-3" >
+                    <input class="form-control" type="text" id="location" name="location" th:value="${location}" value=""/>
                 </div>
             </div>
         </div>
-
         <div class="panel panel-default">
             <div class="panel-heading">Info</div>
             <div class="panel-body" id="infoPanel">
@@ -74,7 +76,7 @@
         <div class="panel panel-default">
             <div class="panel-body" id="resultPanel">
                 <div class="panel-heading">Results</div>
-                <div class="row">
+                <div class="container">
                     <div class="col-8">
                         <textarea rows = "20" cols="40" th:text="${results}" form="form" ></textarea>
                     </div>
