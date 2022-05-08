@@ -402,7 +402,10 @@
         <div class="row">
             <div class="col-md-auto">
                 <input id="submit" class="btn btn-success" type="submit" value="Process">
-                <a href="/upload?clear=true" class="btn btn-secondary" role="button" id="button-markdown-back">Clear Form</a>
+                <a href="#" class="btn btn-secondary" role="button" id="back">Back...</a>
+                <a href="/upload?clear=true" class="btn btn-secondary" role="button" id="button-markdown-upload">Clear Form</a>
+                <a href="https://urbancamo.github.io/adif-processor/adif-processor" class="btn btn-info" role="button" id="button-markdown-docs">Docs</a>
+                <a href="/coord" class="btn btn-primary" role="button" id="button-markdown-coord">Coord Converter</a>
             </div>
             <div class="col">
                 <div id="spinner" class="spinner-border" role="status">
@@ -428,6 +431,11 @@
 <script th:inline="javascript">
     $(function () {
         $('#spinner').hide();
+
+        $("#back").on("click", function(e){
+            e.preventDefault();
+            window.history.back();
+        });
 
         if ($('#optionsVisible').val() === 'on') {
             $('#optionsCollapse').show();

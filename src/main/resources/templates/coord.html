@@ -92,26 +92,27 @@
         </div>
 
         <div class="container padding-bottom">
-            <div class="row">
-                <div class="col">
-                    <input id="submit" type="submit" value="Convert">
-                </div>
-                <div class="col">
-                    <input id="googleMaps" type="button" value="Google Maps">
-                </div>
-                <div class="col">
-                    <input id="osm" type="button" value="Open Street Map">
-                </div>
-                <div class="col">
-                    <div id="spinner" class="spinner-border" role="status">
-                        <span class="sr-only"></span>
+                <div class="row">
+                    <div class="col-md-auto">
+                        <input id="submit" class="btn btn-success" type="submit" value="Convert">
+                        <a href="#" class="btn btn-secondary" role="button" id="back">Back...</a>
+                        <a href="https://urbancamo.github.io/adif-processor/coord" class="btn btn-info" role="button" id="button-markdown-docs">Docs</a>
+                        <a href="/upload" class="btn btn-primary" role="button" id="button-markdown-coord">Processor</a>
+
+                        <input id="googleMaps" class="btn btn-secondary" type="button" value="Google Maps">
+                        <input id="osm" class="btn btn-secondary" type="button" value="Open Street Map">
                     </div>
-                </div>
-                <div class="col-auto" style="font-family:monospace; text-align: right">
-                    <span th:text="${pom_version}">x.x-SNAPSHOT</span>
-                    <span> built </span>
-                    <span th:text="${build_timestamp}">yyyy-MM-dd HH:mm</span>
-                    <span> UTC</span>
+                    <div class="col">
+                        <div id="spinner" class="spinner-border" role="status">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                    <div class="col-auto" style="font-family:monospace; text-align: right">
+                        <span th:text="${pom_version}">x.x-SNAPSHOT</span>
+                        <span> built </span>
+                        <span th:text="${build_timestamp}">yyyy-MM-dd HH:mm</span>
+                        <span> UTC</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -149,6 +150,11 @@
                 return false;
             });
         }
+
+        $("#back").on("click", function(e){
+            e.preventDefault();
+            window.history.back();
+        });
 
         $('#form').submit(function () {
             $('#submit').prop('disabled', true);
