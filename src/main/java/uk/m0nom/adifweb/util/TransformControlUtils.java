@@ -2,10 +2,10 @@ package uk.m0nom.adifweb.util;
 
 import uk.m0nom.adifproc.activity.ActivityType;
 import uk.m0nom.adifproc.adif3.control.TransformControl;
+import uk.m0nom.adifproc.icons.IconResource;
 import uk.m0nom.adifweb.ApplicationConfiguration;
 import uk.m0nom.adifweb.domain.HtmlParameterType;
 import uk.m0nom.adifweb.domain.HtmlParameters;
-import uk.m0nom.adifproc.icons.IconResource;
 
 public class TransformControlUtils {
     public static TransformControl createTransformControlFromParameters(ApplicationConfiguration configuration, HtmlParameters parameters) {
@@ -44,6 +44,7 @@ public class TransformControlUtils {
         control.setIcon(IconResource.PORTABLE_ICON_NAME, IconResource.PORTABLE_DEFAULT_ICON_URL);
         control.setIcon(IconResource.MOBILE_ICON_NAME, IconResource.MOBILE_DEFAULT_ICON_URL);
         control.setIcon(IconResource.MARITIME_MOBILE_ICON_NAME, IconResource.MARITIME_DEFAULT_ICON_URL);
+        control.setIcon(IconResource.AERONAUTICAL_MOBILE_ICON_NAME, IconResource.AERONAUTICAL_DEFAULT_ICON_URL);
 
         control.setIcon(ActivityType.POTA.getActivityName(), IconResource.POTA_DEFAULT_ICON_URL);
         control.setIcon(ActivityType.SOTA.getActivityName(), IconResource.SOTA_DEFAULT_ICON_URL);
