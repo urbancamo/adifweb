@@ -148,10 +148,10 @@ public class UploadController {
 				fileService.storeInputFile(control, uploadedFile, tmpPath);
 				var transformResults = transformerService.runTransformer(control, tmpPath, uploadedFile.getOriginalFilename());
 				if (transformResults.getAdiFile() != null) {
-					fileService.archiveFile(transformResults.getAdiFile(), tmpPath, control.getEncoding());
+					fileService.archiveFile(transformResults.getAdiFile(), tmpPath, StandardCharsets.UTF_8.name());
 				}
 				if (transformResults.getKmlFile() != null) {
-					fileService.archiveFile(transformResults.getKmlFile(), tmpPath, control.getEncoding());
+					fileService.archiveFile(transformResults.getKmlFile(), tmpPath, StandardCharsets.UTF_8.name());
 				}
 				if (transformResults.getFormattedQsoFile() != null) {
 					fileService.archiveFile(transformResults.getFormattedQsoFile(), tmpPath, configuration.getFormatter().getPrintJobConfig().getOutEncoding());
