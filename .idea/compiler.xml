@@ -9,9 +9,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="adifweb" />
         <module name="adif-processor" />
+        <module name="adif" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="11">
+      <module name="adif" target="11" />
       <module name="adif-processor" target="11" />
       <module name="adifweb" target="11" />
       <module name="JavaAPIforKml" target="11" />
