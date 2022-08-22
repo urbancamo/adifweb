@@ -10,7 +10,7 @@ import uk.m0nom.adifweb.domain.HtmlParameters;
 public class TransformControlUtils {
     public static TransformControl createTransformControlFromParameters(ApplicationConfiguration configuration, HtmlParameters parameters) {
         TransformControl control = new TransformControl();
-        control.setMarkdown(true);
+        control.setFormattedOutput(true);
         control.setGenerateKml(true);
 
         control.setKmlS2s(true);
