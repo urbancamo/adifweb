@@ -18,12 +18,14 @@ import uk.m0nom.adifproc.adif3.print.Adif3PrintFormatter;
 import uk.m0nom.adifproc.antenna.AntennaService;
 import uk.m0nom.adifproc.dxcc.DxccEntities;
 import uk.m0nom.adifproc.dxcc.DxccJsonReader;
+import uk.m0nom.adifproc.dxcc.JsonDxccEntities;
 import uk.m0nom.adifproc.kml.KmlWriter;
 import uk.m0nom.adifproc.qsofile.QsoFileReader;
 import uk.m0nom.adifproc.qsofile.QsoFileWriter;
 import uk.m0nom.adifproc.satellite.ApSatelliteService;
 import uk.m0nom.adifproc.sotacsv.SotaCsvFileReader;
 
+import java.text.ParseException;
 import java.util.logging.Logger;
 
 @Configuration
@@ -75,7 +77,13 @@ public class ApplicationConfiguration implements ApplicationListener<Application
         logger.info("ApplicationStartupListener#onApplicationEvent()");
 
         activityDatabases.loadData();
-        dxccEntities = new DxccJsonReader().read();
+        JsonDxccEntities jsonDxccEntities = new DxccJsonReader().read();
+        dxccEntities = new DxccEntities();
+        try {
+            dxccEntities.setup(jsonDxccEntities);
+        } catch (ParseException e) {
+            logger.severe(e.getMessage());
+        }
 
         qrzUsername = setFromEnv("QRZ_USERNAME");
         qrzPassword = setFromEnv("QRZ_PASSWORD");
