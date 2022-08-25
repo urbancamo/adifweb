@@ -27,9 +27,10 @@ public class PrintJobConfigs {
         addConfig("adif-printer-132-ukac.yaml");
         addConfig("adif-printer-158.yaml");
         addConfig("adif-printer-158-utf8.yaml");
+        addConfig("adif-printer-medium-md.yaml");
         addConfig("adif-printer-196.yaml");
         addConfig("adif-printer-196-utf8.yaml");
-
+        addConfig("adif-printer-wide-md.yaml");
     }
 
     private void addConfig(String filename) {

@@ -1,5 +1,5 @@
 printJob:
-  name:         'Default (132 column UTF-8 Markdown)'
+  name:         'Wide Markdown'
   inEncoding:   iso-8859-1
   outEncoding:  utf-8
   startCommand: ''
@@ -12,7 +12,7 @@ page:
   headerLine:   'COLUMN_NAMES'
   headerSeparator: '-'
   pageHeight:   9999
-  pageWidth:    132
+  pageWidth:    512
   topMargin:    1
   headerMargin: 0
   bottomMargin: 1
@@ -24,7 +24,7 @@ columns:
       adif: 'QSO_DATE'
       header: 'DATE'
       length: 10
-      format: 'YYYY.MM.dd'
+      format: 'YYYY-MM-dd'
       align:  left
   - column:
       adif: 'TIME_ON'
@@ -32,10 +32,15 @@ columns:
       length: 5
       format: 'HH:mm'
       align: left
+#  - column:
+#      adif: 'STATION_CALLSIGN'
+#      header: 'MY CALL'
+#      length: 10
+#      align: left
   - column:
       adif: 'CALL'
-      header: 'CALLSIGN'
-      length: 12
+      header: 'THEIR CALL'
+      length: 60
       align: left
   - column:
       adif: 'FREQ'
@@ -44,19 +49,9 @@ columns:
       format: '%8.3f'
       align: right
   - column:
-      adif: 'BAND'
-      header: 'BAND'
-      length: 5
-      align: right
-  - column:
       adif: 'MODE'
       header: 'MODE'
       length: 4
-      align: right
-  - column:
-      adif: 'RST_SENT'
-      header: 'RST'
-      length: 3
       align: right
   - column:
       adif: 'RST_RCVD'
@@ -64,34 +59,41 @@ columns:
       length: 3
       align: right
   - column:
-      adif: 'MY_SOTA_REF'
-      header: 'SOTA-TX'
-      length: 9
-  - column:
-      adif: 'NAME'
-      header: 'OPERATOR'
-      length: 19
+      adif: 'RST_SENT'
+      header: 'RST'
+      length: 3
+      align: right
   - column:
       adif: 'SIG'
       header: 'SIG'
-      length: 4
+      length: 6
   - column:
       adif: 'SIG_INFO'
-      header: 'REF'
-      length: 10
+      header: 'INFO'
+      length: 80
   - column:
-      adif: 'COMMENT'
-      header: 'COMMENT'
-      length: 28
+      adif: 'NAME'
+      header: 'OPERATOR'
+      length: 26
+  - column:
+      adif: 'COUNTRY'
+      header: 'COUNTRY'
+      length: 16
   - column:
       adif: 'GRIDSQUARE'
       header: 'MHL'
       length: 6
-#     TIME_ON: 4
-#     STATION_CALLSIGN: 10,left
-#     BAND: 3
-#     MODE: 3
-#     FREQ: 8,decimal
-#     RST_SENT: 3
-#     RST_RCVD: 3
-#     COMMENT: 60
+  - column:
+      adif: 'DISTANCE'
+      header: 'DIST'
+      length: 5
+      format: '%4.0f'
+      align: right
+  - column:
+      adif: 'QTH'
+      header: 'QTH'
+      length: 31
+  - column:
+      adif: 'COMMENT'
+      header: 'COMMENT'
+      length: 60

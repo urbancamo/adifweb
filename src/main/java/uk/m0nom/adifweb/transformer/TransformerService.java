@@ -112,7 +112,7 @@ public class TransformerService {
             logger.info(String.format("Writing QSO log file %s with encoding %s", out, control.getEncoding()));
             writer.write(out, control.getEncoding(), log);
 
-            if (control.isMarkdown()) {
+            if (control.isFormattedOutput()) {
                 formatter.getPrintJobConfig().configure(adifPrinterConfigFilename, adifPrinterConfig.getInputStream());
                 String markdown = String.format("%s%d-out-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, formatter.getPrintJobConfig().getFilenameExtension());
                 BufferedWriter markdownWriter = null;
@@ -126,7 +126,7 @@ public class TransformerService {
                     }
                     if (formattedQsoFile.createNewFile()) {
                         logger.info(String.format("Writing QSO log to: %s", markdown));
-                        StringBuilder sb = formatter.format(log);
+                        StringBuilder sb = formatter.format(qsos);
                         markdownWriter = Files.newBufferedWriter(formattedQsoFile.toPath(), Charset.forName(formatter.getPrintJobConfig().getOutEncoding()), StandardOpenOption.WRITE);
                         markdownWriter.write(sb.toString());
 

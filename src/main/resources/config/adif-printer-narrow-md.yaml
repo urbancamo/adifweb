@@ -1,5 +1,5 @@
 printJob:
-  name:         'SOTA Markdown'
+  name:         'Narrow Markdown'
   inEncoding:   iso-8859-1
   outEncoding:  utf-8
   startCommand: ''
@@ -21,6 +21,12 @@ page:
   columnSeparator: '|'
 columns:
   - column:
+      adif: 'QSO_DATE'
+      header: 'DATE'
+      length: 10
+      format: 'YYYY.MM.dd'
+      align:  left
+  - column:
       adif: 'TIME_ON'
       header: 'TIME'
       length: 5
@@ -32,6 +38,12 @@ columns:
       length: 60
       align: left
   - column:
+      adif: 'FREQ'
+      header: 'FREQ'
+      length: 8
+      format: '%8.3f'
+      align: right
+  - column:
       adif: 'BAND'
       header: 'BAND'
       length: 5
@@ -39,7 +51,7 @@ columns:
   - column:
       adif: 'MODE'
       header: 'MODE'
-      length: 5
+      length: 4
       align: right
   - column:
       adif: 'RST_SENT'
@@ -52,14 +64,34 @@ columns:
       length: 3
       align: right
   - column:
-      adif: 'FIRSTNAME'
+      adif: 'MY_SOTA_REF'
+      header: 'SOTA-TX'
+      length: 9
+  - column:
+      adif: 'NAME'
       header: 'OPERATOR'
-      length: 12
+      length: 19
   - column:
       adif: 'SIG'
       header: 'SIG'
-      length: 5
+      length: 4
   - column:
       adif: 'SIG_INFO'
       header: 'REF'
       length: 60
+  - column:
+      adif: 'COMMENT'
+      header: 'COMMENT'
+      length: 28
+  - column:
+      adif: 'GRIDSQUARE'
+      header: 'MHL'
+      length: 6
+#     TIME_ON: 4
+#     STATION_CALLSIGN: 10,left
+#     BAND: 3
+#     MODE: 3
+#     FREQ: 8,decimal
+#     RST_SENT: 3
+#     RST_RCVD: 3
+#     COMMENT: 60
