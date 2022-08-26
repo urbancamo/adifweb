@@ -62,4 +62,4 @@ columns:
   - column:
       adif: 'SIG_INFO'
       header: 'REF'
-      length: 60
+      length: 100
