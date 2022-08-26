@@ -16,9 +16,7 @@ import uk.m0nom.adifproc.adif3.io.Adif3FileReader;
 import uk.m0nom.adifproc.adif3.io.Adif3FileWriter;
 import uk.m0nom.adifproc.adif3.print.Adif3PrintFormatter;
 import uk.m0nom.adifproc.antenna.AntennaService;
-import uk.m0nom.adifproc.dxcc.DxccEntities;
-import uk.m0nom.adifproc.dxcc.DxccJsonReader;
-import uk.m0nom.adifproc.dxcc.JsonDxccEntities;
+import uk.m0nom.adifproc.dxcc.*;
 import uk.m0nom.adifproc.kml.KmlWriter;
 import uk.m0nom.adifproc.qsofile.QsoFileReader;
 import uk.m0nom.adifproc.qsofile.QsoFileWriter;
@@ -44,6 +42,7 @@ public class ApplicationConfiguration implements ApplicationListener<Application
     private AntennaService antennaService;
     private ActivityDatabaseService activityDatabases;
     private DxccEntities dxccEntities = null;
+    private Countries countries;
     private Adif3PrintFormatter formatter;
     private SotaCsvFileReader sotaCsvFileReader;
     private Adif3FileReader adif3FileReader;
@@ -84,6 +83,8 @@ public class ApplicationConfiguration implements ApplicationListener<Application
         } catch (ParseException e) {
             logger.severe(e.getMessage());
         }
+        countries = new CountriesJsonReader().read();
+        countries.setup();
 
         qrzUsername = setFromEnv("QRZ_USERNAME");
         qrzPassword = setFromEnv("QRZ_PASSWORD");

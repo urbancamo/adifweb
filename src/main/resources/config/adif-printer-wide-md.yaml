@@ -70,7 +70,7 @@ columns:
   - column:
       adif: 'SIG_INFO'
       header: 'INFO'
-      length: 80
+      length: 100
   - column:
       adif: 'NAME'
       header: 'OPERATOR'
