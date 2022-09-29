@@ -272,6 +272,13 @@
                             Station Sub-label (Band/Mode)
                         </label>
                     </div>
+                    <input class="form-check-input" type="checkbox"
+                           th:checked="${parameters.get('activitySubLabel').getValueAsBoolean()}"
+                           id="activitySubLabel" name="activitySubLabel">
+                    <label class="form-check-label" for="activitySubLabel">
+                        Activity Sub-label
+                    </label>
+                </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox"
                                th:checked="${parameters.get('localActivationSites').getValueAsBoolean()}"

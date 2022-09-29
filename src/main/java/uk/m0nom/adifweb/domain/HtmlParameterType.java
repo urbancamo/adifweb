@@ -18,6 +18,7 @@ public enum HtmlParameterType {
     IOTA_REF("iotaRef"),
     ENCODING("encoding"),
     STATION_SUBLABEL("stationSubLabel"),
+    ACTIVITY_SUBLABEL("activitySubLabel"),
     LOCAL_ACTIVATION_SITES("localActivationSites"),
     LOCAL_ACTIVATION_SITES_RADIUS("localActivationSitesRadius"),
     ANTENNA("antenna"),

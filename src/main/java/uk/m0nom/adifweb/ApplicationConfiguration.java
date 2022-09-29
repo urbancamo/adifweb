@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.ComponentScan;
@@ -23,6 +24,9 @@ import uk.m0nom.adifproc.qsofile.QsoFileWriter;
 import uk.m0nom.adifproc.satellite.ApSatelliteService;
 import uk.m0nom.adifproc.sotacsv.SotaCsvFileReader;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.text.ParseException;
 import java.util.logging.Logger;
 
@@ -52,6 +56,10 @@ public class ApplicationConfiguration implements ApplicationListener<Application
 
     private String awsAccessKey;
     private String awsSecretKey;
+
+    @Value("${server.port}")
+    private int serverPort;
+
 
     public ApplicationConfiguration(Adif3Transformer transformer,
                                     Adif3FileWriter writer,
@@ -92,9 +100,25 @@ public class ApplicationConfiguration implements ApplicationListener<Application
         awsAccessKey = setFromEnv("AWS_ACCESS_KEY");
         awsSecretKey = setFromEnv("AWS_SECRET_KEY");
 
+        if (StringUtils.isEmpty(awsAccessKey)) {
+            String localIpAddress = getLocalIpAddressOfThisMachine();
+            if (localIpAddress != null) {
+                logger.info(String.format("Access locally with: http://localhost:%s or http://%s:%s", serverPort, localIpAddress, serverPort));
+            } else {
+                logger.info(String.format("Access locally with: http://localhost:%s", serverPort));
+            }
+        }
         logger.info("Initialising complete, ready to process requests...");
     }
 
+    private String getLocalIpAddressOfThisMachine() {
+        try (Socket socket = new Socket()) {
+            socket.connect(new InetSocketAddress("google.com", 80));
+            return socket.getLocalAddress().getHostAddress();
+        } catch (IOException e) {
+            return null;
+        }
+    }
     private String setFromEnv(String envVar) {
         String value = System.getenv(envVar);
         if (StringUtils.isNotEmpty(value)) {
