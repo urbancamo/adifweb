@@ -63,6 +63,7 @@ public class TransformControlUtils {
         control.setIcon(IconResource.SATELLITE_TRACK_ICON_NAME, IconResource.SATELLITE_TRACK_DEFAULT_ICON_URL);
 
         control.setKmlShowStationSubLabel(null != parameters.get(HtmlParameterType.STATION_SUBLABEL.getParameterName()).getValue());
+        control.setKmlShowActivitySubLabel(null != parameters.get(HtmlParameterType.ACTIVITY_SUBLABEL.getParameterName()).getValue());
         control.setKmlShowLocalActivationSites(parameters.get(HtmlParameterType.LOCAL_ACTIVATION_SITES.getParameterName()).getValue() != null);
         control.setKmlLocalActivationSitesRadius(Double.valueOf(parameters.get(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS.getParameterName()).getValue()));
         control.setAntenna(configuration.getAntennaService().getAntenna(parameters.get(HtmlParameterType.ANTENNA.getParameterName()).getValue()));

@@ -38,6 +38,7 @@ public class HtmlParameters {
         addParameter(new HtmlParameter(HtmlParameterType.ROTA_REF, "", validatorService.getValidator(HtmlParameterType.ROTA_REF)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.IOTA_REF, "", validatorService.getValidator(HtmlParameterType.IOTA_REF)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.STATION_SUBLABEL, BooleanValidator.TRUE, validatorService.getValidator(HtmlParameterType.STATION_SUBLABEL)), parameters);
+        addParameter(new HtmlParameter(HtmlParameterType.ACTIVITY_SUBLABEL, BooleanValidator.TRUE, validatorService.getValidator(HtmlParameterType.ACTIVITY_SUBLABEL)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES, "", validatorService.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, KmlLocalActivities.DEFAULT_RADIUS, validatorService.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.ANTENNA, "Vertical", validatorService.getValidator(HtmlParameterType.ANTENNA)), parameters);

@@ -35,6 +35,7 @@ public class ValidatorService {
         addValidator(HtmlParameterType.ROTA_REF, new ActivityValidator(activityDatabaseService, ActivityType.ROTA));
         addValidator(HtmlParameterType.IOTA_REF, new ActivityValidator(activityDatabaseService, ActivityType.IOTA));
         addValidator(HtmlParameterType.STATION_SUBLABEL, new BooleanValidator());
+        addValidator(HtmlParameterType.ACTIVITY_SUBLABEL, new BooleanValidator());
         addValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES, new BooleanValidator());
         addValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES_RADIUS, new DistanceValidator());
         addValidator(HtmlParameterType.ANTENNA, new AntennaValidator());
