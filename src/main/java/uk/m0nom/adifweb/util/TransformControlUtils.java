@@ -37,6 +37,7 @@ public class TransformControlUtils {
         control.setKmlContactColourByBand(false);
         control.setKmlContactShadow(true);
         control.setKmlS2sContactLineStyle("brick_red:50:2");
+        control.setKmlInternetContactLineStyle("cadmium_yellow:50:1");
         control.setKmlSatelliteTrackLineStyle("brick_red:50:2");
 
         control.setKmlContactLineStyle("baby_blue:50:2");
