@@ -11,6 +11,7 @@ public class TransformControlUtils {
     public static TransformControl createTransformControlFromParameters(ApplicationConfiguration configuration, HtmlParameters parameters) {
         TransformControl control = new TransformControl();
         control.setFormattedOutput(true);
+        control.setQslLabels(true);
         control.setGenerateKml(true);
 
         control.setKmlS2s(true);

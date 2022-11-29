@@ -155,7 +155,10 @@ public class UploadController {
 					fileService.archiveFile(transformResults.getKmlFile(), tmpPath, StandardCharsets.UTF_8.name());
 				}
 				if (transformResults.getFormattedQsoFile() != null) {
-					fileService.archiveFile(transformResults.getFormattedQsoFile(), tmpPath, configuration.getFormatter().getPrintJobConfig().getOutEncoding());
+					fileService.archiveFile(transformResults.getFormattedQsoFile(), tmpPath, configuration.getPrintFormatter().getPrintJobConfig().getOutEncoding());
+				}
+				if (transformResults.getQslLabelsFile() != null) {
+					fileService.archiveFile(transformResults.getQslLabelsFile(), tmpPath, StandardCharsets.UTF_8.name());
 				}
 
 				if (customFileLogHandler != null) {
@@ -185,6 +188,7 @@ public class UploadController {
 		results.put("adiFile", transformResults.getAdiFile());
 		results.put("kmlFile", transformResults.getKmlFile());
 		results.put("formattedQsoFile", transformResults.getFormattedQsoFile());
+		results.put("qslLabelsFile", transformResults.getQslLabelsFile());
 		results.put("error", StringUtils.defaultIfEmpty(transformResults.getError(), "none"));
 
 		results.put("callsignsWithoutLocation", String.join(", ", transformResults.getContactsWithoutLocation()));

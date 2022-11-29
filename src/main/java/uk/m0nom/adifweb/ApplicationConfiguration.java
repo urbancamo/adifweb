@@ -15,6 +15,7 @@ import uk.m0nom.adifproc.activity.ActivityDatabaseService;
 import uk.m0nom.adifproc.adif3.Adif3Transformer;
 import uk.m0nom.adifproc.adif3.io.Adif3FileReader;
 import uk.m0nom.adifproc.adif3.io.Adif3FileWriter;
+import uk.m0nom.adifproc.adif3.label.Adif3LabelFormatter;
 import uk.m0nom.adifproc.adif3.print.Adif3PrintFormatter;
 import uk.m0nom.adifproc.antenna.AntennaService;
 import uk.m0nom.adifproc.dxcc.*;
@@ -47,7 +48,8 @@ public class ApplicationConfiguration implements ApplicationListener<Application
     private ActivityDatabaseService activityDatabases;
     private DxccEntities dxccEntities = null;
     private Countries countries;
-    private Adif3PrintFormatter formatter;
+    private Adif3PrintFormatter printFormatter;
+    private Adif3LabelFormatter labelFormatter;
     private SotaCsvFileReader sotaCsvFileReader;
     private Adif3FileReader adif3FileReader;
 
@@ -66,7 +68,8 @@ public class ApplicationConfiguration implements ApplicationListener<Application
                                     ApSatelliteService apSatelliteService,
                                     AntennaService antennaService,
                                     ActivityDatabaseService activityDatabases,
-                                    Adif3PrintFormatter formatter,
+                                    Adif3PrintFormatter printFormatter,
+                                    Adif3LabelFormatter labelFormatter,
                                     SotaCsvFileReader sotaCsvFileReader,
                                     Adif3FileReader adif3FileReader) {
         this.transformer = transformer;
@@ -74,7 +77,8 @@ public class ApplicationConfiguration implements ApplicationListener<Application
         this.apSatelliteService = apSatelliteService;
         this.antennaService = antennaService;
         this.activityDatabases = activityDatabases;
-        this.formatter = formatter;
+        this.printFormatter = printFormatter;
+        this.labelFormatter = labelFormatter;
         this.sotaCsvFileReader = sotaCsvFileReader;
         this.adif3FileReader = adif3FileReader;
     }
