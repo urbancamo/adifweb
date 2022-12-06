@@ -193,6 +193,7 @@ public class UploadController {
 
 		results.put("callsignsWithoutLocation", String.join(", ", transformResults.getContactsWithoutLocation()));
 		results.put("callsignsWithDubiousLocation", String.join(", ", transformResults.getContactsWithDubiousLocation()));
+		results.put("qslCallsigns", String.join(", ", transformResults.getQslContacts()));
 		results.put("unknownSatellites", String.join(", ", transformResults.getUnknownSatellites()));
 		results.put("unknownSatellitePasses", String.join(", ", transformResults.getUnknownSatellitePasses()));
 		return results;

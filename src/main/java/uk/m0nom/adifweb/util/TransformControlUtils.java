@@ -73,7 +73,7 @@ public class TransformControlUtils {
         control.setQrzUsername(configuration.getQrzUsername());
         control.setQrzPassword(configuration.getQrzPassword());
         control.setPrintConfigFile(parameters.get(HtmlParameterType.PRINTER_CONFIG.getParameterName()).getValue());
-
+        control.setDontQslCallsigns(parameters.get(HtmlParameterType.DONT_QSL_CALLSIGNS.getParameterName()).getValue());
         return control;
     }
 }

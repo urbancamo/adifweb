@@ -289,10 +289,10 @@
                     </div>
                     <div class="form-check">
                         <input class="form-input" type="number"
-                               th:value="${parameters.get('localActivationSitesRadius').getValue()}" value="5000"
+                               th:value="${parameters.get('localActivationSitesRadius').getValue()}" value="5"
                                id="localActivationSitesRadius" name="localActivationSitesRadius">
                         <label class="form-label" for="localActivationSitesRadius">
-                            Local Activation Sites Radius (m)
+                            Local Activation Sites Radius (km)
                         </label>
                     </div>
                     <div class="form-check">
@@ -389,6 +389,21 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="" for="satMode">Don't QSL Callsign List</label>
+                        </div>
+                        <div class="col-4">
+                            <input class="" type="text" id="dontQsl" name="dontQsl" style="width: 100%;"
+                                   th:value="${parameters.get('dontQsl').getValue()}" value=""/>
+                        </div>
+                        <div class="col-auto">
+                            <span class="text-danger"
+                                  th:text="${parameters.get('dontQsl').getValidationResult().getError()}"></span>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

@@ -12,6 +12,7 @@ import uk.m0nom.adifproc.adif3.UnsupportedHeaderException;
 import uk.m0nom.adifproc.adif3.contacts.Qsos;
 import uk.m0nom.adifproc.adif3.control.TransformControl;
 import uk.m0nom.adifproc.adif3.label.Adif3LabelFormatter;
+import uk.m0nom.adifproc.adif3.label.Adif3LabelFormatterResult;
 import uk.m0nom.adifproc.adif3.print.Adif3PrintFormatter;
 import uk.m0nom.adifproc.adif3.transform.TransformResults;
 import uk.m0nom.adifproc.contest.ContestResultsCalculator;
@@ -156,11 +157,12 @@ public class TransformerService {
                     }
                     if (qslLabelsFile.createNewFile()) {
                         logger.info(String.format("Writing QSL labels to: %s", labels));
-                        StringBuilder sb = labelFormatter.format(qsos);
+                        Adif3LabelFormatterResult qslResult = labelFormatter.format(qsos, control.getDontQslCallsigns());
                         qslLabelsWriter = Files.newBufferedWriter(qslLabelsFile.toPath(), Charset.forName(printFormatter.getPrintJobConfig().getOutEncoding()), StandardOpenOption.WRITE);
-                        qslLabelsWriter.write(sb.toString());
+                        qslLabelsWriter.write(qslResult.getLabels());
 
                         results.setQslLabelsFile(FilenameUtils.getName(labels));
+                        results.setQslContacts(qslResult.getCallsigns());
                     } else {
                         logger.severe(String.format("Error creating QSL Labels file %s, check permissions?", labels));
                     }
