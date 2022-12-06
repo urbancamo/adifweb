@@ -6,7 +6,7 @@ public class DistanceValidator implements Validator {
     private final static Double MAX_DISTANCE = 1000.0;
     public final static String NAN = "Distance not a number";
     public final static String UNDER_RANGE = "Distance must be > 0.0";
-    public final static String OVER_RANGE = String.format("Distance must be <= %d",  MAX_DISTANCE);
+    public final static String OVER_RANGE = String.format("Distance must be <= %.0f",  MAX_DISTANCE);
 
     @Override
     public ValidationResult isValid(String value)
