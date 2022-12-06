@@ -54,6 +54,10 @@
                     <input class="form-control" type="text" id="callsignsWithDubiousLocation" name="callsignsWithDubiousLocation" th:value="${callsignsWithDubiousLocation}" value=""/>
                 </div>
                 <div class="form-group mb-3" >
+                    <label for="qslCallsigns" class="form-label">QSL'd Contacts</label>
+                    <input class="form-control" type="text" id="qslCallsigns" name="qslCallsigns" th:value="${qslCallsigns}" value=""/>
+                </div>
+                <div class="form-group mb-3" >
                     <label for="unknownSatellites" class="form-label">Unknown Satellites</label>
                     <input class="form-control" type="text" id="unknownSatellites" name="unknownSatellites" th:value="${unknownSatellites}" value=""/>
                 </div>
@@ -79,6 +83,13 @@
                     <input class="form-control" type="text" id="formattedQsoFile" name="formattedQsoFile" th:value="${formattedQsoFile}" value="" placeholder="Markdown File" aria-label="Markdown File" aria-describedby="button-markdown-download"/>
                     <a href="#" th:href="@{/download(filename=${formattedQsoFile})}" class="btn btn-outline-secondary" role="button" id="button-markdown-download">Download</a>
                 </div>
+
+                <label for="qslLabelsFile" class="form-label">QSL Labels File</label>
+                <div class="input-group mb-3" >
+                    <input class="form-control" type="text" id="qslLabelsFile" name="qslLabelsFile" th:value="${qslLabelsFile}" value="" placeholder="QSL Labels File" aria-label="QSL Labels File" aria-describedby="button-qsllables-download"/>
+                    <a href="#" th:href="@{/download(filename=${qslLabelsFile})}" class="btn btn-outline-secondary" role="button" id="button-qsllabels-download">Download</a>
+                </div>
+
             </div>
         </div>
     </div>

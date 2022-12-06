@@ -46,6 +46,7 @@ public class ValidatorService {
         addValidator(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, new BooleanValidator());
         addValidator(HtmlParameterType.STRIP_COMMENT, new BooleanValidator());
         addValidator(HtmlParameterType.OPTIONS_VISIBLE, new BooleanValidator());
+        addValidator(HtmlParameterType.DONT_QSL_CALLSIGNS, new CallsignListValidator());
     }
 
     public void addValidator(HtmlParameterType type, Validator validator) {

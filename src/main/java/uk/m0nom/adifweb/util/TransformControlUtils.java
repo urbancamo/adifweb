@@ -11,6 +11,7 @@ public class TransformControlUtils {
     public static TransformControl createTransformControlFromParameters(ApplicationConfiguration configuration, HtmlParameters parameters) {
         TransformControl control = new TransformControl();
         control.setFormattedOutput(true);
+        control.setQslLabels(true);
         control.setGenerateKml(true);
 
         control.setKmlS2s(true);
@@ -72,7 +73,7 @@ public class TransformControlUtils {
         control.setQrzUsername(configuration.getQrzUsername());
         control.setQrzPassword(configuration.getQrzPassword());
         control.setPrintConfigFile(parameters.get(HtmlParameterType.PRINTER_CONFIG.getParameterName()).getValue());
-
+        control.setDontQslCallsigns(parameters.get(HtmlParameterType.DONT_QSL_CALLSIGNS.getParameterName()).getValue());
         return control;
     }
 }

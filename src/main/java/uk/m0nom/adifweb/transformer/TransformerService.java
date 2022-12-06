@@ -11,6 +11,8 @@ import uk.m0nom.adifproc.adif3.Adif3Transformer;
 import uk.m0nom.adifproc.adif3.UnsupportedHeaderException;
 import uk.m0nom.adifproc.adif3.contacts.Qsos;
 import uk.m0nom.adifproc.adif3.control.TransformControl;
+import uk.m0nom.adifproc.adif3.label.Adif3LabelFormatter;
+import uk.m0nom.adifproc.adif3.label.Adif3LabelFormatterResult;
 import uk.m0nom.adifproc.adif3.print.Adif3PrintFormatter;
 import uk.m0nom.adifproc.adif3.transform.TransformResults;
 import uk.m0nom.adifproc.contest.ContestResultsCalculator;
@@ -72,7 +74,8 @@ public class TransformerService {
         QsoFileReader reader = configuration.getReader(in);
         QsoFileWriter writer = configuration.getWriter();
 
-        Adif3PrintFormatter formatter = configuration.getFormatter();
+        Adif3PrintFormatter printFormatter = configuration.getPrintFormatter();
+        Adif3LabelFormatter labelFormatter = configuration.getLabelFormatter();
 
         String out = String.format("%s%d-out-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, "adi");
         String kml = String.format("%s%d-out-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, "kml");
@@ -109,12 +112,9 @@ public class TransformerService {
                 // Contest Calculations
                 log.getHeader().setPreamble(new ContestResultsCalculator(summits).calculateResults(log));
             }
-            logger.info(String.format("Writing QSO log file %s with encoding %s", out, control.getEncoding()));
-            writer.write(out, control.getEncoding(), log);
-
             if (control.isFormattedOutput()) {
-                formatter.getPrintJobConfig().configure(adifPrinterConfigFilename, adifPrinterConfig.getInputStream());
-                String markdown = String.format("%s%d-out-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, formatter.getPrintJobConfig().getFilenameExtension());
+                printFormatter.getPrintJobConfig().configure(adifPrinterConfigFilename, adifPrinterConfig.getInputStream());
+                String markdown = String.format("%s%d-log-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, printFormatter.getPrintJobConfig().getFilenameExtension());
                 BufferedWriter markdownWriter = null;
 
                 try {
@@ -126,12 +126,9 @@ public class TransformerService {
                     }
                     if (formattedQsoFile.createNewFile()) {
                         logger.info(String.format("Writing QSO log to: %s", markdown));
-                        StringBuilder sb = formatter.format(qsos);
-                        markdownWriter = Files.newBufferedWriter(formattedQsoFile.toPath(), Charset.forName(formatter.getPrintJobConfig().getOutEncoding()), StandardOpenOption.WRITE);
+                        StringBuilder sb = printFormatter.format(qsos);
+                        markdownWriter = Files.newBufferedWriter(formattedQsoFile.toPath(), Charset.forName(printFormatter.getPrintJobConfig().getOutEncoding()), StandardOpenOption.WRITE);
                         markdownWriter.write(sb.toString());
-
-                        results.setAdiFile(FilenameUtils.getName(out));
-                        results.setKmlFile(FilenameUtils.getName(kml));
                         results.setFormattedQsoFile(FilenameUtils.getName(markdown));
                     } else {
                         logger.severe(String.format("Error creating QSO log %s, check permissions?", markdown));
@@ -146,6 +143,44 @@ public class TransformerService {
                     }
                 }
             }
+
+            if (control.isQslLabels()) {
+                String labels = String.format("%s%d-lab-%s.%s", tmpPath, control.getRunTimestamp(), inBasename, "txt");
+                BufferedWriter qslLabelsWriter = null;
+
+                try {
+                    File qslLabelsFile = new File(labels);
+                    if (qslLabelsFile.exists()) {
+                        if (!qslLabelsFile.delete()) {
+                            logger.severe(String.format("Error deleting QSL Labels File %s, check permissions?", labels));
+                        }
+                    }
+                    if (qslLabelsFile.createNewFile()) {
+                        logger.info(String.format("Writing QSL labels to: %s", labels));
+                        Adif3LabelFormatterResult qslResult = labelFormatter.format(qsos, control.getDontQslCallsigns());
+                        qslLabelsWriter = Files.newBufferedWriter(qslLabelsFile.toPath(), Charset.forName(printFormatter.getPrintJobConfig().getOutEncoding()), StandardOpenOption.WRITE);
+                        qslLabelsWriter.write(qslResult.getLabels());
+
+                        results.setQslLabelsFile(FilenameUtils.getName(labels));
+                        results.setQslContacts(qslResult.getCallsigns());
+                    } else {
+                        logger.severe(String.format("Error creating QSL Labels file %s, check permissions?", labels));
+                    }
+                } catch (IOException ioe) {
+                    logger.severe(String.format("Error writing QSL Labels %s: %s", labels, ioe.getMessage()));
+                } finally {
+                    if (qslLabelsWriter != null) {
+                        qslLabelsWriter.close();
+                    }
+                }
+            }
+
+            logger.info(String.format("Writing QSO log file %s with encoding %s", out, control.getEncoding()));
+            writer.write(out, control.getEncoding(), log);
+
+            results.setAdiFile(FilenameUtils.getName(out));
+            results.setKmlFile(FilenameUtils.getName(kml));
+
         } catch (NoSuchFileException nfe) {
             logger.severe(String.format("Could not open input file: %s", control.getPathname()));
         } catch (UnsupportedHeaderException ushe) {

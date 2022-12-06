@@ -31,6 +31,7 @@ public class PrintJobConfigs {
         addConfig("adif-printer-196.yaml");
         addConfig("adif-printer-196-utf8.yaml");
         addConfig("adif-printer-wide-md.yaml");
+        addConfig("adif-printer-a4-24-63.5mmx33.9mm.yaml");
     }
 
     private void addConfig(String filename) {

@@ -29,7 +29,8 @@ public enum HtmlParameterType {
     SOTA_MICROWAVE_AWARD_COMMENT("sotaMicrowaveAwardComment"),
     STRIP_COMMENT("stripComment"),
     PRINTER_CONFIG("printerConfig"),
-    OPTIONS_VISIBLE("optionsVisible");
+    OPTIONS_VISIBLE("optionsVisible"),
+    DONT_QSL_CALLSIGNS("dontQsl");
 
     private final String parameterName;
 
