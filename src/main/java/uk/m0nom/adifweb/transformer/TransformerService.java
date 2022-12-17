@@ -157,7 +157,7 @@ public class TransformerService {
                     }
                     if (qslLabelsFile.createNewFile()) {
                         logger.info(String.format("Writing QSL labels to: %s", labels));
-                        Adif3LabelFormatterResult qslResult = labelFormatter.format(qsos, control.getDontQslCallsigns());
+                        Adif3LabelFormatterResult qslResult = labelFormatter.format(qsos, control.getDontQslCallsigns(), control.getQslLabelsInitialPosition());
                         qslLabelsWriter = Files.newBufferedWriter(qslLabelsFile.toPath(), Charset.forName(printFormatter.getPrintJobConfig().getOutEncoding()), StandardOpenOption.WRITE);
                         qslLabelsWriter.write(qslResult.getLabels());
 

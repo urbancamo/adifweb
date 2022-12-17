@@ -49,10 +49,12 @@
         <div class="panel-body" id="filePanel">
             <div class="container">
                 <p>In most cases you only need to select the input file and click process.</p>
-                <p><span style="color: orangered;font-weight: bold;">Note:</span> if you get a gateway timeout your input file is too large, consider splitting it and processing files separately.</p>
+                <p><span style="color: orangered;font-weight: bold;">Note:</span> if you get a gateway timeout your
+                    input file is too large, consider splitting it and processing files separately.</p>
             </div>
             <div class="input-group mb-3">
-                <input type="file" class="form-control" id="filename" name="filename" th:value="${parameters.get('filename').getValue()}"/>
+                <input type="file" class="form-control" id="filename" name="filename"
+                       th:value="${parameters.get('filename').getValue()}"/>
             </div>
             <div class="input-group mb-3">
                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -85,7 +87,10 @@
                 <div id="input-group activity">
                     <div class="row">
                         <div class="col-4">
-                            <label class="" for="sotaRef">Summits on the Air <a href="https://www.sota.org.uk/" target="_blank" class="infolink" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                            <label class="" for="sotaRef">Summits on the Air <a href="https://www.sota.org.uk/"
+                                                                                target="_blank" class="infolink"
+                                                                                rel="noopener noreferrer"><i
+                                    class="fa-solid fa-circle-info"></i></a></label>
                         </div>
                         <div class="col-4">
                             <input class="" type="text" id="sotaRef" name="sotaRef"
@@ -98,7 +103,10 @@
                     </div>
                     <div class="row">
                         <div class="col-4">
-                            <label class="" for="wotaRef">Wainwrights on the Air <a href="https://www.wota.org.uk/" target="_blank" class="infolink" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                            <label class="" for="wotaRef">Wainwrights on the Air <a href="https://www.wota.org.uk/"
+                                                                                    target="_blank" class="infolink"
+                                                                                    rel="noopener noreferrer"><i
+                                    class="fa-solid fa-circle-info"></i></a></label>
                         </div>
                         <div class="col-4">
                             <input class="" type="text" id="wotaRef" name="wotaRef"
@@ -111,7 +119,11 @@
                     </div>
                     <div class="row">
                         <div class="col-4">
-                            <label class="" for="hemaRef">HuMPs Excluding Marilyns Award <a href="http://hema.org.uk/" target="_blank" class="infolink" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                            <label class="" for="hemaRef">HuMPs Excluding Marilyns Award <a href="http://hema.org.uk/"
+                                                                                            target="_blank"
+                                                                                            class="infolink"
+                                                                                            rel="noopener noreferrer"><i
+                                    class="fa-solid fa-circle-info"></i></a></label>
                         </div>
                         <div class="col-4">
                             <input class="" type="text" id="hemaRef" name="hemaRef"
@@ -124,7 +136,10 @@
                     </div>
                     <div class="row">
                         <div class="col-4">
-                            <label class="" for="potaRef">Parks on the Air <a href="https://parksontheair.com/" target="_blank" class="infolink" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                            <label class="" for="potaRef">Parks on the Air <a href="https://parksontheair.com/"
+                                                                              target="_blank" class="infolink"
+                                                                              rel="noopener noreferrer"><i
+                                    class="fa-solid fa-circle-info"></i></a></label>
                         </div>
                         <div class="col-4">
                             <input class="" type="text" id="potaRef" name="potaRef"
@@ -137,7 +152,10 @@
                     </div>
                     <div class="row">
                         <div class="col-4">
-                            <label class="" for="wwffRef">World Wide Flora Fauna <a href="https://wwff.co/" target="_blank" class="infolink" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                            <label class="" for="wwffRef">World Wide Flora Fauna <a href="https://wwff.co/"
+                                                                                    target="_blank" class="infolink"
+                                                                                    rel="noopener noreferrer"><i
+                                    class="fa-solid fa-circle-info"></i></a></label>
                         </div>
                         <div class="col-4">
                             <input class="" type="text" id="wwffRef" name="wwffRef"
@@ -151,7 +169,9 @@
 
                     <div class="row">
                         <div class="col-4">
-                            <label class="" for="cotaRef">World Castles Award <a href="http://www.wca.qrz.ru/ENG/main.html" class="infolink" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                            <label class="" for="cotaRef">World Castles Award <a
+                                    href="http://www.wca.qrz.ru/ENG/main.html" class="infolink" target="_blank"
+                                    rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
                         </div>
                         <div class="col-4">
                             <input class="" type="text" id="cotaRef" name="cotaRef"
@@ -165,7 +185,9 @@
 
                     <div class="row">
                         <div class="col-4">
-                            <label class="" for="lotaRef">International Lighthouse Lightship Weekend <a href="https://illw.net/" class="infolink" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                            <label class="" for="lotaRef">International Lighthouse Lightship Weekend <a
+                                    href="https://illw.net/" class="infolink" target="_blank" rel="noopener noreferrer"><i
+                                    class="fa-solid fa-circle-info"></i></a></label>
                         </div>
                         <div class="col-4">
                             <input class="" type="text" id="lotaRef" name="lotaRef"
@@ -179,7 +201,10 @@
 
                     <div class="row">
                         <div class="col-4">
-                            <label class="" for="rotaRef">Railways on the Air <a href="https://rota.barac.org.uk/" class="infolink" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                            <label class="" for="rotaRef">Railways on the Air <a href="https://rota.barac.org.uk/"
+                                                                                 class="infolink" target="_blank"
+                                                                                 rel="noopener noreferrer"><i
+                                    class="fa-solid fa-circle-info"></i></a></label>
                         </div>
                         <div class="col-4">
                             <input class="" type="text" id="rotaRef" name="rotaRef"
@@ -193,7 +218,10 @@
 
                     <div class="row">
                         <div class="col-4">
-                            <label class="" for="iotaRef">Islands on the Air <a href="https://www.iota-world.org/" class="infolink" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                            <label class="" for="iotaRef">Islands on the Air <a href="https://www.iota-world.org/"
+                                                                                class="infolink" target="_blank"
+                                                                                rel="noopener noreferrer"><i
+                                    class="fa-solid fa-circle-info"></i></a></label>
                         </div>
                         <div class="col-4">
                             <input class="" type="text" id="iotaRef" name="iotaRef"
@@ -207,7 +235,10 @@
 
                     <div class="row">
                         <div class="col-4">
-                            <label class="" for="gmaRef">Global Mountain Activity <a href="https://www.cqgma.org/" class="infolink" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-circle-info"></i></a></label>
+                            <label class="" for="gmaRef">Global Mountain Activity <a href="https://www.cqgma.org/"
+                                                                                     class="infolink" target="_blank"
+                                                                                     rel="noopener noreferrer"><i
+                                    class="fa-solid fa-circle-info"></i></a></label>
                         </div>
                         <div class="col-4">
                             <input class="" type="text" id="gmaRef" name="gmaRef"
@@ -232,7 +263,7 @@
                 <p>If your activity doesn't have a location, your ADIF input file doesn't have your Maidenhead
                     location set, or you want to specify a more accurate location override it here.</p>
             </div>
-             <div class="container">
+            <div class="container">
                 <div class="row">
                     <div class="col-4">
                         <label class="location" for="location">Location</label>
@@ -278,22 +309,31 @@
                     <label class="form-check-label" for="activitySubLabel">
                         Activity Sub-label
                     </label>
-                </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox"
-                               th:checked="${parameters.get('localActivationSites').getValueAsBoolean()}"
-                               id="localActivationSites" name="localActivationSites">
-                        <label class="form-check-label" for="localActivationSites">
-                            Show Local Activation Sites
-                        </label>
+                    <div class="row">
+                        <div class="col-4">
+                            <input class="form-check-input" type="checkbox"
+                                   th:checked="${parameters.get('localActivationSites').getValueAsBoolean()}"
+                                   id="localActivationSites" name="localActivationSites">
+                            <label class="form-check-label" for="localActivationSites">
+                                Show Local Activation Sites
+                            </label>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-input" type="number"
-                               th:value="${parameters.get('localActivationSitesRadius').getValue()}" value="5"
-                               id="localActivationSitesRadius" name="localActivationSitesRadius">
-                        <label class="form-label" for="localActivationSitesRadius">
-                            Local Activation Sites Radius (km)
-                        </label>
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="form-label" for="localActivationSitesRadius">
+                                Local Activation Sites Radius (km)
+                            </label>
+                        </div>
+                        <div class="col-4">
+                            <input class="form-input" type="number"
+                                   th:value="${parameters.get('localActivationSitesRadius').getValue()}" value="5"
+                                   id="localActivationSitesRadius" name="localActivationSitesRadius">
+                        </div>
+                        <div class="col-auto">
+                            <span class="text-danger"
+                                  th:text="${parameters.get('localActivationSitesRadius').getValidationResult().getError()}"></span>
+                        </div>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox"
@@ -311,17 +351,17 @@
                             Include SOTA LD Weekend Contest Results in ADIF file
                         </label>
                     </div>
-
                     <div class="row">
                         <div class="col-4">
                             <label class="" for="antenna">Antenna Type</label>
                         </div>
                         <div class="col-4">
                             <select class="form-select" id="antenna" name="antenna">
-                                <option th:each="antenna : ${antennas}" th:value="${antenna}" th:text="${antenna}" th:selected="${antenna} == ${parameters.get('antenna').getValue()}"></option>
+                                <option th:each="antenna : ${antennas}" th:value="${antenna}" th:text="${antenna}"
+                                        th:selected="${antenna} == ${parameters.get('antenna').getValue()}"></option>
                             </select>
                         </div>
-                        <div class="col-4">
+                        <div class="col-auto">
                             <span class="text-danger"
                                   th:text="${parameters.get('antenna').getValidationResult().getError()}"></span>
                         </div>
@@ -334,10 +374,12 @@
                         <div class="col-4">
                             <select class="form-select" id="satName" name="satName">
                                 <option></option>
-                                <option th:each="satellite : ${satellites}" th:value="${satellite}" th:text="${satellite}" th:selected="${satellite} == ${parameters.get('satName').getValue()}"></option>
+                                <option th:each="satellite : ${satellites}" th:value="${satellite}"
+                                        th:text="${satellite}"
+                                        th:selected="${satellite} == ${parameters.get('satName').getValue()}"></option>
                             </select>
                         </div>
-                        <div class="col-4">
+                        <div class="col-auto">
                             <span class="text-danger"
                                   th:text="${parameters.get('satName').getValidationResult().getError()}"></span>
                         </div>
@@ -351,7 +393,7 @@
                             <input class="" type="text" id="satMode" name="satMode"
                                    th:value="${parameters.get('satMode').getValue()}" value=""/>
                         </div>
-                        <div class="col-4">
+                        <div class="col-auto">
                             <span class="text-danger"
                                   th:text="${parameters.get('satMode').getValidationResult().getError()}"></span>
                         </div>
@@ -364,7 +406,7 @@
                             <input class="" type="text" id="satBand" name="satBand"
                                    th:value="${parameters.get('satBand').getValue()}" value=""/>
                         </div>
-                        <div class="col-4">
+                        <div class="col-auto">
                             <span class="text-danger"
                                   th:text="${parameters.get('satBand').getValidationResult().getError()}"></span>
                         </div>
@@ -384,12 +426,31 @@
                             <label class="" for="satBand">QSO Formatter Config</label>
                         </div>
                         <div class="col-auto">
-                            <select class="form-select" id="printerConfig" name="printerConfig" aria-label="Printer Config">
-                                <option th:each="config : ${printJobConfigs}" th:value="${config.filename}" th:text="${config.name}" th:selected="${config.filename} == ${parameters.get('printerConfig').getValue()}"></option>
+                            <select class="form-select" id="printerConfig" name="printerConfig"
+                                    aria-label="Printer Config">
+                                <option th:each="config : ${printJobConfigs}" th:value="${config.filename}"
+                                        th:text="${config.name}"
+                                        th:selected="${config.filename} == ${parameters.get('printerConfig').getValue()}"></option>
                             </select>
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="form-label" for="qslLabelsInitialPosition">
+                                Initial Qsl Label Position (L→R, T→B)
+                            </label>
+                        </div>
+                        <div class="col-4">
+                            <input class="form-input" type="number"
+                                   th:value="${parameters.get('qslLabelsInitialPosition').getValue()}" value="1"
+                                   id="qslLabelsInitialPosition" name="qslLabelsInitialPosition">
+                        </div>
+                        <div class="col-auto">
+                            <span class="text-danger"
+                                  th:text="${parameters.get('qslLabelsInitialPosition').getValidationResult().getError()}"></span>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-4">
                             <label class="" for="satMode">Don't QSL Callsign List</label>
@@ -403,10 +464,10 @@
                                   th:text="${parameters.get('dontQsl').getValidationResult().getError()}"></span>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <!-- *********************** ERRORS ***************** -->
@@ -426,8 +487,10 @@
             <div class="col-md-auto">
                 <input id="submit" class="btn btn-success" type="submit" value="Process">
                 <a href="#" class="btn btn-secondary" role="button" id="back">Back...</a>
-                <a href="/upload?clear=true" class="btn btn-secondary" role="button" id="button-markdown-upload">Clear Form</a>
-                <a href="https://urbancamo.github.io/adif-processor/adif-processor" class="btn btn-info" role="button" id="button-markdown-docs">Docs</a>
+                <a href="/upload?clear=true" class="btn btn-secondary" role="button" id="button-markdown-upload">Clear
+                    Form</a>
+                <a href="https://urbancamo.github.io/adif-processor/adif-processor" class="btn btn-info" role="button"
+                   id="button-markdown-docs">Docs</a>
                 <a href="/coord" class="btn btn-primary" role="button" id="button-markdown-coord">Coord Converter</a>
             </div>
             <div class="col">
@@ -443,7 +506,8 @@
             </div>
         </div>
     </div>
-    <input hidden id="optionsVisible" name="optionsVisible" type="text" th:value="${parameters.get('optionsVisible').getValue()}"/>
+    <input hidden id="optionsVisible" name="optionsVisible" type="text"
+           th:value="${parameters.get('optionsVisible').getValue()}"/>
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -455,7 +519,7 @@
     $(function () {
         $('#spinner').hide();
 
-        $("#back").on("click", function(e){
+        $("#back").on("click", function (e) {
             e.preventDefault();
             window.history.back();
         });
@@ -468,7 +532,7 @@
             $('#submit').prop('disabled', true);
             $('#submit').val("Processing");
             $('#spinner').show();
-            if($('#optionsPanelBody').is(':visible')) {
+            if ($('#optionsPanelBody').is(':visible')) {
                 $('#optionsVisible').val("on");
             }
             $("body").css("cursor", "progress");
@@ -479,14 +543,14 @@
             $("#encoding").val(this.innerText);
         })
 
-        $('#satName').change(function() {
-           if (this.value === 'QO-100') {
-               $('#satMode').val("S/X");
-               $('#satBand').val("13cm");
-           } else {
-               $('#satMode').val("");
-               $('#satBand').val("");
-           }
+        $('#satName').change(function () {
+            if (this.value === 'QO-100') {
+                $('#satMode').val("S/X");
+                $('#satBand').val("13cm");
+            } else {
+                $('#satMode').val("");
+                $('#satBand').val("");
+            }
         });
     });
 </script>

@@ -47,6 +47,7 @@ public class ValidatorService {
         addValidator(HtmlParameterType.STRIP_COMMENT, new BooleanValidator());
         addValidator(HtmlParameterType.OPTIONS_VISIBLE, new BooleanValidator());
         addValidator(HtmlParameterType.DONT_QSL_CALLSIGNS, new CallsignListValidator());
+        addValidator(HtmlParameterType.QSL_LABELS_INITIAL_POSITION, new IntegerRangeValidator(1, 24));
     }
 
     public void addValidator(HtmlParameterType type, Validator validator) {
