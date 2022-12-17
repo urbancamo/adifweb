@@ -30,7 +30,8 @@ public enum HtmlParameterType {
     STRIP_COMMENT("stripComment"),
     PRINTER_CONFIG("printerConfig"),
     OPTIONS_VISIBLE("optionsVisible"),
-    DONT_QSL_CALLSIGNS("dontQsl");
+    DONT_QSL_CALLSIGNS("dontQsl"),
+    QSL_LABELS_INITIAL_POSITION("qslLabelsInitialPosition");
 
     private final String parameterName;
 
