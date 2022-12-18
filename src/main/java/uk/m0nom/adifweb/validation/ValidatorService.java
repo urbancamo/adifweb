@@ -28,7 +28,7 @@ public class ValidatorService {
         addValidator(HtmlParameterType.GMA_REF, new ActivityValidator(activityDatabaseService, ActivityType.GMA));
         addValidator(HtmlParameterType.HEMA_REF, new ActivityValidator(activityDatabaseService, ActivityType.HEMA));
         addValidator(HtmlParameterType.WOTA_REF, new ActivityValidator(activityDatabaseService, ActivityType.WOTA));
-        addValidator(HtmlParameterType.POTA_REF, new ActivityValidator(activityDatabaseService, ActivityType.POTA));
+        addValidator(HtmlParameterType.POTA_REF, new PotaValidator(activityDatabaseService));
         addValidator(HtmlParameterType.WWFF_REF, new ActivityValidator(activityDatabaseService, ActivityType.WWFF));
         addValidator(HtmlParameterType.COTA_REF, new ActivityValidator(activityDatabaseService, ActivityType.COTA));
         addValidator(HtmlParameterType.LOTA_REF, new ActivityValidator(activityDatabaseService, ActivityType.LOTA));
