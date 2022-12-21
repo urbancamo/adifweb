@@ -1,5 +1,6 @@
 package uk.m0nom.adifweb.validation;
 
+import org.apache.commons.lang.StringUtils;
 import org.marsik.ham.adif.types.Pota;
 import org.marsik.ham.adif.types.PotaList;
 import uk.m0nom.adifproc.activity.ActivityDatabaseService;
@@ -14,6 +15,9 @@ public class PotaValidator implements Validator {
 
     @Override
     public ValidationResult isValid(String value) {
+        if (StringUtils.isEmpty(value)) {
+            return ValidationResult.SUCCESS;
+        }
         try {
             PotaList list = PotaList.valueOf(value);
             for (Pota pota : list.getPotaList()) {
