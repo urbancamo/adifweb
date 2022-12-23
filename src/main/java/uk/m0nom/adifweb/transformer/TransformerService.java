@@ -3,6 +3,7 @@ package uk.m0nom.adifweb.transformer;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.marsik.ham.adif.Adif3;
+import org.marsik.ham.adif.Adif3Record;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,8 @@ import java.nio.charset.UnmappableCharacterException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -97,6 +100,11 @@ public class TransformerService {
                 String error = String.format("Error processing %s file, caught exception:\n\t'%s'", inExtension.toUpperCase(), e.getMessage());
                 logger.severe(error);
                 return new TransformResults(error);
+            }
+
+            if (limitLogLength(log, configuration.getMaxQsosToProcess())) {
+                results.addWarning(String.format("Processing restricted to first %d QSOS", configuration.getMaxQsosToProcess()));
+                logger.warning(String.format("Limited input file containing %d QSOS to maximum: %d", log.getRecords().size(), configuration.getMaxQsosToProcess()));
             }
             Qsos qsos;
 
@@ -192,6 +200,19 @@ public class TransformerService {
         }
         logger.info("Processing complete...");
         return results;
+    }
+
+    private boolean limitLogLength(Adif3 log, int maxQsosToProcess) {
+        boolean logHasBeenLimited = false;
+        if (log.getRecords().size() > maxQsosToProcess) {
+            logHasBeenLimited = true;
+            List<Adif3Record> newLogToProcess = new ArrayList<>(maxQsosToProcess);
+            for (int i = 0; i < maxQsosToProcess; i++) {
+                newLogToProcess.add(log.getRecords().get(i));
+            }
+            log.setRecords(newLogToProcess);
+        }
+        return logHasBeenLimited;
     }
 
 }

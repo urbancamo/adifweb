@@ -49,8 +49,10 @@
         <div class="panel-body" id="filePanel">
             <div class="container">
                 <p>In most cases you only need to select the input file and click process.</p>
-                <p><span style="color: orangered;font-weight: bold;">Note:</span> if you get a gateway timeout your
-                    input file is too large, consider splitting it and processing files separately.</p>
+                <p><span style="color: orangered;font-weight: bold;">Warning: </span>
+                <span>processing is limited to the first </span>
+                    <span th:text="${maxQsosToProcess}"></span>
+                <span>QSOs in your input file.</span></p>
             </div>
             <div class="input-group mb-3">
                 <input type="file" class="form-control" id="filename" name="filename"
