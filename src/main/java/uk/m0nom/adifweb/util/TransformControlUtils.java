@@ -75,6 +75,7 @@ public class TransformControlUtils {
         control.setPrintConfigFile(parameters.get(HtmlParameterType.PRINTER_CONFIG.getParameterName()).getValue());
         control.setDontQslCallsigns(parameters.get(HtmlParameterType.DONT_QSL_CALLSIGNS.getParameterName()).getValue());
         control.setQslLabelsInitialPosition(Integer.valueOf(parameters.get(HtmlParameterType.QSL_LABELS_INITIAL_POSITION.getParameterName()).getValue()));
+
         return control;
     }
 }

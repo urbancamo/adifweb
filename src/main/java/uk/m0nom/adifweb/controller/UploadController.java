@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Displays and accepts the input from the main ADIF Processor HTML form
@@ -102,7 +103,7 @@ public class UploadController {
 		model.addAttribute("satellites", configuration.getApSatelliteService().getSatelliteNames());
 		model.addAttribute("antennas", configuration.getAntennaService().getAntennaNames());
 		model.addAttribute("printJobConfigs", printJobConfigs.getConfigs());
-
+		model.addAttribute("maxQsosToProcess", Integer.toString(configuration.getMaxQsosToProcess()));
 		return "upload";
 	}
 
@@ -190,8 +191,8 @@ public class UploadController {
 		results.put("formattedQsoFile", transformResults.getFormattedQsoFile());
 		results.put("qslLabelsFile", transformResults.getQslLabelsFile());
 		results.put("error", StringUtils.defaultIfEmpty(transformResults.getError(), "none"));
-
-		results.put("callsignsWithoutLocation", String.join(", ", transformResults.getContactsWithoutLocation()));
+		results.put("warnings", transformResults.getWarnings().stream().collect(Collectors.joining( "\n")));
+				results.put("callsignsWithoutLocation", String.join(", ", transformResults.getContactsWithoutLocation()));
 		results.put("callsignsWithDubiousLocation", String.join(", ", transformResults.getContactsWithDubiousLocation()));
 		results.put("qslCallsigns", String.join(", ", transformResults.getQslContacts()));
 		results.put("unknownSatellites", String.join(", ", transformResults.getUnknownSatellites()));
@@ -204,6 +205,7 @@ public class UploadController {
 		map.put("satellites", configuration.getApSatelliteService().getSatelliteNames());
 		map.put("antennas", configuration.getAntennaService().getAntennaNames());
 		map.put("printJobConfigs", printJobConfigs.getConfigs());
+		map.put("maxQsosToProcess", Integer.valueOf(configuration.getMaxQsosToProcess()));
 		return map;
 	}
 }
