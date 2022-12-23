@@ -62,7 +62,7 @@ public class ApplicationConfiguration implements ApplicationListener<Application
     @Value("${server.port}")
     private int serverPort;
 
-    @Value("5")
+    @Value("500")
     private int maxQsosToProcess;
 
     public ApplicationConfiguration(Adif3Transformer transformer,
