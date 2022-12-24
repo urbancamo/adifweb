@@ -307,7 +307,7 @@
                                 <unzip src="${project.build.directory}/adifweb.jar" dest="${project.build.directory}/adifweb/" />
                                 <mkdir dir="${project.build.directory}/adifweb/.platform"/>
                                 <copy todir="${project.build.directory}/adifweb/.platform">
-                                    <fileset dir="${project.build.directory}/classes/platform">
+                                    <fileset dir="${project.build.outputDirectory}/platform">
                                     </fileset>
                                 </copy>
                                 <zip basedir="${project.build.directory}/adifweb" destfile="${project.build.directory}/adifweb.jar"/>
