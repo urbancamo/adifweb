@@ -232,11 +232,7 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 
 	@Override
 	public void sendProgressUpdate(String sessionId, String message) {
-		try {
-			webSocketConfig.getProgressFeedbackHandler().sendProgressUpdate(sessionId, message);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		webSocketConfig.getProgressFeedbackHandler().sendProgressUpdate(sessionId, message);
 	}
 }
 
