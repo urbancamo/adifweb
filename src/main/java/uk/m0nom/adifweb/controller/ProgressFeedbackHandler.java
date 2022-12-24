@@ -1,5 +1,6 @@
 package uk.m0nom.adifweb.controller;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.socket.*;
@@ -17,13 +18,14 @@ public class ProgressFeedbackHandler extends TextWebSocketHandler implements Han
     private static final Logger logger = Logger.getLogger(ProgressFeedbackHandler.class.getName());
 
     Map<String, WebSocketSession> webSocketSessions = Collections.synchronizedMap(new HashMap<>());
+    Map<WebSocketSession, String> webSocketSessionsReverseMap = Collections.synchronizedMap(new HashMap<>());
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+    public void afterConnectionEstablished(@NotNull WebSocketSession session) throws Exception {
         logger.info("ProgressFeedbackHandler.afterConnectionEstablished called");
         super.afterConnectionEstablished(session);
         // get the JSESSION (HttpSession Id)
-        String httpSessionId = "";
+        String httpSessionId = "empty";
         List<String> cookies = session.getHandshakeHeaders().get("cookie");
         for (String cookie : cookies) {
             if (cookie.startsWith("JSESSIONID=")) {
@@ -31,50 +33,57 @@ public class ProgressFeedbackHandler extends TextWebSocketHandler implements Han
                 logger.info(String.format("Identified httpSessionId='%s', webSocket sessionId='%s'", httpSessionId, session.getId()));
             }
         }
-        if (httpSessionId == "") {
-            logger.info("Could not identify httpSessionId");
+        if ("empty".equals(httpSessionId)) {
+            logger.info("Could not identify httpSessionId, storing under 'empty' httpSessionId");
         }
         webSocketSessions.put(httpSessionId, session);
+        webSocketSessionsReverseMap.put(session, httpSessionId);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         logger.info(String.format("ProgressFeedbackHandler.afterConnectionClosed called session='%s', status='%s'", session.getId(), status.toString()));
         super.afterConnectionClosed(session, status);
-        webSocketSessions.remove(session);
+        String httpSessionId = webSocketSessionsReverseMap.get(session);
+        webSocketSessionsReverseMap.remove(session);
+        webSocketSessions.remove(httpSessionId);
     }
 
     @Override
-    public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-        logger.info("ProgressFeedbackHandler.handleMessage called");
+    public void handleMessage(@NotNull WebSocketSession session, @NotNull WebSocketMessage<?> message) {
+        logger.warning("ProgressFeedbackHandler.handleMessage unexpectedly called");
         /* Shouldn't receive message from the client, so discard */
     }
 
-    public void sendProgressUpdate(String sessionId, String progressMessage) throws IOException {
+    public void sendProgressUpdate(String sessionId, String progressMessage) {
         if (sessionId != null) {
             logger.info(String.format("ProgressFeedbackHandler.sendProgressUpdate httpSessionId='%s', progressMessage='%s'", sessionId, progressMessage));
             WebSocketMessage<String> messageToSend = new TextMessage(progressMessage);
             WebSocketSession webSocketSession = webSocketSessions.get(sessionId);
             if (webSocketSession != null && webSocketSession.isOpen()) {
                 logger.info("sending message to open web socket session");
-                webSocketSession.sendMessage(messageToSend);
+                try {
+                    webSocketSession.sendMessage(messageToSend);
+                } catch (IOException e) {
+                    logger.warning(String.format("Caught exception %s sending message to httpSessionId='%s', webSocketSessionId='%s'", e.getMessage(), sessionId, webSocketSession.getId()));
+                }
             }
         } else {
-            logger.info(String.format("ProgressFeedbackHandler.sendProgressUpdate sessionId=null, progressMessage='%s'", sessionId, progressMessage));
+            logger.info(String.format("ProgressFeedbackHandler.sendProgressUpdate sessionId=null, progressMessage='%s'", progressMessage));
         }
     }
 
     @Override
-    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
-                                   WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
+    public boolean beforeHandshake(@NotNull ServerHttpRequest request, @NotNull ServerHttpResponse response,
+                                   @NotNull WebSocketHandler wsHandler, @NotNull Map<String, Object> attributes) {
 
         logger.info("ProgressFeedbackHandler.beforeHandshake called");
         return false;
     }
 
     @Override
-    public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response,
-                               WebSocketHandler wsHandler, Exception exception) {
+    public void afterHandshake(@NotNull ServerHttpRequest request, @NotNull ServerHttpResponse response,
+                               @NotNull WebSocketHandler wsHandler, Exception exception) {
 
         logger.info("ProgressFeedbackHandler.afterHandshake called");
     }
