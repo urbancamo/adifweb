@@ -303,14 +303,14 @@
                         <phase>deploy</phase>
                         <configuration>
                             <target name="repackage spring-boot archive with .platform">
-                                <mkdir dir="${project.basedir}/target/adifweb"/>
-                                <unzip src="${project.basedir}/target/adifweb.jar" dest="${project.basedir}/target/adifweb/" />
-                                <mkdir dir="${project.basedir}/target/adifweb/.platform"/>
-                                <copy todir="${project.basedir}/target/adifweb/.platform">
-                                    <fileset dir="${project.basedir}/target/classes/platform">
+                                <mkdir dir="${project.build.directory}/adifweb"/>
+                                <unzip src="{project.build.directory}/adifweb.jar" dest="${project.build.directory}/adifweb/" />
+                                <mkdir dir="${project.build.directory}/adifweb/.platform"/>
+                                <copy todir="${project.build.directory}/adifweb/.platform">
+                                    <fileset dir="${project.build.directory}/classes/platform">
                                     </fileset>
                                 </copy>
-                                <zip basedir="${project.basedir}/target/adifweb" destfile="${project.basedir}/target/adifweb.jar"/>
+                                <zip basedir="${project.build.directory}/adifweb" destfile="${project.build.directory}/adifweb.jar"/>
                             </target>
                         </configuration>
                         <goals>
