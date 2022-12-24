@@ -18,6 +18,7 @@ import uk.m0nom.adifproc.adif3.print.Adif3PrintFormatter;
 import uk.m0nom.adifproc.adif3.transform.TransformResults;
 import uk.m0nom.adifproc.contest.ContestResultsCalculator;
 import uk.m0nom.adifproc.kml.KmlWriter;
+import uk.m0nom.adifproc.progress.ProgressFeedbackHandlerCallback;
 import uk.m0nom.adifproc.qrz.CachingQrzXmlService;
 import uk.m0nom.adifproc.qsofile.QsoFileReader;
 import uk.m0nom.adifproc.qsofile.QsoFileWriter;
@@ -45,6 +46,7 @@ public class TransformerService {
     private final ResourceLoader resourceLoader;
     private final CachingQrzXmlService qrzService;
     private final KmlWriter kmlWriter;
+    private ProgressFeedbackHandlerCallback progressFeedbackHandlerCallback = null;
 
     public TransformerService(ApplicationConfiguration configuration,
                               ResourceLoader resourceLoader,
@@ -57,7 +59,10 @@ public class TransformerService {
     }
 
     public TransformResults runTransformer(TransformControl control,
-                                           String tmpPath, String originalFilename) {
+                                           String tmpPath, String originalFilename,
+                                           ProgressFeedbackHandlerCallback progressFeedbackHandlerCallback,
+                                           String sessionId) {
+        this.progressFeedbackHandlerCallback = progressFeedbackHandlerCallback;
         TransformResults results = new TransformResults();
         qrzService.setCredentials(control.getQrzUsername(), control.getQrzPassword());
 
@@ -92,9 +97,11 @@ public class TransformerService {
                 }
             }
 
-            logger.info(String.format("Reading input file %s with encoding %s", in, control.getEncoding()));
+            String status = String.format("Reading input file %s with encoding %s", in, control.getEncoding());
+            logger.info(status);
             Adif3 log;
             try {
+                //progressFeedbackHandlerCallback.sendProgressUpdate(sessionId, status);
                 log = reader.read(in, control.getEncoding(), false);
             } catch (Exception e) {
                 String error = String.format("Error processing %s file, caught exception:\n\t'%s'", inExtension.toUpperCase(), e.getMessage());
@@ -109,7 +116,7 @@ public class TransformerService {
             Qsos qsos;
 
             try {
-                qsos = transformer.transform(log, control, results);
+                qsos = transformer.transform(log, control, results, progressFeedbackHandlerCallback, sessionId);
             } catch (UnsupportedOperationException e) {
                 return new TransformResults(e.getMessage());
             }

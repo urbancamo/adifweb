@@ -472,11 +472,11 @@
     </div>
     </div>
 
-    <!-- *********************** ERRORS ***************** -->
+    <!-- *********************** ERRORS/PROGRESS ***************** -->
     <div class="panel panel-default">
-        <div class="panel-heading">Errors</div>
+        <div class="panel-heading">Progress/Errors</div>
         <div class="container">
-            <input type="text" class="form-control" id="error" name="error" th:value="${error}">
+            <input type="text" class="form-control" id="progressAndError" name="progessAndError" th:value="${error}">
         </div>
         <div class="container">
             <span>Please contact <a href="mailto:mark@wickensonline.co.uk">mark@wickensonline.co.uk</a> if you are having issues.</span>
@@ -518,6 +518,19 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script th:inline="javascript">
+    let ws;
+
+    function updateProgress(data) {
+        let messages = document.getElementById("progressAndError");
+        messages.value = data;
+    }
+    function connectProgressWebSocket() {
+        ws = new WebSocket("ws://localhost:9090/progress");
+        ws.onmessage = function (e) {
+            updateProgress(e.data);
+        }
+    }
+
     $(function () {
         $('#spinner').hide();
 
@@ -531,6 +544,7 @@
         }
 
         $('#form').submit(function () {
+            connectProgressWebSocket();
             $('#submit').prop('disabled', true);
             $('#submit').val("Processing");
             $('#spinner').show();

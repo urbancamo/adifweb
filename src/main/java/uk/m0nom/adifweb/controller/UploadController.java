@@ -1,5 +1,6 @@
 package uk.m0nom.adifweb.controller;
 
+import com.amazonaws.event.request.Progress;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import uk.m0nom.adifproc.adif3.transform.TransformResults;
+import uk.m0nom.adifproc.progress.ProgressFeedbackHandlerCallback;
 import uk.m0nom.adifweb.ApplicationConfiguration;
 import uk.m0nom.adifweb.domain.*;
 import uk.m0nom.adifweb.file.FileService;
@@ -24,6 +26,7 @@ import uk.m0nom.adifweb.validation.ValidatorService;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +37,7 @@ import java.util.stream.Collectors;
  * Displays and accepts the input from the main ADIF Processor HTML form
  */
 @Controller
-public class UploadController {
+public class UploadController implements ProgressFeedbackHandlerCallback {
 	private static final Logger logger = Logger.getLogger(UploadController.class.getName());
 
 	private static final String HTML_PARAMETERS = "HTML_PARAMETERS";
@@ -57,15 +60,19 @@ public class UploadController {
 
 	private String tmpPath;
 
+	private final WebSocketConfig webSocketConfig;
+
 	public UploadController(ApplicationConfiguration configuration, TransformerService transformerService,
 							PrintJobConfigs printJobConfigs, Adif3SchemaElementsService adif3SchemaElementsService,
-							FileService fileService, ValidatorService validatorService) {
+							FileService fileService, ValidatorService validatorService,
+							WebSocketConfig webSocketConfig) {
 		this.configuration = configuration;
 		this.printJobConfigs = printJobConfigs;
 		this.adif3SchemaElementsService = adif3SchemaElementsService;
 		this.fileService = fileService;
 		this.transformerService = transformerService;
 		this.validatorService = validatorService;
+		this.webSocketConfig = webSocketConfig;
 
 		tmpPath = System.getProperty("java.io.tmpdir");
 		if (!StringUtils.endsWith(tmpPath, File.separator)) {
@@ -148,7 +155,7 @@ public class UploadController {
 				
 				fileService.archiveParameters(control, parameters);
 				fileService.storeInputFile(control, uploadedFile, tmpPath);
-				var transformResults = transformerService.runTransformer(control, tmpPath, uploadedFile.getOriginalFilename());
+				var transformResults = transformerService.runTransformer(control, tmpPath, uploadedFile.getOriginalFilename(), this, session.getId());
 				if (transformResults.getAdiFile() != null) {
 					fileService.archiveFile(transformResults.getAdiFile(), tmpPath, StandardCharsets.UTF_8.name());
 				}
@@ -207,6 +214,15 @@ public class UploadController {
 		map.put("printJobConfigs", printJobConfigs.getConfigs());
 		map.put("maxQsosToProcess", Integer.valueOf(configuration.getMaxQsosToProcess()));
 		return map;
+	}
+
+	@Override
+	public void sendProgressUpdate(String sessionId, String message) {
+		try {
+			webSocketConfig.getProgressFeedbackHandler().sendProgressUpdate(sessionId, message);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
 
