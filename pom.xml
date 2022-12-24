@@ -305,7 +305,7 @@
                             <target name="repackage spring-boot archive with .platform">
                                 <unzip src="target/adifweb.jar" dest="target/adifweb" />
                                 <copy todir="target/adifweb/.platform">
-                                    <fileset dir=".platform">
+                                    <fileset dir="src/main/resources/.platform">
                                     </fileset>
                                 </copy>
                                 <zip basedir="target/adifweb" destfile="target/adifweb.jar"/>
