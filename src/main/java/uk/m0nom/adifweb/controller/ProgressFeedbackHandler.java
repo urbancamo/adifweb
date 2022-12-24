@@ -20,7 +20,7 @@ public class ProgressFeedbackHandler extends TextWebSocketHandler implements Han
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        logger.info(String.format("ProgressFeedbackHandler.afterConnectionEstablished called, session=%s", session.getId()));
+        logger.info("ProgressFeedbackHandler.afterConnectionEstablished called");
         super.afterConnectionEstablished(session);
         // get the JSESSION (HttpSession Id)
         String httpSessionId = "";
@@ -28,18 +28,18 @@ public class ProgressFeedbackHandler extends TextWebSocketHandler implements Han
         for (String cookie : cookies) {
             if (cookie.startsWith("JSESSIONID=")) {
                 httpSessionId = cookie.substring(cookie.indexOf("=")+1);
-                logger.info(String.format("Identified http session id as %s", httpSessionId));
+                logger.info(String.format("Identified httpSessionId='%s', webSocket sessionId='%s'", httpSessionId, session.getId()));
             }
         }
         if (httpSessionId == "") {
-            logger.info("Could not identify http session id");
+            logger.info("Could not identify httpSessionId");
         }
         webSocketSessions.put(httpSessionId, session);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        logger.info(String.format("ProgressFeedbackHandler.afterConnectionClosed called session=%s, status=%s", session.getId(), status.toString()));
+        logger.info(String.format("ProgressFeedbackHandler.afterConnectionClosed called session='%s', status='%s'", session.getId(), status.toString()));
         super.afterConnectionClosed(session, status);
         webSocketSessions.remove(session);
     }
@@ -51,9 +51,8 @@ public class ProgressFeedbackHandler extends TextWebSocketHandler implements Han
     }
 
     public void sendProgressUpdate(String sessionId, String progressMessage) throws IOException {
-
         if (sessionId != null) {
-            logger.info(String.format("ProgressFeedbackHandler.sendProgressUpdate httpSessionId=%s, progressMessage=%s", sessionId, progressMessage));
+            logger.info(String.format("ProgressFeedbackHandler.sendProgressUpdate httpSessionId='%s', progressMessage='%s'", sessionId, progressMessage));
             WebSocketMessage<String> messageToSend = new TextMessage(progressMessage);
             WebSocketSession webSocketSession = webSocketSessions.get(sessionId);
             if (webSocketSession != null && webSocketSession.isOpen()) {
@@ -61,7 +60,7 @@ public class ProgressFeedbackHandler extends TextWebSocketHandler implements Han
                 webSocketSession.sendMessage(messageToSend);
             }
         } else {
-            logger.info(String.format("ProgressFeedbackHandler.sendProgressUpdate sessionId=null, progressMessage=%s", sessionId, progressMessage));
+            logger.info(String.format("ProgressFeedbackHandler.sendProgressUpdate sessionId=null, progressMessage='%s'", sessionId, progressMessage));
         }
     }
 

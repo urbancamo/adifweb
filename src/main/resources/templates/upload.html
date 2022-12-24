@@ -510,6 +510,8 @@
     </div>
     <input hidden id="optionsVisible" name="optionsVisible" type="text"
            th:value="${parameters.get('optionsVisible').getValue()}"/>
+    <input hidden id="serverUri" name="serverUri" type="text"
+           th:value="${parameters.get('serverUri').getValue()}"/>
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -526,7 +528,8 @@
     }
     function connectProgressWebSocket() {
         <!-- TODO this should not be hard coded! -->
-        ws = new WebSocket("ws://adifweb-env.eba-saseumwd.eu-west-2.elasticbeanstalk.com:80/progress");
+        let webSocketUri = document.getElementById("webSocketUri").value();
+        ws = new WebSocket(websocketUri);
         ws.onmessage = function (e) {
             updateProgress(e.data);
         }
