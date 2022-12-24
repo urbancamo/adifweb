@@ -6,9 +6,11 @@ import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ProgressFeedbackHandler extends TextWebSocketHandler implements HandshakeInterceptor {
 
@@ -43,7 +45,7 @@ public class ProgressFeedbackHandler extends TextWebSocketHandler implements Han
         if (sessionId != null) {
             WebSocketMessage<String> messageToSend = new TextMessage(progressMessage);
             WebSocketSession webSocketSession = webSocketSessions.get(sessionId);
-            if (webSocketSession != null) {
+            if (webSocketSession != null && webSocketSession.isOpen()) {
                 webSocketSession.sendMessage(messageToSend);
             }
         }
