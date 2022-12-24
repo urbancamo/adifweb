@@ -39,7 +39,7 @@ public class ProgressFeedbackHandler extends TextWebSocketHandler implements Han
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        logger.info(String.format("ProgressFeedbackHandler.afterConnectionClosed , session=%s", session.getId()));
+        logger.info(String.format("ProgressFeedbackHandler.afterConnectionClosed called session=%s, status=%s", session.getId(), status.toString()));
         super.afterConnectionClosed(session, status);
         webSocketSessions.remove(session);
     }
