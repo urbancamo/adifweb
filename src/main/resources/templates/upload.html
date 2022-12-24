@@ -526,7 +526,7 @@
     }
     function connectProgressWebSocket() {
         <!-- TODO this should not be hard coded! -->
-        ws = new WebSocket("ws://adifweb-env.eba-saseumwd.eu-west-2.elasticbeanstalk.com/progress");
+        ws = new WebSocket("ws://adifweb-env.eba-saseumwd.eu-west-2.elasticbeanstalk.com:80/progress");
         ws.onmessage = function (e) {
             updateProgress(e.data);
         }
