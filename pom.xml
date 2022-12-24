@@ -310,7 +310,7 @@
                                     <fileset dir="${project.build.outputDirectory}/platform">
                                     </fileset>
                                 </copy>
-                                <zip basedir="${project.build.directory}/adifweb" destfile="${project.build.directory}/adifweb.jar"/>
+                                <zip compress="false" basedir="${project.build.directory}/adifweb" destfile="${project.build.directory}/adifweb.jar"/>
                             </target>
                         </configuration>
                         <goals>
