@@ -276,6 +276,11 @@
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>3.0.0</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>3.1.0</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -286,6 +291,31 @@
                     <source>11</source>
                     <target>11</target>
                 </configuration>
+            </plugin>
+            <!-- mvn clean package spring-boot:repackage antrun:run@repackage -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <phase>deploy</phase>
+                        <configuration>
+                            <target name="repackage spring-boot archive with .platform">
+                                <unzip src="target/adifweb.jar" dest="target/adifweb" />
+                                <copy todir="target/adifweb/.platform">
+                                    <fileset dir=".platform">
+                                    </fileset>
+                                </copy>
+                                <zip basedir="target/adifweb" destfile="target/adifweb.jar"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
