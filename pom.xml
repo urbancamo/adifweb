@@ -310,7 +310,7 @@
                                     <fileset dir="${project.build.outputDirectory}/platform">
                                     </fileset>
                                 </copy>
-                                <zip compress="false" keepcompression="true" level="0" basedir="${project.build.directory}/adifweb" destfile="${project.build.directory}/adifweb.jar"/>
+                                <jar manifest="${project.build.directory}/adifweb/META-INF/MANIFEST.MF" compress="false" keepcompression="true" level="0" basedir="${project.build.directory}/adifweb" destfile="${project.build.directory}/adifweb.jar"/>
                             </target>
                         </configuration>
                         <goals>
