@@ -304,7 +304,7 @@
                         <configuration>
                             <target name="repackage spring-boot archive with .platform">
                                 <mkdir dir="${project.build.directory}/adifweb"/>
-                                <unzip src="{project.build.directory}/adifweb.jar" dest="${project.build.directory}/adifweb/" />
+                                <unzip src="${project.build.directory}/adifweb.jar" dest="${project.build.directory}/adifweb/" />
                                 <mkdir dir="${project.build.directory}/adifweb/.platform"/>
                                 <copy todir="${project.build.directory}/adifweb/.platform">
                                     <fileset dir="${project.build.directory}/classes/platform">
