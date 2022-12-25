@@ -7,10 +7,7 @@ import uk.m0nom.adifproc.adif3.control.TransformControl;
 import uk.m0nom.adifweb.domain.HtmlParameter;
 import uk.m0nom.adifweb.domain.HtmlParameters;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.logging.Logger;
 
 @Service
@@ -24,37 +21,21 @@ public class FileService {
     }
 
     public void storeInputFile(TransformControl control, MultipartFile uploadedFile, String tmpPath) {
-        String inputPath;
-        String inputFilename = null;
-        String content = null;
-        InputStream uploadedStream = null;
+        String inputFilename = String.format("%d-in-%s", control.getRunTimestamp(), uploadedFile.getOriginalFilename());
+        String inputPath = String.format("%s%s", tmpPath, inputFilename);
 
-        try {
-            uploadedStream = uploadedFile.getInputStream();
-            inputFilename = String.format("%d-in-%s", control.getRunTimestamp(), uploadedFile.getOriginalFilename());
-            inputPath = String.format("%s%s", tmpPath, inputFilename);
-            var out = new FileOutputStream(inputPath);
-
-            content = IOUtils.toString(uploadedStream, control.getEncoding());
-            // Store the ADIF input file into the server temp directory
-            IOUtils.write(content, out, control.getEncoding());
+        try (var out = new FileOutputStream(inputPath);
+                var uploadedStream = uploadedFile.getInputStream()) {
+            uploadedStream.transferTo(out);
             logger.info(String.format("Wrote ADIF input file to: %s", inputPath));
         } catch (IOException ioe1) {
             logger.severe(ioe1.getMessage());
-        } finally {
-            try {
-                assert uploadedStream != null;
-                uploadedStream.close();
-            } catch (IOException ioe2) {
-                logger.severe(ioe2.getMessage());
-            }
         }
 
         if (awsS3Utils.isConfigured()) {
             // Archive the content into S3 storage
-            assert content != null;
-            logger.info(String.format("Archiving %d characters into AWS S3 file %s", content.length(), inputFilename));
-            awsS3Utils.archiveFile(inputFilename, content);
+            logger.info(String.format("Archiving input file to AWS S3 file %s", inputFilename));
+            awsS3Utils.archiveFile(inputFilename, new File(inputPath));
         }
     }
 
@@ -69,34 +50,16 @@ public class FileService {
 
     public void archiveData(String filename, String content) {
         // Read content of file
-        awsS3Utils.archiveFile(filename, content);
+        awsS3Utils.archiveData(filename, content);
     }
 
-    public void archiveFile(String filename, String tmpPath, String encoding) {
-        String content;
-        FileInputStream out = null;
+    public void archiveFile(String filename, String tmpPath) {
         if (awsS3Utils.isConfigured()) {
             // Read content of file
             var filePath = String.format("%s%s", tmpPath, filename);
-            try {
-                out = new FileInputStream(filePath);
-                content = IOUtils.toString(out, encoding);
-
-                // Archive the content into S3 storage
-                logger.info(String.format("Archiving output file %s", filename));
-                awsS3Utils.archiveFile(filename, content);
-            } catch (Exception e) {
-                logger.severe(e.getMessage());
-            } finally {
-                try {
-                    if (out != null) {
-                        out.close();
-                    }
-                } catch (IOException e) {
-                    logger.severe(e.getMessage());
-                }
-            }
-
+            // Archive the content into S3 storage
+            logger.info(String.format("Archiving output file into S3: %s", filename));
+            awsS3Utils.archiveFile(filename, new File(filePath));
         }
     }
 }

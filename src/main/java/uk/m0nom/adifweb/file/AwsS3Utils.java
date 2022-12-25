@@ -7,6 +7,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import lombok.Getter;
@@ -15,7 +16,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
@@ -43,7 +46,17 @@ public class AwsS3Utils {
         }
     }
 
-    public void archiveFile(String infile, String content) {
+    public void archiveFile(String filename, File fileToUpload) {
+        if (isConfigured()) {
+            String path = String.format("%s/%s", ARCHIVE_FILE_PATH, filename);
+            try {
+                s3client.putObject(ADIF_PROC_BUCKET, path, fileToUpload);
+            } catch (Exception e) {
+                logger.severe(String.format("Exception archiving file %s into bucket %s: %s", path, ADIF_PROC_BUCKET, e.getMessage()));}
+        }
+    }
+
+    public void archiveData(String infile, String content) {
         if (isConfigured()) {
             String path = String.format("%s/%s", ARCHIVE_FILE_PATH, infile);
             try {
@@ -53,6 +66,7 @@ public class AwsS3Utils {
             }
         }
     }
+
 
     public Set<String> getFiles() {
         if (isConfigured()) {

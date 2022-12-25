@@ -169,22 +169,22 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 				fileService.storeInputFile(control, uploadedFile, tmpPath);
 				var transformResults = transformerService.runTransformer(control, tmpPath, uploadedFile.getOriginalFilename(), this, session.getId());
 				if (transformResults.getAdiFile() != null) {
-					fileService.archiveFile(transformResults.getAdiFile(), tmpPath, StandardCharsets.UTF_8.name());
+					fileService.archiveFile(transformResults.getAdiFile(), tmpPath);
 				}
 				if (transformResults.getKmlFile() != null) {
-					fileService.archiveFile(transformResults.getKmlFile(), tmpPath, StandardCharsets.UTF_8.name());
+					fileService.archiveFile(transformResults.getKmlFile(), tmpPath);
 				}
 				if (transformResults.getFormattedQsoFile() != null) {
-					fileService.archiveFile(transformResults.getFormattedQsoFile(), tmpPath, configuration.getPrintFormatter().getPrintJobConfig().getOutEncoding());
+					fileService.archiveFile(transformResults.getFormattedQsoFile(), tmpPath);
 				}
 				if (transformResults.getQslLabelsFile() != null) {
-					fileService.archiveFile(transformResults.getQslLabelsFile(), tmpPath, StandardCharsets.UTF_8.name());
+					fileService.archiveFile(transformResults.getQslLabelsFile(), tmpPath);
 				}
 
 				if (customFileLogHandler != null) {
 					String logFile = customFileLogHandler.getLogFile();
 					customFileLogHandler.closeAndDetach();
-					fileService.archiveFile(logFile, tmpPath, StandardCharsets.UTF_8.name());
+					fileService.archiveFile(logFile, tmpPath);
 				}
 
 				if (transformResults.hasErrors()) {
