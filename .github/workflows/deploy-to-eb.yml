@@ -42,13 +42,13 @@ jobs:
         run: mvn -B verify spring-boot:repackage antrun:run@repackage
 
       - name: Version deployment archive
-        run: mv -v target/adifweb.jar target/adifweb-${{ github.sha }}.jar
+        run: mv -v target/adifweb.zip target/adifweb-${{ github.sha }}.zip
 
-      - name: Upload JAR
+      - name: Upload ZIP
         uses: actions/upload-artifact@v2
         with:
-            name: adifweb-${{ github.sha }}.jar
-            path: target/adifweb-${{ github.sha }}.jar
+            name: adifweb-${{ github.sha }}.zip
+            path: target/adifweb-${{ github.sha }}.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -61,20 +61,20 @@ jobs:
           aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
           aws-region: "eu-west-2"
 
-      - name: Download JAR
+      - name: Download ZIP
         #Download the artifact which was uploaded in the build's job
         uses: actions/download-artifact@v2
         with:
-          name: adifweb-${{ github.sha }}.jar
+          name: adifweb-${{ github.sha }}.zip
 
       - name: Upload package to S3 bucket
-        run: aws s3 cp adifweb-${{ github.sha }}.jar s3://adifweb-deploy/
+        run: aws s3 cp adifweb-${{ github.sha }}.zip s3://adifweb-deploy/
 
       - name: Create new ElasticBeanstalk Application Version
         run: |
           aws elasticbeanstalk create-application-version \
           --application-name adifweb \
-          --source-bundle S3Bucket="adifweb-deploy",S3Key="adifweb-${{ github.sha }}.jar" \
+          --source-bundle S3Bucket="adifweb-deploy",S3Key="adifweb-${{ github.sha }}.zip" \
           --version-label "ver-${{ github.sha }}" \
           --description "commit-sha-${{ github.sha }}"
 
