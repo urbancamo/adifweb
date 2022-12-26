@@ -3,10 +3,12 @@ package uk.m0nom.adifweb.controller;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -78,7 +80,12 @@ public class ProgressFeedbackHandler extends TextWebSocketHandler implements Han
                                    @NotNull WebSocketHandler wsHandler, @NotNull Map<String, Object> attributes) {
 
         logger.info("ProgressFeedbackHandler.beforeHandshake called");
-        return false;
+        if (request instanceof ServletServerHttpRequest) {
+            ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
+            HttpSession session = servletRequest.getServletRequest().getSession();
+            attributes.put("sessionId", session.getId());
+        }
+        return true;
     }
 
     @Override
