@@ -14,8 +14,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
         this.progressFeedbackHandler = new ProgressFeedbackHandler();
         webSocketHandlerRegistry
-                .addHandler(progressFeedbackHandler, "/progress")
-                .addInterceptors(progressFeedbackHandler);
+                .addHandler(progressFeedbackHandler, "/progress");
     }
 
     public ProgressFeedbackHandler getProgressFeedbackHandler() {
