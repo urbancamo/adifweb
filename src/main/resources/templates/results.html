@@ -45,27 +45,27 @@
                     <label for="error"  class="form-label">Errors</label>
                     <input class="form-control" type="text" id="error" name="error" th:value="${error}" value=""/>
                 </div>
-                <div class="form-group mb-3" >
+                <div class="form-group mb-3" th:if="${warningsRows > 0}">
                     <label for="error"  class="form-label">Warnings</label>
-                    <input class="form-control" type="textfield" id="warnings" name="warnings" th:value="${warnings}" value=""/>
+                    <textarea class="form-control" id="warnings" name="warnings" th:rows="${warningsRows}" th:text="${warnings}"></textarea>
                 </div>
-                <div class="form-group mb-3" >
+                <div class="form-group mb-3" th:if="${callsignsWithoutLocation.length() > 0}">
                     <label for="callsignsWithoutLocation" class="form-label">Contacts without a location</label>
                     <input class="form-control" type="text" id="callsignsWithoutLocation" name="callsignsWithoutLocation" th:value="${callsignsWithoutLocation}" value=""/>
                 </div>
-                <div class="form-group mb-3" >
+                <div class="form-group mb-3" th:if="${callsignsWithDubiousLocationRows}" >
                     <label for="callsignsWithDubiousLocation" class="form-label">Contacts with a dubious location</label>
-                    <input class="form-control" type="text" id="callsignsWithDubiousLocation" name="callsignsWithDubiousLocation" th:value="${callsignsWithDubiousLocation}" value=""/>
+                    <textarea class="form-control" id="callsignsWithDubiousLocation" name="callsignsWithDubiousLocation" th:rows="${callsignsWithDubiousLocationRows}" th:text="${callsignsWithDubiousLocation}"></textarea>
                 </div>
                 <div class="form-group mb-3" >
                     <label for="qslCallsigns" class="form-label">QSL'd Contacts</label>
                     <input class="form-control" type="text" id="qslCallsigns" name="qslCallsigns" th:value="${qslCallsigns}" value=""/>
                 </div>
-                <div class="form-group mb-3" >
+                <div class="form-group mb-3" th:if="${unknownSatellites.length() > 0}">
                     <label for="unknownSatellites" class="form-label">Unknown Satellites</label>
                     <input class="form-control" type="text" id="unknownSatellites" name="unknownSatellites" th:value="${unknownSatellites}" value=""/>
                 </div>
-                <div class="form-group mb-3" >
+                <div class="form-group mb-3" th:if="${unknownSatellitePasses.length() > 0}" >
                     <label for="unknownSatellitePasses" class="form-label">Satellite Passes with no data</label>
                     <input class="form-control" type="text" id="unknownSatellitePasses" name="unknownSatellitePasses" th:value="${unknownSatellitePasses}" value=""/>
                 </div>

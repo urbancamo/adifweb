@@ -1,6 +1,5 @@
 package uk.m0nom.adifweb.controller;
 
-import com.amazonaws.event.request.Progress;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,8 +26,6 @@ import uk.m0nom.adifweb.validation.ValidatorService;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +49,7 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 
 	private final PrintJobConfigs printJobConfigs;
 
-	private final Adif3SchemaElementsService adif3SchemaElementsService;
+	private final Adif3SchemaService adif3SchemaService;
 
 	private final ApplicationConfiguration configuration;
 
@@ -64,15 +61,15 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 
 	private final WebSocketConfig webSocketConfig;
 
-	private String webSocketUri = "localhost:9090";
+	private String webSocketUri;
 
 	public UploadController(ApplicationConfiguration configuration, TransformerService transformerService,
-							PrintJobConfigs printJobConfigs, Adif3SchemaElementsService adif3SchemaElementsService,
+							PrintJobConfigs printJobConfigs, Adif3SchemaService adif3SchemaService,
 							FileService fileService, ValidatorService validatorService,
 							WebSocketConfig webSocketConfig, ConfigurableEnvironment environment) {
 		this.configuration = configuration;
 		this.printJobConfigs = printJobConfigs;
-		this.adif3SchemaElementsService = adif3SchemaElementsService;
+		this.adif3SchemaService = adif3SchemaService;
 		this.fileService = fileService;
 		this.transformerService = transformerService;
 		this.validatorService = validatorService;
@@ -161,7 +158,7 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 				var control = TransformControlUtils.createTransformControlFromParameters(configuration, parameters);
 				control.setRunTimestamp(runTimestamp);
 
-				control.setAdif3ElementSet(adif3SchemaElementsService.getElements());
+				control.setAdif3Schema(adif3SchemaService.getSchema());
 				control.setDxccEntities(configuration.getDxccEntities());
 				control.setCountries(configuration.getCountries());
 				
@@ -210,9 +207,11 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 		results.put("formattedQsoFile", transformResults.getFormattedQsoFile());
 		results.put("qslLabelsFile", transformResults.getQslLabelsFile());
 		results.put("error", StringUtils.defaultIfEmpty(transformResults.getError(), "none"));
-		results.put("warnings", transformResults.getWarnings().stream().collect(Collectors.joining( "\n")));
-				results.put("callsignsWithoutLocation", String.join(", ", transformResults.getContactsWithoutLocation()));
-		results.put("callsignsWithDubiousLocation", String.join(", ", transformResults.getContactsWithDubiousLocation()));
+		results.put("warnings", String.join("\n", transformResults.getWarnings()));
+		results.put("warningsRows", transformResults.getWarnings().size());
+		results.put("callsignsWithoutLocation", String.join(", ", transformResults.getContactsWithoutLocation()));
+		results.put("callsignsWithDubiousLocation", String.join("\n", transformResults.getContactsWithDubiousLocation()));
+		results.put("callsignsWithDubiousLocationRows", transformResults.getContactsWithDubiousLocation().size());
 		results.put("qslCallsigns", String.join(", ", transformResults.getQslContacts()));
 		results.put("unknownSatellites", String.join(", ", transformResults.getUnknownSatellites()));
 		results.put("unknownSatellitePasses", String.join(", ", transformResults.getUnknownSatellitePasses()));
