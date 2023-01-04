@@ -58,11 +58,11 @@ public class ProgressFeedbackHandler extends TextWebSocketHandler {
 
     public void sendProgressUpdate(String sessionId, String progressMessage) {
         if (sessionId != null) {
-            logger.info(String.format("ProgressFeedbackHandler.sendProgressUpdate httpSessionId='%s', progressMessage='%s'", sessionId, progressMessage));
+            //logger.info(String.format("ProgressFeedbackHandler.sendProgressUpdate httpSessionId='%s', progressMessage='%s'", sessionId, progressMessage));
             WebSocketMessage<String> messageToSend = new TextMessage(progressMessage);
             WebSocketSession webSocketSession = webSocketSessions.get(sessionId);
             if (webSocketSession != null && webSocketSession.isOpen()) {
-                logger.info("sending message to open web socket session");
+                //logger.info("sending message to open web socket session");
                 try {
                     webSocketSession.sendMessage(messageToSend);
                 } catch (IOException e) {
@@ -70,7 +70,7 @@ public class ProgressFeedbackHandler extends TextWebSocketHandler {
                 }
             }
         } else {
-            logger.info(String.format("ProgressFeedbackHandler.sendProgressUpdate sessionId=null, progressMessage='%s'", progressMessage));
+            logger.warning(String.format("ProgressFeedbackHandler.sendProgressUpdate sessionId=null, progressMessage='%s'", progressMessage));
         }
     }
 }
