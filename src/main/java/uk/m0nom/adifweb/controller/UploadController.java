@@ -83,7 +83,7 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 		if (Arrays.asList(environment.getActiveProfiles()).contains("dev")) {
 			webSocketUri = "ws://localhost:9090/progress";
 		} else {
-			webSocketUri = "ws://adifweb-env.eba-saseumwd.eu-west-2.elasticbeanstalk.com/progress";
+			webSocketUri = "ws://adifweb-env.eba-saseumwd.eu-west-2.elasticbeanstalk.com:80/progress";
 		}
 		logger.info(String.format("webSocketUri set to %s", webSocketUri));
 	}
