@@ -12,7 +12,7 @@
 
     <groupId>uk.m0nom</groupId>
     <artifactId>adifweb</artifactId>
-    <version>1.1.11</version>
+    <version>1.1.12</version>
     <name>adifweb</name>
     <url>https://github.com/urbancamo/adifweb</url>
     <description>Web Interface for the ADIF Processor</description>
@@ -308,6 +308,11 @@
                                 <mkdir dir="${project.build.directory}/adifweb/.platform"/>
                                 <copy todir="${project.build.directory}/adifweb/.platform">
                                     <fileset dir="${project.build.outputDirectory}/platform">
+                                    </fileset>
+                                </copy>
+                                <mkdir dir="${project.build.directory}/adifweb/.ebextensions"/>
+                                <copy todir="${project.build.directory}/adifweb/.ebextensions">
+                                    <fileset dir="${project.build.outputDirectory}/ebextensions">
                                     </fileset>
                                 </copy>
                                 <zip compress="false" keepcompression="true" level="0"
