@@ -2,7 +2,10 @@ package uk.m0nom.adifproc.adifweb;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.inspector.TagInspector;
+import org.yaml.snakeyaml.nodes.Tag;
 import uk.m0nom.adifproc.adif3.control.TransformControl;
 
 import java.io.File;
@@ -17,7 +20,16 @@ public class WriteYamlTest {
     public void testSerialization() {
         TransformControl primary = new TransformControl();
 
-        Yaml yamlProcessor = new Yaml();
+        LoaderOptions options = new LoaderOptions();
+        TagInspector allowedTags = new TagInspector() {
+            @Override
+            public boolean isGlobalTagAllowed(Tag tag) {
+                return true;
+            }
+        };
+
+        options.setTagInspector(allowedTags);
+        Yaml yamlProcessor = new Yaml(options);
         String yaml = yamlProcessor.dump(primary);
 
         try {
