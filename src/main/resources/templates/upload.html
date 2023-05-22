@@ -32,12 +32,18 @@
         a.infolink {
             text-decoration: none;
         }
+        h3 {
+            color: white;
+            background-color: MidnightBlue;
+            text-align: center;
+        }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/f5ec62c7d7.js" crossorigin="anonymous"></script>
 <body>
 <div class="container">
+    <h3>Please use the new URL for the ADIF Processor: <a href="https://www.adif.uk">https://www.adif.uk</a></h3>
     <h1>ADIF Processor Control Form</h1>
 </div>
 <form id="form" action="#" th:action="@{/upload}" th:object="${upload}" enctype="multipart/form-data" method="post">
