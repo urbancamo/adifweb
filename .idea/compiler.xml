@@ -9,7 +9,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="adifweb" />
         <module name="adif-processor" />
-        <module name="adif" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="11">
