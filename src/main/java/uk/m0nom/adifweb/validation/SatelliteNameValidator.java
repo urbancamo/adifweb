@@ -5,6 +5,7 @@ import uk.m0nom.adifproc.satellite.ApSatellite;
 import uk.m0nom.adifproc.satellite.ApSatelliteService;
 
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 
 public class SatelliteNameValidator implements Validator {
     public final static String UNSUPPORTED_SATELLITE = "Unsupported Satellite";
@@ -20,7 +21,7 @@ public class SatelliteNameValidator implements Validator {
         if (StringUtils.isEmpty(value)) {
             return ValidationResult.EMPTY;
         } else {
-            ApSatellite satellite = apSatelliteService.getSatellite(value.toUpperCase(), LocalDate.now());
+            ApSatellite satellite = apSatelliteService.getSatellite(value.toUpperCase(), LocalDate.now().atStartOfDay(ZoneOffset.UTC));
             if (satellite == null) {
                 return new ValidationResult(UNSUPPORTED_SATELLITE);
             }
