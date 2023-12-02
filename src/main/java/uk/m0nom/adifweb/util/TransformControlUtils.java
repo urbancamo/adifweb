@@ -31,6 +31,7 @@ public class TransformControlUtils {
         control.setContestResults(parameters.get(HtmlParameterType.CONTEST_RESULTS.getParameterName()).getValue() != null);
 
         control.setLocation(parameters.get(HtmlParameterType.LOCATION.getParameterName()).getValue());
+        control.setCallsign(parameters.get(HtmlParameterType.CALLSIGN.getParameterName()).getValue());
         control.setEncoding(parameters.get(HtmlParameterType.ENCODING.getParameterName()).getValue());
 
         control.setKmlContactWidth(3);
