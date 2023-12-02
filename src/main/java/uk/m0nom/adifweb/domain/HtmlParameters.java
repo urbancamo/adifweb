@@ -26,6 +26,7 @@ public class HtmlParameters {
     public void reset() {
         addParameter(new HtmlParameter(HtmlParameterType.FILENAME, "", validatorService.getValidator(HtmlParameterType.FILENAME)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.ENCODING, "windows-1251", validatorService.getValidator(HtmlParameterType.ENCODING)), parameters);
+        addParameter(new HtmlParameter(HtmlParameterType.CALLSIGN, "", validatorService.getValidator(HtmlParameterType.CALLSIGN)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.LOCATION, "", validatorService.getValidator(HtmlParameterType.LOCATION)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.SOTA_REF, "", validatorService.getValidator(HtmlParameterType.SOTA_REF)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.GMA_REF, "", validatorService.getValidator(HtmlParameterType.GMA_REF)), parameters);

@@ -23,6 +23,7 @@ public class ValidatorService {
         addValidator(HtmlParameterType.ENCODING, new EncodingValidator());
         addValidator(HtmlParameterType.FILENAME, new FilenameValidator());
         addValidator(HtmlParameterType.PRINTER_CONFIG, new PrinterConfigValidator());
+        addValidator(HtmlParameterType.CALLSIGN, new CallsignValidator());
         addValidator(HtmlParameterType.LOCATION, new LocationValidator(locationParsingService));
         addValidator(HtmlParameterType.SOTA_REF, new ActivityValidator(activityDatabaseService, ActivityType.SOTA));
         addValidator(HtmlParameterType.GMA_REF, new ActivityValidator(activityDatabaseService, ActivityType.GMA));

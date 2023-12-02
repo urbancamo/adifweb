@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum HtmlParameterType {
+    CALLSIGN("callsign"),
     FILENAME("filename"),
     LOCATION("location"),
     SOTA_REF("sotaRef"),

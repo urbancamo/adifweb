@@ -42,10 +42,12 @@
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/f5ec62c7d7.js" crossorigin="anonymous"></script>
 <body>
+<!--
 <div class="container">
     <h3>Please use the new URL for the ADIF Processor: <a href="https://www.adif.uk">https://www.adif.uk</a></h3>
     <h1>ADIF Processor Control Form</h1>
 </div>
+-->
 <form id="form" action="#" th:action="@{/upload}" th:object="${upload}" enctype="multipart/form-data" method="post">
 
     <!-- *********************** FILE ***************** -->
@@ -286,6 +288,34 @@
                               th:text="${parameters.get('location').getValidationResult().getError()}"></span>
                         <span class="text-success"
                               th:unless="${parameters.get('location').getValidationResult().hasError()}">(any valid format)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- *********************** CALLSIGN ***************** -->
+    <div class="panel panel-default">
+        <div class="panel-heading">Your Callsign</div>
+        <div class="panel-body" id="callsignPanel">
+            <div class="container">
+                <p>If you get the error 'STATION_CALLSIGN or OPERATOR not defined', enter your callsign here.</p>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-4">
+                        <label class="callsign" for="callsign">Callsign</label>
+                    </div>
+                    <div class="col-4">
+                        <input class="callsign callsignPanel" type="text" id="callsign" name="callsign"
+                               th:value="${parameters.get('callsign').getValue()}" value=""/>
+                    </div>
+                    <div class="col-md-auto">
+                        <span class="text-danger"
+                              th:if="${parameters.get('callsign').getValidationResult().hasError()}"
+                              th:text="${parameters.get('callsign').getValidationResult().getError()}"></span>
+                        <span class="text-success"
+                              th:unless="${parameters.get('callsign').getValidationResult().hasError()}">(any valid format)</span>
                     </div>
                 </div>
             </div>
