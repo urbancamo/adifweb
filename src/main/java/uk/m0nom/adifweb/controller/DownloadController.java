@@ -16,11 +16,28 @@ import java.util.logging.Logger;
 public class DownloadController {
 	private static final Logger logger = Logger.getLogger(DownloadController.class.getName());
 
-	@GetMapping (value = "/download", produces = MediaType.TEXT_PLAIN_VALUE)
+	@GetMapping (value = "/download", produces = MediaType.ALL_VALUE)
 	public ResponseEntity<StreamingResponseBody> download(@RequestParam String filename, final HttpServletResponse response) {
 
 		logger.info(String.format("Download request for: %s", filename));
-		response.setContentType("text/plain");
+
+		String filenameExt = filename.substring(filename.lastIndexOf('.'));
+		String contentType = "text/plain";
+		switch (filenameExt) {
+			case ".md":
+				response.setContentType("text/markdown");
+				break;
+			case ".kml":
+				response.setContentType("application/vnd.google-earth.kml+xml");
+				break;
+			case ".adi":
+				response.setContentType("application/adif");
+				break;
+			case ".txt":
+				response.setContentType("text/plain");
+				break;
+		}
+		response.setContentType(contentType);
 		response.setHeader(
 				"Content-Disposition",
 				String.format("attachment;filename=%s", filename));

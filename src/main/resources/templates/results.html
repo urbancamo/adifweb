@@ -73,25 +73,25 @@
                 <label for="kmlFile" class="form-label">ADI File</label>
                 <div class="input-group mb-3" >
                     <input class="form-control" type="text" id="adiFile" name="adiFile" th:value="${adiFile}" value="" placeholder="ADI File" aria-label="ADI File" aria-describedby="button-adif-download"/>
-                    <a href="#" th:href="@{/download(filename=${adiFile})}" class="btn btn-outline-secondary" role="button" id="button-adif-download">Download</a>
+                    <a href="#" th:download="${adiFile}" th:href="@{/download(filename=${adiFile})}" class="btn btn-outline-secondary" role="button" id="button-adif-download">Download</a>
                 </div>
 
                 <label for="kmlFile" class="form-label">KML File</label>
                 <div class="input-group mb-3" >
                     <input class="form-control" type="text" id="kmlFile" name="kmlFile" th:value="${kmlFile}" value="" placeholder="KML File" aria-label="KML File" aria-describedby="button-kml-download"/>
-                    <a href="#" th:href="@{/download(filename=${kmlFile})}" class="btn btn-outline-secondary" role="button" id="button-kml-download">Download</a>
+                    <a href="#" th:download="${kmlFile}" th:href="@{/download(filename=${kmlFile})}" class="btn btn-outline-secondary" role="button" id="button-kml-download">Download</a>
                 </div>
 
                 <label for="formattedQsoFile" class="form-label">Formatted QSO File</label>
                 <div class="input-group mb-3" >
                     <input class="form-control" type="text" id="formattedQsoFile" name="formattedQsoFile" th:value="${formattedQsoFile}" value="" placeholder="Markdown File" aria-label="Markdown File" aria-describedby="button-markdown-download"/>
-                    <a href="#" th:href="@{/download(filename=${formattedQsoFile})}" class="btn btn-outline-secondary" role="button" id="button-markdown-download">Download</a>
+                    <a href="#" th:download="${formattedQsoFile}" th:href="@{/download(filename=${formattedQsoFile})}" class="btn btn-outline-secondary" role="button" id="button-markdown-download">Download</a>
                 </div>
 
                 <label for="qslLabelsFile" class="form-label">QSL Labels File</label>
                 <div class="input-group mb-3" >
                     <input class="form-control" type="text" id="qslLabelsFile" name="qslLabelsFile" th:value="${qslLabelsFile}" value="" placeholder="QSL Labels File" aria-label="QSL Labels File" aria-describedby="button-qsllables-download"/>
-                    <a href="#" th:href="@{/download(filename=${qslLabelsFile})}" class="btn btn-outline-secondary" role="button" id="button-qsllabels-download">Download</a>
+                    <a href="#" th:download="${qslLabelsFile}" th:href="@{/download(filename=${qslLabelsFile})}" class="btn btn-outline-secondary" role="button" id="button-qsllabels-download">Download</a>
                 </div>
 
             </div>
