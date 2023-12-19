@@ -12,7 +12,7 @@
 
     <groupId>uk.m0nom</groupId>
     <artifactId>adifweb</artifactId>
-    <version>1.1.37</version>
+    <version>1.1.38</version>
     <name>ADIF Web Interface</name>
     <url>https://github.com/urbancamo/adifweb</url>
     <description>Web Interface for the ADIF Processor</description>
@@ -134,7 +134,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.16.0</version>
+            <version>2.13.5</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/jakarta.activation/jakarta.activation-api -->
