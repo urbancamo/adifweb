@@ -494,8 +494,9 @@
                             <label class="" for="satMode">Don't QSL Callsign List</label>
                         </div>
                         <div class="col-4">
+                            <label for="dontQsl"></label>
                             <input class="" type="text" id="dontQsl" name="dontQsl" style="width: 100%;"
-                                   th:value="${parameters.get('dontQsl').getValue()}" value=""/>
+                                                                th:value="${parameters.get('dontQsl').getValue()}" value=""/>
                         </div>
                         <div class="col-auto">
                             <span class="text-danger"
@@ -506,12 +507,12 @@
             </div>
         </div>
     </div>
-    </div>
 
     <!-- *********************** ERRORS/PROGRESS ***************** -->
     <div class="panel panel-default">
         <div class="panel-heading">Progress/Errors</div>
         <div class="container">
+            <label for="progressAndError"></label>
             <input type="text" class="form-control" id="progressAndError" name="progessAndError" th:value="${error}">
         </div>
         <div class="container">
@@ -544,10 +545,12 @@
             </div>
         </div>
     </div>
+    <label for="optionsVisible"></label>
     <input hidden id="optionsVisible" name="optionsVisible" type="text"
-           th:value="${parameters.get('optionsVisible').getValue()}"/>
+                                               th:value="${parameters.get('optionsVisible').getValue()}"/>
+    <label for="webSocketUri"></label>
     <input hidden id="webSocketUri" name="webSocketUri" type="text"
-           th:value="${webSocketUri}"/>
+                                             th:value="${webSocketUri}"/>
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -556,19 +559,19 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script th:inline="javascript">
-    let ws;
+    // let ws;
 
-    function updateProgress(data) {
-        let messages = document.getElementById("progressAndError");
-        messages.value = data;
-    }
-    function connectProgressWebSocket() {
-        let webSocketUri = document.getElementById("webSocketUri").defaultValue;
-        ws = new WebSocket(webSocketUri);
-        ws.onmessage = function (e) {
-            updateProgress(e.data);
-        }
-    }
+    // function updateProgress(data) {
+    //     let messages = document.getElementById("progressAndError");
+    //     messages.value = data;
+    // }
+    // function connectProgressWebSocket() {
+    //     let webSocketUri = document.getElementById("webSocketUri").defaultValue;
+    //     ws = new WebSocket(webSocketUri);
+    //     ws.onmessage = function (e) {
+    //         updateProgress(e.data);
+    //     }
+    // }
 
     $(function () {
         $('#spinner').hide();
