@@ -583,7 +583,7 @@
         }
 
         $('#submitButton').click(function () {
-            connectProgressWebSocket();
+            // Not working for firefox - connectProgressWebSocket();
             $('#submitButton').prop('disabled', true);
             $('#progressAndError').val("Processing...");
             $('#spinner').show();
