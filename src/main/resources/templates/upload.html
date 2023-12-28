@@ -523,7 +523,7 @@
     <div class="container padding-bottom">
         <div class="row">
             <div class="col-md-auto">
-                <input id="submitButton" class="btn btn-success" type="submit" value="Process">
+                <input id="submitButton" class="btn btn-success" type="button" value="Process">
                 <a href="#" class="btn btn-secondary" role="button" id="back">Back...</a>
                 <a href="/upload?clear=true" class="btn btn-secondary" role="button" id="button-markdown-upload">Clear
                     Form</a>
@@ -582,16 +582,16 @@
             $('#optionsCollapse').show();
         }
 
-        $('#form').submit(function () {
-            //connectProgressWebSocket();
-            $('#submit').prop('disabled', true);
+        $('#submitButton').click(function () {
+            connectProgressWebSocket();
+            $('#submitButton').prop('disabled', true);
             $('#progressAndError').val("Processing...");
             $('#spinner').show();
             if ($('#optionsPanelBody').is(':visible')) {
                 $('#optionsVisible').val("on");
             }
             $("body").css("cursor", "progress");
-            //$("#form").submit();
+            $("#form").submit();
         })
 
         $('a.a-encoding').click(function () {
