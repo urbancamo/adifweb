@@ -73,7 +73,7 @@ jobs:
       - name: Create new ElasticBeanstalk Application Version
         run: |
           aws elasticbeanstalk create-application-version \
-          --application-name adifweb \
+          --application-name adifweb17 \
           --source-bundle S3Bucket="adifweb-deploy",S3Key="adifweb-${{ github.sha }}.zip" \
           --version-label "ver-${{ github.sha }}" \
           --description "commit-sha-${{ github.sha }}"
