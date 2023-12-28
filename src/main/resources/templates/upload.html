@@ -582,8 +582,8 @@
             $('#optionsCollapse').show();
         }
 
-        $('#submitButton').submit(function () {
-            //connectProgressWebSocket();
+        $('#submitButton').click(function () {
+            connectProgressWebSocket();
             $('#submitButton').prop('disabled', true);
             $('#progressAndError').val("Processing...");
             $('#spinner').show();
