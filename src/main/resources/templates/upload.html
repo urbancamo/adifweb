@@ -259,6 +259,24 @@
                                   th:text="${parameters.get('gmaRef').getValidationResult().getError()}"></span>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="" for="gmaRef">Bunkers on the Air <a href="https://bunkerbase.org/"
+                                                                                     class="infolink" target="_blank"
+                                                                                     rel="noopener noreferrer"><i
+                                    class="fa-solid fa-circle-info"></i></a></label>
+                        </div>
+                        <div class="col-4">
+                            <input class="" type="text" id="botaRef" name="botaRef"
+                                   th:value="${parameters.get('botaRef').getValue()}" value=""/>
+                        </div>
+                        <div class="col-md-auto">
+                            <span class="text-danger"
+                                  th:text="${parameters.get('botaRef').getValidationResult().getError()}"></span>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

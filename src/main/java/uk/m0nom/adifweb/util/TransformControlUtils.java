@@ -59,6 +59,7 @@ public class TransformControlUtils {
         control.setIcon(ActivityType.LOTA.getActivityName(), IconResource.LOTA_DEFAULT_ICON_URL);
         control.setIcon(ActivityType.ROTA.getActivityName(), IconResource.ROTA_DEFAULT_ICON_URL);
         control.setIcon(ActivityType.IOTA.getActivityName(), IconResource.IOTA_DEFAULT_ICON_URL);
+        control.setIcon(ActivityType.BOTA.getActivityName(), IconResource.BOTA_DEFAULT_ICON_URL);
 
         control.setIcon(IconResource.CW_ICON_NAME, IconResource.CW_DEFAULT_ICON_URL);
 

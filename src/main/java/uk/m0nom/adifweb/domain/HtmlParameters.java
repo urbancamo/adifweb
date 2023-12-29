@@ -38,6 +38,7 @@ public class HtmlParameters {
         addParameter(new HtmlParameter(HtmlParameterType.LOTA_REF, "", validatorService.getValidator(HtmlParameterType.LOTA_REF)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.ROTA_REF, "", validatorService.getValidator(HtmlParameterType.ROTA_REF)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.IOTA_REF, "", validatorService.getValidator(HtmlParameterType.IOTA_REF)), parameters);
+        addParameter(new HtmlParameter(HtmlParameterType.BOTA_REF, "", validatorService.getValidator(HtmlParameterType.BOTA_REF)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.STATION_SUBLABEL, BooleanValidator.TRUE, validatorService.getValidator(HtmlParameterType.STATION_SUBLABEL)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.ACTIVITY_SUBLABEL, BooleanValidator.TRUE, validatorService.getValidator(HtmlParameterType.ACTIVITY_SUBLABEL)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.LOCAL_ACTIVATION_SITES, "", validatorService.getValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES)), parameters);
