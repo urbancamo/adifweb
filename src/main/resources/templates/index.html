@@ -17,11 +17,7 @@
             text-shadow: 3px 3px #2222cc;
             padding-bottom: 10px;
         }
-        h3 {
-            color: white;
-            background-color: MidnightBlue;
-            text-align: center;
-        }
+
         span.version {
             font-family: monospace;
         }
@@ -45,6 +41,10 @@
             z-index:1;
             position:relative;
         }
+        .release-notes {
+            opacity: 0.75;
+        }
+
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/f5ec62c7d7.js" crossorigin="anonymous"></script>
@@ -71,6 +71,11 @@
                     <div class="container">
                         <a href="https://qrz.com/db/M0NOM/P" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary" role="button" id="author-button">Author</a>
                     </div>
+                </div>
+            </div>
+            <div class='container m-4 px-4 release-notes'>
+                <div class='alert alert-light px-4' role='alert'>
+                    [(${release_notes})]
                 </div>
             </div>
         </div>
