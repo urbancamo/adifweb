@@ -35,6 +35,7 @@ public class ValidatorService {
         addValidator(HtmlParameterType.LOTA_REF, new ActivityValidator(activityDatabaseService, ActivityType.LOTA));
         addValidator(HtmlParameterType.ROTA_REF, new ActivityValidator(activityDatabaseService, ActivityType.ROTA));
         addValidator(HtmlParameterType.IOTA_REF, new ActivityValidator(activityDatabaseService, ActivityType.IOTA));
+        addValidator(HtmlParameterType.BOTA_REF, new ActivityValidator(activityDatabaseService, ActivityType.BOTA));
         addValidator(HtmlParameterType.STATION_SUBLABEL, new BooleanValidator());
         addValidator(HtmlParameterType.ACTIVITY_SUBLABEL, new BooleanValidator());
         addValidator(HtmlParameterType.LOCAL_ACTIVATION_SITES, new BooleanValidator());
