@@ -1,3 +1,7 @@
+**Version 1.2.7, released 31-DEC-2023**
+- handle multiple POTA references in a comment
+- show Time Off accurately in contact info panel
+
 **Version 1.2.6, released 30-DEC-2023**
  - add Bunkers on the Air as a supported activity
  - improve resilience when reading ADIF files with empty fields
