@@ -1,3 +1,6 @@
+**Version 1.2.8, released 13-JAN-2024**
+- handle invalid mode of LSB/USB in input file - convert to SSB/LSB and SSB/USB mode/submode
+
 **Version 1.2.7, released 31-DEC-2023**
 - handle multiple POTA references in a comment
 - show Time Off accurately in contact info panel
