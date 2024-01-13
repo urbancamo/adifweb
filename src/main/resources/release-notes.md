@@ -1,3 +1,6 @@
+**Version 1.2.10, released 13-JAN-2024**
+- security credentials rotation
+
 **Version 1.2.9, released 13-JAN-2024**
 - fix propagation prediction for groundwave or LoS signals
 
