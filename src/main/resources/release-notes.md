@@ -1,3 +1,6 @@
+**Version 1.2.9, released 13-JAN-2024**
+- fix propagation prediction for groundwave or LoS signals
+
 **Version 1.2.8, released 13-JAN-2024**
 - handle invalid mode of LSB/USB in input file - convert to SSB/LSB and SSB/USB mode/submode
 
