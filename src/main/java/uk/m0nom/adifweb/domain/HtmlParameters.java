@@ -53,6 +53,7 @@ public class HtmlParameters {
         addParameter(new HtmlParameter(HtmlParameterType.PRINTER_CONFIG, "", validatorService.getValidator(HtmlParameterType.PRINTER_CONFIG)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.OPTIONS_VISIBLE, "", validatorService.getValidator(HtmlParameterType.OPTIONS_VISIBLE)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.DONT_QSL_CALLSIGNS, "", validatorService.getValidator(HtmlParameterType.DONT_QSL_CALLSIGNS)), parameters);
+        addParameter(new HtmlParameter(HtmlParameterType.COMPACT_QSO_TEMPLATE, "", validatorService.getValidator(HtmlParameterType.COMPACT_QSO_TEMPLATE)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.QSL_LABELS_INITIAL_POSITION, "1", validatorService.getValidator(HtmlParameterType.QSL_LABELS_INITIAL_POSITION)), parameters);
     }
 
