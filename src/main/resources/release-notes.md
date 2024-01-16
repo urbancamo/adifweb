@@ -1,3 +1,6 @@
+**Version 1.2.11, released 16-JAN-2024**
+- add option for more compact station display in Google Earth
+
 **Version 1.2.10, released 13-JAN-2024**
 - security credentials rotation
 

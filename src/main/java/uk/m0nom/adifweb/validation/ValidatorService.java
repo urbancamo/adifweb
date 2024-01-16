@@ -50,6 +50,7 @@ public class ValidatorService {
         addValidator(HtmlParameterType.OPTIONS_VISIBLE, new BooleanValidator());
         addValidator(HtmlParameterType.DONT_QSL_CALLSIGNS, new CallsignListValidator());
         addValidator(HtmlParameterType.QSL_LABELS_INITIAL_POSITION, new IntegerRangeValidator(1, 24));
+        addValidator(HtmlParameterType.COMPACT_QSO_TEMPLATE, new BooleanValidator());
     }
 
     public void addValidator(HtmlParameterType type, Validator validator) {

@@ -33,7 +33,8 @@ public enum HtmlParameterType {
     PRINTER_CONFIG("printerConfig"),
     OPTIONS_VISIBLE("optionsVisible"),
     DONT_QSL_CALLSIGNS("dontQsl"),
-    QSL_LABELS_INITIAL_POSITION("qslLabelsInitialPosition");
+    QSL_LABELS_INITIAL_POSITION("qslLabelsInitialPosition"),
+    COMPACT_QSO_TEMPLATE("compactQsoTemplate");
 
     private final String parameterName;
 
