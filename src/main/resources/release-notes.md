@@ -1,3 +1,6 @@
+**Version 1.2.12, released 21-JAN-2024**
+- check whether my gridsquare if specified in the record is the same as a gridsquare calculated from QRZ lat/long. If they are the same, use the QRZ lat/long as it is likely more accurate.
+
 **Version 1.2.11, released 16-JAN-2024**
 - add option for more compact station display in Google Earth
 
