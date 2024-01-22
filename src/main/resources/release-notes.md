@@ -1,3 +1,7 @@
+**Version 1.2.13, released 22-JAN-2024**
+- fix bug introduced in last release
+- refresh POTA park list with latest editions
+
 **Version 1.2.12, released 21-JAN-2024**
 - check whether my gridsquare if specified in the record is the same as a gridsquare calculated from QRZ lat/long. If they are the same, use the QRZ lat/long as it is likely more accurate.
 
