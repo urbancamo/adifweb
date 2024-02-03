@@ -24,7 +24,7 @@ import uk.m0nom.adifweb.util.LoggerSetup;
 import uk.m0nom.adifweb.util.TransformControlUtils;
 import uk.m0nom.adifweb.validation.ValidatorService;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
