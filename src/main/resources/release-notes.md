@@ -1,5 +1,6 @@
 **Version 1.3.0, released 03-FEB-2024**
 - migrated to Spring 3.2.2 platform from Spring 2.x
+- handle deprecated LAT/LONG comments correctly
 
 **Version 1.2.14, released 03-FEB-2024**
 - add max power angle to antenna model
