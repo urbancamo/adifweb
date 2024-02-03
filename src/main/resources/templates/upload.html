@@ -95,7 +95,7 @@
                     </p>
                 </div>
                 <div id="input-group activity">
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
                             <label class="" for="sotaRef">Summits on the Air <a href="https://www.sota.org.uk/"
                                                                                 target="_blank" class="infolink"
@@ -111,7 +111,7 @@
                                   th:text="${parameters.get('sotaRef').getValidationResult().getError()}"></span>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
                             <label class="" for="wotaRef">Wainwrights on the Air <a href="https://www.wota.org.uk/"
                                                                                     target="_blank" class="infolink"
@@ -127,7 +127,7 @@
                                   th:text="${parameters.get('wotaRef').getValidationResult().getError()}"></span>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
                             <label class="" for="hemaRef">HuMPs Excluding Marilyns Award <a href="http://hema.org.uk/"
                                                                                             target="_blank"
@@ -144,7 +144,7 @@
                                   th:text="${parameters.get('hemaRef').getValidationResult().getError()}"></span>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
                             <label class="" for="potaRef">Parks on the Air <a href="https://parksontheair.com/"
                                                                               target="_blank" class="infolink"
@@ -160,7 +160,7 @@
                                   th:text="${parameters.get('potaRef').getValidationResult().getError()}"></span>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
                             <label class="" for="wwffRef">World Wide Flora Fauna <a href="https://wwff.co/"
                                                                                     target="_blank" class="infolink"
@@ -177,7 +177,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
                             <label class="" for="cotaRef">World Castles Award <a
                                     href="http://www.wca.qrz.ru/ENG/main.html" class="infolink" target="_blank"
@@ -193,7 +193,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
                             <label class="" for="lotaRef">International Lighthouse Lightship Weekend <a
                                     href="https://illw.net/" class="infolink" target="_blank" rel="noopener noreferrer"><i
@@ -209,7 +209,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
                             <label class="" for="rotaRef">Railways on the Air <a href="https://rota.barac.org.uk/"
                                                                                  class="infolink" target="_blank"
@@ -226,7 +226,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
                             <label class="" for="iotaRef">Islands on the Air <a href="https://www.iota-world.org/"
                                                                                 class="infolink" target="_blank"
@@ -243,7 +243,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
                             <label class="" for="gmaRef">Global Mountain Activity <a href="https://www.cqgma.org/"
                                                                                      class="infolink" target="_blank"
@@ -260,7 +260,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
                             <label class="" for="gmaRef">Bunkers on the Air <a href="https://bunkerbase.org/"
                                                                                      class="infolink" target="_blank"
@@ -292,7 +292,7 @@
                     location set, or you want to specify a more accurate location override it here.</p>
             </div>
             <div class="container">
-                <div class="row">
+                <div class="row d-flex align-items-center">
                     <div class="col-4">
                         <label class="location" for="location">Location</label>
                     </div>
@@ -320,7 +320,7 @@
                 <p>If you get the error 'STATION_CALLSIGN or OPERATOR not defined', enter your callsign here.</p>
             </div>
             <div class="container">
-                <div class="row">
+                <div class="row d-flex align-items-center">
                     <div class="col-4">
                         <label class="callsign" for="callsign">Callsign</label>
                     </div>
@@ -365,7 +365,7 @@
                     <label class="form-check-label" for="activitySubLabel">
                         Activity Sub-label
                     </label>
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
                             <input class="form-check-input" type="checkbox"
                                    th:checked="${parameters.get('localActivationSites').getValueAsBoolean()}"
@@ -375,9 +375,9 @@
                             </label>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
-                            <label class="form-label" for="localActivationSitesRadius">
+                            <label class="" for="localActivationSitesRadius">
                                 Local Activation Sites Radius (km)
                             </label>
                         </div>
@@ -407,14 +407,14 @@
                             Include SOTA LD Weekend Contest Results in ADIF file
                         </label>
                     </div>
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
-                            <label class="" for="antenna">Antenna Type</label>
+                            <label class="" for="antenna">HF Antenna Type</label>
                         </div>
                         <div class="col-4">
                             <select class="form-select" id="antenna" name="antenna">
-                                <option th:each="antenna : ${antennas}" th:value="${antenna}" th:text="${antenna}"
-                                        th:selected="${antenna} == ${parameters.get('antenna').getValue()}"></option>
+                                <option th:each="antenna : ${antennas}" th:value="${antenna.getName()}" th:text="${antenna.getDescription()}"
+                                        th:selected="${antenna.getName()} == ${parameters.get('antenna').getValue()}"></option>
                             </select>
                         </div>
                         <div class="col-auto">
@@ -423,7 +423,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
                             <label class="" for="satName">Satellite Name</label>
                         </div>
@@ -441,7 +441,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
                             <label class="" for="satMode">Satellite Mode</label>
                         </div>
@@ -454,7 +454,7 @@
                                   th:text="${parameters.get('satMode').getValidationResult().getError()}"></span>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
                             <label class="" for="satBand">Satellite Band</label>
                         </div>
@@ -477,7 +477,7 @@
                         </label>
                     </div>
 
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
                             <label class="" for="satBand">QSO Formatter Config</label>
                         </div>
@@ -491,9 +491,9 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
-                            <label class="form-label" for="qslLabelsInitialPosition">
+                            <label class="" for="qslLabelsInitialPosition">
                                 Initial Qsl Label Position (L→R, T→B)
                             </label>
                         </div>
@@ -507,12 +507,11 @@
                                   th:text="${parameters.get('qslLabelsInitialPosition').getValidationResult().getError()}"></span>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="col-4">
                             <label class="" for="dontQsl">Don't QSL Callsign List</label>
                         </div>
                         <div class="col-4">
-                            <label for="dontQsl"></label>
                             <input class="" type="text" id="dontQsl" name="dontQsl" style="width: 100%;"
                                                                 th:value="${parameters.get('dontQsl').getValue()}" value=""/>
                         </div>
@@ -521,7 +520,7 @@
                                   th:text="${parameters.get('dontQsl').getValidationResult().getError()}"></span>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row d-flex align-items-center">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox"
                                    th:checked="${parameters.get('compactQsoTemplate').getValueAsBoolean()}"
@@ -550,7 +549,7 @@
 
     <!-- *********************** BUTTONS ***************** -->
     <div class="container padding-bottom">
-        <div class="row">
+        <div class="row d-flex align-items-center">
             <div class="col-md-auto">
                 <input id="submitButton" class="btn btn-success" type="button" value="Process">
                 <a href="#" class="btn btn-secondary" role="button" id="back">Back...</a>

@@ -30,7 +30,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * Displays and accepts the input from the main ADIF Processor HTML form
@@ -116,7 +115,7 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 
 		model.addAttribute("parameters", parameters.getParameters());
 		model.addAttribute("satellites", configuration.getApSatelliteService().getSatelliteNames());
-		model.addAttribute("antennas", configuration.getAntennaService().getAntennaNames());
+		model.addAttribute("antennas", configuration.getAntennaService().getAntennas());
 		model.addAttribute("printJobConfigs", printJobConfigs.getConfigs());
 		model.addAttribute("maxQsosToProcess", Integer.toString(configuration.getMaxQsosToProcess()));
 		model.addAttribute("webSocketUri", webSocketUri);
@@ -222,7 +221,7 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 	private ModelMap addBasicErrorElementsIntoMap(ModelMap map, HtmlParameters parameters) {
 		map.put("parameters", parameters);
 		map.put("satellites", configuration.getApSatelliteService().getSatelliteNames());
-		map.put("antennas", configuration.getAntennaService().getAntennaNames());
+		map.put("antennas", configuration.getAntennaService().getAntennas());
 		map.put("printJobConfigs", printJobConfigs.getConfigs());
 		map.put("maxQsosToProcess", Integer.valueOf(configuration.getMaxQsosToProcess()));
 		map.put("webSocketUri", webSocketUri);
