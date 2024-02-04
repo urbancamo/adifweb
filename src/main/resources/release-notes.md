@@ -10,7 +10,7 @@
 - add max power angle to antenna model
 - make antenna model HF only
 - vertically align form labels and input fields
-- 
+
 **Version 1.2.13, released 22-JAN-2024**
 - fix bug introduced in last release
 - refresh POTA park list with latest editions
