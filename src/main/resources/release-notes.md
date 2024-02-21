@@ -1,3 +1,6 @@
+**Version 1.3.4, released 21-FEB-2024**
+- include new 'E' UK Callsign variant
+
 **Version 1.3.2, released 04-FEB-2024**
 - fix bug in my location determination
 - increase max MUF to just below 4m band
