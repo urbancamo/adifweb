@@ -1,3 +1,7 @@
+**Version 1.3.5, released 01-APR-2024**
+- internal user access log
+- fix satellite support with name specified in ADIF file
+
 **Version 1.3.4, released 21-FEB-2024**
 - include new 'E' UK Callsign variant
 
