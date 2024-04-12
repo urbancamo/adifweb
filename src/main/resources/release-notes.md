@@ -1,3 +1,6 @@
+**Version 1.3.6, released 12-APR-2024**
+- WAB Square conversion full support
+
 **Version 1.3.5, released 01-APR-2024**
 - internal user access log
 - fix satellite support with name specified in ADIF file
