@@ -1,3 +1,6 @@
+**Version 1.3.7, released 02-MAY-2024**
+- Engineering release
+
 **Version 1.3.6, released 12-APR-2024**
 - WAB Square conversion full support
 
