@@ -1,3 +1,6 @@
+**Version 1.3.8 released 28-MAY-2024**
+- Coordinate converter fixes
+
 **Version 1.3.7, released 02-MAY-2024**
 - Engineering release
 
