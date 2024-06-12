@@ -1,3 +1,6 @@
+**Version 1.3.10, released 12-JUL-2024**
+- fix NPE in DXCC lookup
+- 
 **Version 1.3.9 released 02-JUN-2024**
 - DXCC entity fixes (prefer input ADIF DXCC over calculated DXCC from callsign)
 
