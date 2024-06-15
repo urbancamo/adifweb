@@ -1,3 +1,6 @@
+** Version 1.4.0, released 15-JUL-2024**
+- platform upgrade to Java 21
+- 
 **Version 1.3.10, released 12-JUL-2024**
 - fix NPE in DXCC lookup
 - 
