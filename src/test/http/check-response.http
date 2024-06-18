@@ -1,0 +1,3 @@
+### Check https response from live domain name
+GET https://www.adif.uk/
+Accept: text/html
