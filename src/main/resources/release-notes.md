@@ -1,3 +1,6 @@
+**Version 1.4.4, released 18-JUN-2024**
+- dynamically load the POTA park list from the POTA site on startup
+
 **Version 1.4.3, released 17-JUN-2024**
 - updated POTA park list
 
