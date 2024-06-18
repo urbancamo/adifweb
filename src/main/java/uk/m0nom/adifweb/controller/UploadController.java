@@ -60,7 +60,7 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 
 	private final WebSocketConfig webSocketConfig;
 
-	private String webSocketUri;
+	private final String webSocketUri;
 
 	public UploadController(ApplicationConfiguration configuration, TransformerService transformerService,
 							PrintJobConfigs printJobConfigs, Adif3SchemaService adif3SchemaService,
@@ -223,7 +223,7 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 		map.put("satellites", configuration.getApSatelliteService().getSatelliteNames());
 		map.put("antennas", configuration.getAntennaService().getAntennas());
 		map.put("printJobConfigs", printJobConfigs.getConfigs());
-		map.put("maxQsosToProcess", Integer.valueOf(configuration.getMaxQsosToProcess()));
+		map.put("maxQsosToProcess", configuration.getMaxQsosToProcess());
 		map.put("webSocketUri", webSocketUri);
 		return map;
 	}

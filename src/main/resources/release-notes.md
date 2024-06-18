@@ -1,3 +1,7 @@
+**Version 1.4.5, released 18-JUN-2024**
+- logging usage to RDS
+- deprecate the command line version
+
 **Version 1.4.4, released 18-JUN-2024**
 - dynamically load the POTA park list from the POTA site on startup
 
