@@ -39,7 +39,7 @@ jobs:
           java-package: jdk
 
       - name: Build and test project
-        run: mvn -Pprod -B verify spring-boot:repackage antrun:run@repackage
+        run: mvn -B verify spring-boot:repackage antrun:run@repackage
 
       - name: Version deployment archive
         run: mv -v target/adifweb.zip target/adifweb-${{ github.sha }}.zip
