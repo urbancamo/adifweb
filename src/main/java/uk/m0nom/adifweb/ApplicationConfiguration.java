@@ -1,7 +1,6 @@
 package uk.m0nom.adifweb;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -34,8 +33,7 @@ import java.util.logging.Logger;
 @Configuration
 @ComponentScan({"uk.m0nom.adifproc","uk.m0nom.adifweb"})
 @Order(0)
-@Getter
-@Setter
+@Data
 public class ApplicationConfiguration implements ApplicationListener<ApplicationReadyEvent> {
     private static final Logger logger = Logger.getLogger(ApplicationConfiguration.class.getName());
 

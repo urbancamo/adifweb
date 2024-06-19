@@ -12,7 +12,7 @@
 
     <groupId>uk.m0nom</groupId>
     <artifactId>adifweb</artifactId>
-    <version>1.4.4</version>
+    <version>1.4.5</version>
     <name>ADIF Web Interface</name>
     <url>https://github.com/urbancamo/adifweb</url>
     <description>Web Interface for the ADIF Processor</description>
@@ -60,6 +60,24 @@
             <groupId>uk.m0nom</groupId>
             <artifactId>adif-processor</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.3</version>
         </dependency>
 
         <dependency>
@@ -288,6 +306,16 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/*.properties</exclude>
+                </excludes>
             </resource>
         </resources>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
@@ -310,8 +338,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.11.0</version>
                     <configuration>
-                        <source>11</source>
-                        <target>11</target>
+                        <source>21</source>
+                        <target>21</target>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -348,8 +376,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>21</source>
+                    <target>21</target>
                 </configuration>
             </plugin>
             <!-- mvn clean package spring-boot:repackage antrun:run@repackage -->
