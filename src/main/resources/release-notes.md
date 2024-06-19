@@ -1,3 +1,6 @@
+**Version 1.4.7, released 19-JUN-2024**
+- prod RDS config
+
 **Version 1.4.5, released 18-JUN-2024**
 - logging usage to RDS
 - deprecate the command line version
