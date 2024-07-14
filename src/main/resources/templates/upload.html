@@ -537,6 +537,20 @@
                             </label>
                         </div>
                     </div>
+                    <div class="row d-flex align-items-center">
+                        <div class="col-4">
+                            <label class="" for="satBand">Icon for Portable Station Override</label>
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select" id="portableIcon" name="portableIcon"
+                                    aria-label="Portable Icon">
+                                <option th:each="portableIcon : ${portableIcons}" th:value="${portableIcon.iconName}"
+                                        th:text="${portableIcon.description}"
+                                        th:selected="${portableIcon.iconName} == ${parameters.get('portableIcon').getValue()}"></option>
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

@@ -1,3 +1,6 @@
+**Version 1.4.10, released 14-JUL-2024**
+- add option to specify portable icon
+- 
 **Version 1.4.7, released 19-JUN-2024**
 - prod RDS config
 

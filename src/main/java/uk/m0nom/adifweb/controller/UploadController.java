@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import uk.m0nom.adifproc.adif3.transform.TransformResults;
+import uk.m0nom.adifproc.icons.PortableIcons;
 import uk.m0nom.adifproc.progress.ProgressFeedbackHandlerCallback;
 import uk.m0nom.adifweb.ApplicationConfiguration;
 import uk.m0nom.adifweb.domain.*;
@@ -47,7 +48,7 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 	private String pomVersion;
 
 	private final PrintJobConfigs printJobConfigs;
-
+	private final PortableIcons portableIcons;
 	private final Adif3SchemaService adif3SchemaService;
 
 	private final ApplicationConfiguration configuration;
@@ -74,6 +75,7 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 		this.validatorService = validatorService;
 		this.webSocketConfig = webSocketConfig;
 
+		this.portableIcons = new PortableIcons();
 		tmpPath = System.getProperty("java.io.tmpdir");
 		if (!StringUtils.endsWith(tmpPath, File.separator)) {
 			tmpPath = tmpPath + File.separator;
@@ -117,6 +119,7 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 		model.addAttribute("satellites", configuration.getApSatelliteService().getSatelliteNames());
 		model.addAttribute("antennas", configuration.getAntennaService().getAntennas());
 		model.addAttribute("printJobConfigs", printJobConfigs.getConfigs());
+		model.addAttribute("portableIcons", portableIcons.getIcons());
 		model.addAttribute("maxQsosToProcess", Integer.toString(configuration.getMaxQsosToProcess()));
 		model.addAttribute("webSocketUri", webSocketUri);
 		return "upload";
@@ -223,6 +226,7 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 		map.put("satellites", configuration.getApSatelliteService().getSatelliteNames());
 		map.put("antennas", configuration.getAntennaService().getAntennas());
 		map.put("printJobConfigs", printJobConfigs.getConfigs());
+		map.put("iconNames", portableIcons.getIconNames());
 		map.put("maxQsosToProcess", configuration.getMaxQsosToProcess());
 		map.put("webSocketUri", webSocketUri);
 		return map;

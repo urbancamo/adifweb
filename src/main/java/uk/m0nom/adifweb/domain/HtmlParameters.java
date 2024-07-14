@@ -51,6 +51,7 @@ public class HtmlParameters {
         addParameter(new HtmlParameter(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT, "", validatorService.getValidator(HtmlParameterType.SOTA_MICROWAVE_AWARD_COMMENT)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.STRIP_COMMENT, "on", validatorService.getValidator(HtmlParameterType.STRIP_COMMENT)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.PRINTER_CONFIG, "", validatorService.getValidator(HtmlParameterType.PRINTER_CONFIG)), parameters);
+        addParameter(new HtmlParameter(HtmlParameterType.PORTABLE_ICON, "", validatorService.getValidator(HtmlParameterType.PORTABLE_ICON)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.OPTIONS_VISIBLE, "", validatorService.getValidator(HtmlParameterType.OPTIONS_VISIBLE)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.DONT_QSL_CALLSIGNS, "", validatorService.getValidator(HtmlParameterType.DONT_QSL_CALLSIGNS)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.COMPACT_QSO_TEMPLATE, "", validatorService.getValidator(HtmlParameterType.COMPACT_QSO_TEMPLATE)), parameters);
