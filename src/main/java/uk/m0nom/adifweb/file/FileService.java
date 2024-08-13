@@ -1,6 +1,6 @@
 package uk.m0nom.adifweb.file;
 
-import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uk.m0nom.adifproc.adif3.control.TransformControl;
@@ -14,10 +14,10 @@ import java.util.logging.Logger;
 public class FileService {
     private static final Logger logger = Logger.getLogger(FileService.class.getName());
 
-    private final AwsS3Utils awsS3Utils;
+    private final FileSupportService fileSupportService;
 
-    public FileService(AwsS3Utils awsS3Utils) {
-        this.awsS3Utils = awsS3Utils;
+    public FileService(@Qualifier("localFileSupportService") FileSupportService fileSupportService) {
+        this.fileSupportService = fileSupportService;
     }
 
     public void storeInputFile(TransformControl control, MultipartFile uploadedFile, String tmpPath) {
@@ -32,10 +32,10 @@ public class FileService {
             logger.severe(ioe1.getMessage());
         }
 
-        if (awsS3Utils.isConfigured()) {
+        if (fileSupportService.isConfigured()) {
             // Archive the content into S3 storage
             logger.info(String.format("Archiving input file to AWS S3 file %s", inputFilename));
-            awsS3Utils.archiveFile(inputFilename, new File(inputPath));
+            fileSupportService.archiveFile(inputFilename, new File(inputPath));
         }
     }
 
@@ -50,16 +50,16 @@ public class FileService {
 
     public void archiveData(String filename, String content) {
         // Read content of file
-        awsS3Utils.archiveData(filename, content);
+        fileSupportService.archiveData(filename, content);
     }
 
     public void archiveFile(String filename, String tmpPath) {
-        if (awsS3Utils.isConfigured()) {
+        if (fileSupportService.isConfigured()) {
             // Read content of file
             var filePath = String.format("%s%s", tmpPath, filename);
             // Archive the content into S3 storage
             logger.info(String.format("Archiving output file into S3: %s", filename));
-            awsS3Utils.archiveFile(filename, new File(filePath));
+            fileSupportService.archiveFile(filename, new File(filePath));
         }
     }
 }
