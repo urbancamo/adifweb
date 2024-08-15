@@ -56,6 +56,7 @@ public class HtmlParameters {
         addParameter(new HtmlParameter(HtmlParameterType.DONT_QSL_CALLSIGNS, "", validatorService.getValidator(HtmlParameterType.DONT_QSL_CALLSIGNS)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.COMPACT_QSO_TEMPLATE, "", validatorService.getValidator(HtmlParameterType.COMPACT_QSO_TEMPLATE)), parameters);
         addParameter(new HtmlParameter(HtmlParameterType.QSL_LABELS_INITIAL_POSITION, "1", validatorService.getValidator(HtmlParameterType.QSL_LABELS_INITIAL_POSITION)), parameters);
+        addParameter(new HtmlParameter(HtmlParameterType.COLOUR_CONTACTS_BASED_ON_BAND, "", validatorService.getValidator(HtmlParameterType.COLOUR_CONTACTS_BASED_ON_BAND)), parameters);
     }
 
     public void addParameter(HtmlParameter parameter, Map<String, HtmlParameter> parameters) {
