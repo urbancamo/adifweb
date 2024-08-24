@@ -34,7 +34,7 @@ public class FileService {
 
         if (fileSupportService.isConfigured()) {
             // Archive the content into S3 storage
-            logger.info(String.format("Archiving input file to AWS S3 file %s", inputFilename));
+            logger.info(String.format("Archiving input file: %s", inputFilename));
             fileSupportService.archiveFile(inputFilename, new File(inputPath));
         }
     }
@@ -58,7 +58,7 @@ public class FileService {
             // Read content of file
             var filePath = String.format("%s%s", tmpPath, filename);
             // Archive the content into S3 storage
-            logger.info(String.format("Archiving output file into S3: %s", filename));
+            logger.info(String.format("Archiving output file: %s", filename));
             fileSupportService.archiveFile(filename, new File(filePath));
         }
     }

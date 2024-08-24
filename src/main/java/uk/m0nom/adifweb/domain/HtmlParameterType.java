@@ -35,7 +35,8 @@ public enum HtmlParameterType {
     DONT_QSL_CALLSIGNS("dontQsl"),
     QSL_LABELS_INITIAL_POSITION("qslLabelsInitialPosition"),
     COMPACT_QSO_TEMPLATE("compactQsoTemplate"),
-    PORTABLE_ICON("portableIcon");
+    PORTABLE_ICON("portableIcon"),
+    COLOUR_CONTACTS_BASED_ON_BAND("colourContactsBasedOnBand");
 
     private final String parameterName;
 

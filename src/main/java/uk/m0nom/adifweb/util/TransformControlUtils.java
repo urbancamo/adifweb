@@ -36,7 +36,7 @@ public class TransformControlUtils {
 
         control.setKmlContactWidth(3);
         control.setKmlContactTransparency(20);
-        control.setKmlContactColourByBand(false);
+        control.setColourContactsByBand(false);
         control.setKmlContactShadow(true);
         control.setKmlS2sContactLineStyle("brick_red:50:2");
         control.setKmlInternetContactLineStyle("cadmium_yellow:50:1");
@@ -78,6 +78,7 @@ public class TransformControlUtils {
         control.setDontQslCallsigns(parameters.get(HtmlParameterType.DONT_QSL_CALLSIGNS.getParameterName()).getValue());
         control.setQslLabelsInitialPosition(Integer.valueOf(parameters.get(HtmlParameterType.QSL_LABELS_INITIAL_POSITION.getParameterName()).getValue()));
         control.setCompactQsoTemplate(null != parameters.get(HtmlParameterType.COMPACT_QSO_TEMPLATE.getParameterName()).getValue());
+        control.setColourContactsByBand(null != parameters.get(HtmlParameterType.COLOUR_CONTACTS_BASED_ON_BAND.getParameterName()).getValue());
 
         control.setPortableIcon(parameters.get(HtmlParameterType.PORTABLE_ICON.getParameterName()).getValue());
 
