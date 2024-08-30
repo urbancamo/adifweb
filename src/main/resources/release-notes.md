@@ -1,3 +1,6 @@
+**Version 1.4.15, released 30-AUG-2024**
+- add option to colour contacts based on band
+- 
 **Version 1.4.13, released 13-AUG-2024**
 - archives input and output files locally
 
