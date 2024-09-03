@@ -63,7 +63,7 @@ jobs:
 
       - name: Download ZIP
         #Download the artifact which was uploaded in the build's job
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4.1.7
         with:
           name: adifweb-${{ github.sha }}.zip
 
