@@ -163,8 +163,11 @@
                                    th:value="${parameters.get('potaRef').getValue()}" value=""/>
                         </div>
                         <div class="col-md-auto">
-                            <span class="text-danger"
+                            <span class="text-danger" th:if="${parameters.get('potaRef').getValidationResult().getError()}"
                                   th:text="${parameters.get('potaRef').getValidationResult().getError()}"></span>
+                            <span class="" th:unless="${parameters.get('potaRef').getValidationResult().getError()}">
+                                For multiple park activations, specify the most accurate reference first
+                            </span>
                         </div>
                     </div>
                     <div class="row d-flex align-items-center">

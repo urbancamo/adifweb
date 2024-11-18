@@ -1,3 +1,6 @@
+**Version 1.4.16, released 18-NOV-2024**
+- for POTA activations with multiple park list, use the first park reference as the location
+
 **Version 1.4.15, released 30-AUG-2024**
 - add option to colour contacts based on band
 
