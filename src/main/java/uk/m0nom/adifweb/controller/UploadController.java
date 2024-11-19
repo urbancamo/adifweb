@@ -1,7 +1,7 @@
 package uk.m0nom.adifweb.controller;
 
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.stereotype.Controller;
@@ -138,7 +138,6 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 			var factory = new DiskFileItemFactory();
 			factory.setRepository(new File(tmpPath));
 			factory.setSizeThreshold(DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD);
-			factory.setFileCleaningTracker(null);
 
 			MultipartFile uploadedFile = request.getFile(HtmlParameterType.FILENAME.getParameterName());
 

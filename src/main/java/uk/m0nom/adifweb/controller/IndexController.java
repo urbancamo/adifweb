@@ -1,16 +1,17 @@
 package uk.m0nom.adifweb.controller;
 
-import com.amazonaws.util.IOUtils;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.data.MutableDataSet;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 @Controller
@@ -22,12 +23,11 @@ public class IndexController {
     @Value("${build.version}")
     private String pomVersion;
 
-    private String releaseNotes;
+    private final String releaseNotes;
 
     public static String getResource(String classpathLocation) {
         try {
-            return IOUtils.toString(Objects.requireNonNull(IndexController.class.getResourceAsStream(classpathLocation))
-            );
+            return IOUtils.toString(Objects.requireNonNull(IndexController.class.getResourceAsStream(classpathLocation)), StandardCharsets.UTF_8);
         }
         catch (IOException e) {
             throw new RuntimeException("Could not read file [ " + classpathLocation + " ] from classpath", e);
