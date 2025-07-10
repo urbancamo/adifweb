@@ -11,6 +11,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public class ProcessingControlApplication {
 	public static void main(String[] args) {
 		System.setProperty("org.springframework.boot.logging.LoggingSystem", "none");
-		SpringApplication.run(ProcessingControlApplication.class, args);
+		try {
+			SpringApplication.run(ProcessingControlApplication.class, args);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
