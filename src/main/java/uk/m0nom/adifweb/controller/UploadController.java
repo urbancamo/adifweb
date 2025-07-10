@@ -1,7 +1,6 @@
 package uk.m0nom.adifweb.controller;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.stereotype.Controller;
@@ -126,7 +125,8 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 	}
 
 	@PostMapping("/upload")
-	public ModelAndView handleUpload(StandardMultipartHttpServletRequest request, HttpSession session) {
+	public ModelAndView handleUpload(
+			StandardMultipartHttpServletRequest request, HttpSession session) {
 		CustomFileLogHandler customFileLogHandler = null;
 		ModelAndView rtn;
 		try {
@@ -135,12 +135,7 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 
 			var parameters = setParametersFromSession(session);
 
-			var factory = new DiskFileItemFactory();
-			factory.setRepository(new File(tmpPath));
-			factory.setSizeThreshold(DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD);
-
 			MultipartFile uploadedFile = request.getFile(HtmlParameterType.FILENAME.getParameterName());
-
 			parameters.addParametersFromRequest(request);
 
 			assert uploadedFile != null;
