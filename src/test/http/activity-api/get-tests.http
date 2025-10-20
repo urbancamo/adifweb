@@ -1,0 +1,4 @@
+### SOTA Full Match
+GET http://localhost:5001/api/activity?substring=G/LD
+Accept: application/json
+
