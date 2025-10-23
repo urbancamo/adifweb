@@ -1,6 +1,6 @@
 package uk.m0nom.adifweb.location;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import uk.m0nom.adifproc.activity.Activity;
 import uk.m0nom.adifweb.ApplicationConfiguration;
