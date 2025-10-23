@@ -3,6 +3,7 @@ package uk.m0nom.adifweb;
 import lombok.Data;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -133,7 +134,7 @@ public class ApplicationConfiguration implements ApplicationListener<Application
 
     public QsoFileReader getReader(String inputFile) {
         String extension = FilenameUtils.getExtension(inputFile).toLowerCase();
-        if (StringUtils.equals(extension, "csv")) {
+        if (Strings.CI.equals(extension, "csv")) {
             return sotaCsvFileReader;
         }
         return adif3FileReader;

@@ -1,6 +1,6 @@
 package uk.m0nom.adifweb.validation;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.marsik.ham.adif.types.Pota;
 import org.marsik.ham.adif.types.PotaList;
 import uk.m0nom.adifproc.activity.ActivityDatabaseService;

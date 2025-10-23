@@ -1,6 +1,7 @@
 package uk.m0nom.adifweb.controller;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.stereotype.Controller;
@@ -76,7 +77,7 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 
 		this.portableIcons = new PortableIcons();
 		tmpPath = System.getProperty("java.io.tmpdir");
-		if (!StringUtils.endsWith(tmpPath, File.separator)) {
+		if (!Strings.CI.endsWith(tmpPath, File.separator)) {
 			tmpPath = tmpPath + File.separator;
 		}
 

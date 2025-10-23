@@ -2,7 +2,7 @@ package uk.m0nom.adifweb.domain;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import uk.m0nom.adifweb.validation.BooleanValidator;
 import uk.m0nom.adifweb.validation.ValidationResult;
 import uk.m0nom.adifweb.validation.Validator;
@@ -32,6 +32,6 @@ public class HtmlParameter {
     }
 
     public boolean getValueAsBoolean() {
-        return StringUtils.equalsIgnoreCase(BooleanValidator.TRUE, value);
+        return Strings.CI.equals(BooleanValidator.TRUE, value);
     }
 }
