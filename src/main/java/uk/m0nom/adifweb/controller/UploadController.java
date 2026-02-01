@@ -3,7 +3,6 @@ package uk.m0nom.adifweb.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -27,7 +26,6 @@ import uk.m0nom.adifweb.validation.ValidatorService;
 
 import jakarta.servlet.http.HttpSession;
 import java.io.File;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -61,12 +59,10 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 
 	private final WebSocketConfig webSocketConfig;
 
-	private final String webSocketUri;
-
 	public UploadController(ApplicationConfiguration configuration, TransformerService transformerService,
 							PrintJobConfigs printJobConfigs, Adif3SchemaService adif3SchemaService,
 							FileService fileService, ValidatorService validatorService,
-							WebSocketConfig webSocketConfig, ConfigurableEnvironment environment) {
+							WebSocketConfig webSocketConfig) {
 		this.configuration = configuration;
 		this.printJobConfigs = printJobConfigs;
 		this.adif3SchemaService = adif3SchemaService;
@@ -80,13 +76,6 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 		if (!Strings.CI.endsWith(tmpPath, File.separator)) {
 			tmpPath = tmpPath + File.separator;
 		}
-
-		if (Arrays.asList(environment.getActiveProfiles()).contains("dev")) {
-			webSocketUri = "ws://localhost:9090/progress";
-		} else {
-			webSocketUri = "ws://adifweb-env.eba-saseumwd.eu-west-2.elasticbeanstalk.com/progress";
-		}
-		logger.info(String.format("webSocketUri set to %s", webSocketUri));
 	}
 
 	private HtmlParameters setParametersFromSession(HttpSession session) {
@@ -121,7 +110,7 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 		model.addAttribute("printJobConfigs", printJobConfigs.getConfigs());
 		model.addAttribute("portableIcons", portableIcons.getIcons());
 		model.addAttribute("maxQsosToProcess", Integer.toString(configuration.getMaxQsosToProcess()));
-		model.addAttribute("webSocketUri", webSocketUri);
+		model.addAttribute("sessionId", session.getId());
 		return "upload";
 	}
 
@@ -138,6 +127,13 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 
 			MultipartFile uploadedFile = request.getFile(HtmlParameterType.FILENAME.getParameterName());
 			parameters.addParametersFromRequest(request);
+
+			// Get the WebSocket session ID from the form (may differ from request session if cookies not sent)
+			String wsSessionId = request.getParameter("wsSessionId");
+			if (wsSessionId == null || wsSessionId.isEmpty()) {
+				wsSessionId = session.getId();
+			}
+			logger.info(String.format("Using wsSessionId='%s' for progress updates (request session='%s')", wsSessionId, session.getId()));
 
 			assert uploadedFile != null;
 			var fileParam = new HtmlParameter(HtmlParameterType.FILENAME, uploadedFile.getOriginalFilename(), parameters.getValidator(HtmlParameterType.FILENAME));
@@ -158,10 +154,10 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 				control.setAdif3Schema(adif3SchemaService.getSchema());
 				control.setDxccEntities(configuration.getDxccEntities());
 				control.setCountries(configuration.getCountries());
-				
+
 				fileService.archiveParameters(control, parameters);
 				fileService.storeInputFile(control, uploadedFile, tmpPath);
-				var transformResults = transformerService.runTransformer(control, tmpPath, uploadedFile.getOriginalFilename(), this, session.getId());
+				var transformResults = transformerService.runTransformer(control, tmpPath, uploadedFile.getOriginalFilename(), this, wsSessionId);
 				if (transformResults.getAdiFile() != null) {
 					fileService.archiveFile(transformResults.getAdiFile(), tmpPath);
 				}
@@ -212,7 +208,6 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 		results.put("qslCallsigns", String.join(", ", transformResults.getQslContacts()));
 		results.put("unknownSatellites", String.join(", ", transformResults.getUnknownSatellites()));
 		results.put("unknownSatellitePasses", String.join(", ", transformResults.getUnknownSatellitePasses()));
-		results.put("webSocketUri", webSocketUri);
 		return results;
 	}
 
@@ -223,7 +218,6 @@ public class UploadController implements ProgressFeedbackHandlerCallback {
 		map.put("printJobConfigs", printJobConfigs.getConfigs());
 		map.put("iconNames", portableIcons.getIconNames());
 		map.put("maxQsosToProcess", configuration.getMaxQsosToProcess());
-		map.put("webSocketUri", webSocketUri);
 		return map;
 	}
 
