@@ -1,0 +1,33 @@
+antenna: Vertical
+colourContactsBasedOnBand: null
+sotaMicrowaveAwardComment: null
+rotaRef: 
+hemaRef: 
+optionsVisible: 
+satBand: 
+satMode: 
+callsign: 
+lotaRef: 
+localActivationSitesRadius: 5
+dontQsl: 
+botaRef: 
+gmaRef: 
+iotaRef: 
+satName: 
+encoding: windows-1251
+sotaRef: 
+contestResults: null
+wwffRef: 
+wotaRef: 
+stripComment: on
+printerConfig: adif-printer-sota-md.yaml
+filename: 2025-12-23_M5TEA_GB-2409, GB-0165.adi
+potaRef: 
+cotaRef: 
+qslLabelsInitialPosition: 1
+location: 
+stationSubLabel: on
+localActivationSites: null
+activitySubLabel: on
+portableIcon: DEFAULT
+compactQsoTemplate: null
