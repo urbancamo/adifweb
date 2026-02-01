@@ -37,6 +37,33 @@
             background-color: MidnightBlue;
             text-align: center;
         }
+
+        .progress-container {
+            position: relative;
+            width: 100%;
+            background-color: white;
+            border-radius: 0.25rem;
+        }
+
+        .progress-bar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0;
+            background-color: rgba(40, 167, 69, 0.3);
+            border-radius: 0.25rem;
+            transition: width 0.1s ease-in-out;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .progress-container input {
+            position: relative;
+            z-index: 2;
+            background-color: transparent;
+            border: 2px solid #198754;
+        }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -574,7 +601,10 @@
         <div class="panel-heading">Progress/Errors</div>
         <div class="container">
             <label for="progressAndError"></label>
-            <input type="text" class="form-control" id="progressAndError" name="progessAndError" th:value="${error}">
+            <div class="progress-container">
+                <div class="progress-bar-overlay" id="progressBar"></div>
+                <input type="text" class="form-control" id="progressAndError" name="progessAndError" th:value="${error}">
+            </div>
         </div>
         <div class="container">
             <span>Please contact <a href="mailto:mark@wickensonline.co.uk">mark@wickensonline.co.uk</a> if you are having issues.</span>
@@ -609,9 +639,7 @@
     <label for="optionsVisible"></label>
     <input hidden id="optionsVisible" name="optionsVisible" type="text"
                                                th:value="${parameters.get('optionsVisible').getValue()}"/>
-    <label for="webSocketUri"></label>
-    <input hidden id="webSocketUri" name="webSocketUri" type="text"
-                                             th:value="${webSocketUri}"/>
+    <label for="wsSessionId"></label><input hidden id="wsSessionId" name="wsSessionId" type="text" th:value="${sessionId}"/>
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -620,22 +648,66 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script th:inline="javascript">
-    // let ws;
+    let ws;
+    let wsConnected = false;
+    const sessionId = /*[[${sessionId}]]*/ '';
+    console.log('Session ID from server:', sessionId);
 
-    // function updateProgress(data) {
-    //     let messages = document.getElementById("progressAndError");
-    //     messages.value = data;
-    // }
-    // function connectProgressWebSocket() {
-    //     let webSocketUri = document.getElementById("webSocketUri").defaultValue;
-    //     ws = new WebSocket(webSocketUri);
-    //     ws.onmessage = function (e) {
-    //         updateProgress(e.data);
-    //     }
-    // }
+    function buildWebSocketUri() {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        return protocol + '//' + window.location.host + '/progress?sessionId=' + encodeURIComponent(sessionId);
+    }
+
+    function updateProgress(data) {
+        document.getElementById("progressAndError").value = data;
+
+        // Parse progress format: "index/total Processing callsign"
+        const match = data.match(/^(\d+)\/(\d+)\s/);
+        if (match) {
+            const current = parseInt(match[1], 10);
+            const total = parseInt(match[2], 10);
+            const percentage = (current / total) * 100;
+            document.getElementById("progressBar").style.width = percentage + '%';
+        }
+    }
+
+    function resetProgressBar() {
+        document.getElementById("progressBar").style.width = '0%';
+    }
+
+    function connectProgressWebSocket() {
+        try {
+            const uri = buildWebSocketUri();
+            ws = new WebSocket(uri);
+
+            ws.onopen = function() {
+                console.log('WebSocket connected to ' + uri);
+                wsConnected = true;
+            };
+
+            ws.onmessage = function(e) {
+                console.log('WebSocket message received:', e.data);
+                updateProgress(e.data);
+            };
+
+            ws.onerror = function(e) {
+                console.log('WebSocket error:', e);
+            };
+
+            ws.onclose = function(e) {
+                console.log('WebSocket closed - code:', e.code, 'reason:', e.reason, 'wasClean:', e.wasClean);
+                wsConnected = false;
+            };
+        } catch (e) {
+            console.log('WebSocket connection failed:', e);
+        }
+    }
 
     $(function () {
         $('#spinner').hide();
+
+        // Connect WebSocket on page load
+        connectProgressWebSocket();
 
         $("#back").on("click", function (e) {
             e.preventDefault();
@@ -646,16 +718,39 @@
             $('#optionsCollapse').show();
         }
 
-        $('#submitButton').click(function () {
-            // Not working for firefox - connectProgressWebSocket();
+        $('#submitButton').click(function (e) {
+            e.preventDefault();
+            console.log('Form submit - WebSocket state:', ws ? ws.readyState : 'no ws', 'wsConnected:', wsConnected);
             $('#submitButton').prop('disabled', true);
             $('#progressAndError').val("Processing...");
+            resetProgressBar();
             $('#spinner').show();
             if ($('#optionsPanelBody').is(':visible')) {
                 $('#optionsVisible').val("on");
             }
             $("body").css("cursor", "progress");
-            $("#form").submit();
+
+            // Use AJAX to submit form, keeping WebSocket connection alive
+            const formData = new FormData(document.getElementById('form'));
+            fetch('/upload', {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin'  // Ensure session cookie is sent
+            })
+            .then(response => response.text())
+            .then(html => {
+                // Replace entire page with response
+                document.open();
+                document.write(html);
+                document.close();
+            })
+            .catch(error => {
+                console.error('Form submission error:', error);
+                $('#progressAndError').val("Error: " + error.message);
+                $('#spinner').hide();
+                $('#submitButton').prop('disabled', false);
+                $("body").css("cursor", "default");
+            });
         })
 
         $('a.a-encoding').click(function () {

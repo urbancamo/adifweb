@@ -1,10 +1,12 @@
 package uk.m0nom.adifweb.controller;
 
+import lombok.Getter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+@Getter
 @Configuration
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
@@ -14,10 +16,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
     public void registerWebSocketHandlers(WebSocketHandlerRegistry webSocketHandlerRegistry) {
         this.progressFeedbackHandler = new ProgressFeedbackHandler();
         webSocketHandlerRegistry
-                .addHandler(progressFeedbackHandler, "/progress");
+                .addHandler(progressFeedbackHandler, "/progress")
+                .setAllowedOriginPatterns("*");
     }
 
-    public ProgressFeedbackHandler getProgressFeedbackHandler() {
-        return progressFeedbackHandler;
-    }
 }

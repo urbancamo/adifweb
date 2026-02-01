@@ -8,9 +8,13 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.logging.Logger;
 
+// WebSocketSession lifecycle is managed by Spring, not by this handler
+@SuppressWarnings("resource")
 public class ProgressFeedbackHandler extends TextWebSocketHandler {
     private static final Logger logger = Logger.getLogger(ProgressFeedbackHandler.class.getName());
 
@@ -21,22 +25,47 @@ public class ProgressFeedbackHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(@NotNull WebSocketSession session) throws Exception {
         logger.info("ProgressFeedbackHandler.afterConnectionEstablished called");
         super.afterConnectionEstablished(session);
-        // get the JSESSION (HttpSession Id)
-        String httpSessionId = "empty";
-        List<String> cookies = session.getHandshakeHeaders().get("cookie");
-        for (String cookie : cookies) {
-            StringTokenizer tokenizer = new StringTokenizer(cookie, ";");
-            while (tokenizer.hasMoreTokens()) {
-                String keyValuePair = tokenizer.nextToken().trim();
-                if (keyValuePair.startsWith("JSESSIONID=")) {
-                    httpSessionId = keyValuePair.substring(keyValuePair.indexOf("=") + 1);
-                    logger.info(String.format("Identified httpSessionId='%s', webSocket sessionId='%s'", httpSessionId, session.getId()));
+
+        String httpSessionId = null;
+
+        // First, try to get session ID from URL query parameter (most reliable cross-browser)
+        if (session.getUri() != null) {
+            String query = session.getUri().getQuery();
+            if (query != null) {
+                for (String param : query.split("&")) {
+                    if (param.startsWith("sessionId=")) {
+                        httpSessionId = URLDecoder.decode(param.substring("sessionId=".length()), StandardCharsets.UTF_8);
+                        logger.info(String.format("Got sessionId from URL parameter: '%s'", httpSessionId));
+                        break;
+                    }
                 }
             }
         }
-        if ("empty".equals(httpSessionId)) {
-            logger.info("Could not identify httpSessionId, storing under 'empty' httpSessionId");
+
+        // Fallback: try to get JSESSIONID from cookie (may not work in Safari/strict privacy browsers)
+        if (httpSessionId == null) {
+            List<String> cookies = session.getHandshakeHeaders().get("cookie");
+            if (cookies != null) {
+                for (String cookie : cookies) {
+                    StringTokenizer tokenizer = new StringTokenizer(cookie, ";");
+                    while (tokenizer.hasMoreTokens()) {
+                        String keyValuePair = tokenizer.nextToken().trim();
+                        if (keyValuePair.startsWith("JSESSIONID=")) {
+                            httpSessionId = keyValuePair.substring(keyValuePair.indexOf("=") + 1);
+                            logger.info(String.format("Got httpSessionId from cookie: '%s'", httpSessionId));
+                            break;
+                        }
+                    }
+                }
+            }
         }
+
+        if (httpSessionId == null) {
+            httpSessionId = "empty";
+            logger.warning("Could not identify httpSessionId from URL or cookie, storing under 'empty'");
+        }
+
+        logger.info(String.format("Mapping httpSessionId='%s' to webSocket sessionId='%s'", httpSessionId, session.getId()));
         webSocketSessions.put(httpSessionId, session);
         webSocketSessionsReverseMap.put(session, httpSessionId);
     }
@@ -58,19 +87,22 @@ public class ProgressFeedbackHandler extends TextWebSocketHandler {
 
     public void sendProgressUpdate(String sessionId, String progressMessage) {
         if (sessionId != null) {
-            //logger.info(String.format("ProgressFeedbackHandler.sendProgressUpdate httpSessionId='%s', progressMessage='%s'", sessionId, progressMessage));
+            logger.info(String.format("sendProgressUpdate called: sessionId='%s', message='%s', knownSessions=%s",
+                    sessionId, progressMessage, webSocketSessions.keySet()));
             WebSocketMessage<String> messageToSend = new TextMessage(progressMessage);
             WebSocketSession webSocketSession = webSocketSessions.get(sessionId);
             if (webSocketSession != null && webSocketSession.isOpen()) {
-                //logger.info("sending message to open web socket session");
+                logger.info(String.format("Sending message to open WebSocket session: wsSessionId='%s'", webSocketSession.getId()));
                 try {
                     webSocketSession.sendMessage(messageToSend);
                 } catch (IOException e) {
                     logger.warning(String.format("Caught exception %s sending message to httpSessionId='%s', webSocketSessionId='%s'", e.getMessage(), sessionId, webSocketSession.getId()));
                 }
+            } else {
+                logger.warning(String.format("No open WebSocket session found for httpSessionId='%s'", sessionId));
             }
         } else {
-            logger.warning(String.format("ProgressFeedbackHandler.sendProgressUpdate sessionId=null, progressMessage='%s'", progressMessage));
+            logger.warning(String.format("sendProgressUpdate called with sessionId=null, progressMessage='%s'", progressMessage));
         }
     }
 }
