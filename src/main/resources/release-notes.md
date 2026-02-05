@@ -1,5 +1,6 @@
 ### Release Notes 
 
+- Version 1.4.24, 05-FEB-2026, Refresh Bunkers on the Air list
 - Version 1.4.23, 01-FEB-2026, Improved progress feedback, security updates
 - Version 1.4.22, 01-FEB-2026, Updated POTA list
 - Version 1.4.21, 02-NOV-2025, Update SOTA and UK BOTA lists
