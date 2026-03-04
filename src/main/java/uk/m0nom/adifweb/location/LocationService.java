@@ -63,11 +63,13 @@ public class LocationService {
                     coordinates = geocodingResult.getCoordinates();
                     if (coordinates == null) {
                         info = geocodingResult.getError();
+                        logger.severe("Geocoding error: " + info);
                     } else {
                         info = String.format("Geocoding result based on match of '%s'", geocodingResult.getMatchedOn());
                     }
                 } catch (Exception e) {
                     errors = "Problem using the geocoding provider";
+                    logger.severe("Error calling nominatim: " + e.getMessage());
                 }
             }
         }
